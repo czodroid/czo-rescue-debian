@@ -4,18 +4,21 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: févr. 2021
-# Last Modified: Monday 19 December 2022, 20:43
-# Edit Time: 14:18:39
+# Last Modified: Monday 19 December 2022, 22:25
+# Edit Time: 14:19:47
 # Description:
 #
 # $Id: debian-live-install,v 1.14 2022/12/19 19:23:11 czo Exp $
 #
 
+set -e -u
+
 # to run on your host
 #apt install debootstrap squashfs-tools xorriso isolinux syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin mtools dosfstools
 
 #== PREPARE ================================================
-export LIVE_BOOT=$HOME/LIVE_BOOT
+SCRIPTPATH=$(readlink -f ${0%/*})
+export LIVE_BOOT=$SCRIPTPATH/LIVE_BOOT
 mkdir -p $LIVE_BOOT
 
 
