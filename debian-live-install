@@ -1,0 +1,459 @@
+#!/bin/bash
+#
+# Filename: debian-live-install
+# Author: Olivier Sirol <czo@free.fr>
+# License: GPL-2.0 (http://www.gnu.org/copyleft)
+# File Created: févr. 2021
+# Last Modified: Monday 19 December 2022, 20:43
+# Edit Time: 14:18:39
+# Description:
+#
+# $Id: debian-live-install,v 1.14 2022/12/19 19:23:11 czo Exp $
+#
+
+# to run on your host
+#apt install debootstrap squashfs-tools xorriso isolinux syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin mtools dosfstools
+
+#== PREPARE ================================================
+export LIVE_BOOT=$HOME/LIVE_BOOT
+mkdir -p $LIVE_BOOT
+
+
+debootstrap --arch=amd64 --variant=minbase --merged-usr --components=main,contrib,non-free bullseye $LIVE_BOOT/chroot http://deb.debian.org/debian/
+
+mount --make-rslave --rbind /proc $LIVE_BOOT/chroot/proc
+mount --make-rslave --rbind /sys  $LIVE_BOOT/chroot/sys
+mount --make-rslave --rbind /dev  $LIVE_BOOT/chroot/dev
+mount --make-rslave --rbind /run  $LIVE_BOOT/chroot/run
+
+chroot $LIVE_BOOT/chroot /bin/bash <<'EOF'
+
+#== CHROOT ==================================================
+export LANG=C
+export QUIET="-q -y"
+export DEBIAN_FRONTEND=noninteractive
+##export DEBIAN_PRIORITY=critical
+
+echo $(date +%Y-%m-%d) > /etc/lsb-czo-installdate
+echo $(date +%Y-%m-%d) > /etc/lsb-czo-updatedate
+
+echo "debian11-live" > /etc/hostname
+#apt install --no-install-recommends linux-image-amd64 live-boot systemd-sysv
+#apt install --no-install-recommends network-manager net-tools wireless-tools wpagui curl openssh-client blackbox xserver-xorg-core xserver-xorg xinit xterm nano
+#apt $QUIET install net-tools wireless-tools wpagui blackbox xserver-xorg-core xserver-xorg xinit xterm
+
+apt $QUIET update
+apt $QUIET install linux-image-amd64 linux-headers-amd64 live-boot systemd-sysv
+
+#apt $QUIET install aptitude bash bash-completion bc console-setup cron curl debconf-utils debootstrap efibootmgr htop keyboard-configuration locales lsb-release mc mlocate ncdu network-manager rsync ssh tmux tzdata vim wget
+apt $QUIET install aptitude autofs bash bash-completion bc build-essential cmake colordiff command-not-found console-setup cron cryptsetup curl cvs debconf-utils debootstrap dmraid dnsutils dosfstools efibootmgr ethtool exuberant-ctags firmware-iwlwifi firmware-linux-free firmware-misc-nonfree gdisk gir1.2-gtop-2.0 git gpart hashalot hexcurse htop iftop intel-microcode ioping iotop iperf iptraf isolinux jfsutils keyboard-configuration kpartx lftp libguestfs-tools libnet-xmpp-perl libpam-mount libqcow-utils libusb-dev lm-sensors locales lsb-release lzop mc mlocate moreutils mtools nano ncdu net-tools network-manager nfs-client nmap p7zip-full parted perltidy rcs recode reiser4progs reiserfsprogs rsync screen sqlite3 squashfs-tools ssh strace sysstat tcpdump tidy tmate tmux tree tzdata vim wget wireless-tools xfsprogs xorriso zsh zsh-doc zstd gddrescue syslinux grub-pc-bin
+
+#apt $QUIET install syslinux-efi grub-efi-amd64-bin grub-efi-amd64-signed grub-efi-ia32-bin grub-pc-bin
+apt $QUIET install zfs-initramfs
+
+apt $QUIET install xfce4 xfce4-screenshooter xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin xterm lightdm-
+apt $QUIET install gparted vim-gtk xauth xsel xclip xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver remmina ristretto feh x11vnc galculator
+
+# gnupg xserver-xorg-input-synaptics
+
+apt $QUIET clean
+
+# amd64-microcode ttf-mscorefonts-installer intel-microcode rar
+# sshd
+#in debian 7,8,9 ^Permit, in debian 10 ^#Permit
+perl -i -pe 's,^#?PermitRootLogin.*,PermitRootLogin yes,' /etc/ssh/sshd_config
+#arch linux
+perl -i -pe 's,^#?X11Forwarding.*,X11Forwarding yes,' /etc/ssh/sshd_config
+#systemctl restart sshd
+
+# dpkg-reconfigure tzdata
+#ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
+ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime
+dpkg-reconfigure -f noninteractive tzdata
+
+# dpkg-reconfigure locales
+#locale-gen en_US.UTF-8
+perl -i -pe 's,# en_US.UTF-8 UTF-8,en_US.UTF-8 UTF-8,' /etc/locale.gen
+perl -i -pe 's,# fr_FR.UTF-8 UTF-8,fr_FR.UTF-8 UTF-8,' /etc/locale.gen
+update-locale LANG=en_US.UTF-8
+locale-gen
+
+perl -i -pe 's,^#/net\s*-hosts.*,/net    -hosts,' /etc/auto.master
+systemctl restart autofs
+
+# cron czo-motd-czolsb
+cat << 'OVER' > /etc/cron.d/czo-motd-czolsb
+# Filename: czo-email-at-reboot
+# 2022/05/21 : Modified by Olivier Sirol <czo@free.fr>
+
+@reboot      root   /etc/czolsb > /etc/motd 2> /dev/null
+OVER
+chmod 644 /etc/cron.d/czo-motd-czolsb
+
+cd /root
+curl -fsSL https://raw.githubusercontent.com/czodroid/dotfiles/master/config-fast-copy | sh
+curl -fsSL https://raw.githubusercontent.com/czodroid/dotfiles/master/config-fast-ssh  | sh
+
+# passwd
+echo 'root:toor' | chpasswd
+
+/usr/bin/updatedb
+
+aptitude search '~i !~M' -F %p | LANG=C sort > pkg_inst_debian11.txt
+
+date > /root/czo@free.fr
+
+# mnt
+mkdir -p /mnt/sda1
+mkdir -p /mnt/sda2
+mkdir -p /mnt/sdb1
+mkdir -p /mnt/sdb2
+
+# exit
+EOF
+
+#== CHROOT END ==============================================
+
+cd
+umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}
+sleep 5
+
+rsync -av $LIVE_BOOT/dcr/ $LIVE_BOOT/chroot
+
+mkdir -p $LIVE_BOOT/{staging/{EFI/BOOT,boot/grub/x86_64-efi,isolinux,live},tmp}
+
+rm -f $LIVE_BOOT/staging/live/filesystem.squashfs
+mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -e boot
+
+cp -f $LIVE_BOOT/chroot/boot/vmlinuz-* $LIVE_BOOT/staging/live/vmlinuz
+cp -f $LIVE_BOOT/chroot/boot/initrd.img-* $LIVE_BOOT/staging/live/initrd
+
+#== Prepare Boot Loader Menus ===============================
+cat <<'EOF' >$LIVE_BOOT/staging/isolinux/isolinux.cfg
+serial 0 115200
+ui menu.c32
+timeout 3000
+menu default
+prompt 0
+
+menu title Czo Rescue (2022-12-18)
+
+menu MARGIN 8
+menu ROWS 10
+menu TABMSGROW 16
+menu CMDLINEROW 16
+
+label Debian Czo Rescue (debian11 ZFS)                 (root/toor)
+    menu default
+    kernel /live/vmlinuz
+    append initrd=/live/initrd boot=live
+
+label Debian Czo Rescue (debian11 ZFS, nomodeset)      (root/toor)
+    kernel /live/vmlinuz
+    append initrd=/live/initrd boot=live nomodeset
+
+EOF
+
+cat <<'EOF' > $LIVE_BOOT/staging/boot/grub/grub.cfg
+insmod part_gpt
+insmod part_msdos
+insmod fat
+insmod iso9660
+
+insmod all_video
+insmod font
+
+set default="0"
+set timeout=300
+
+# If X has issues finding screens, experiment with/without nomodeset.
+
+menuentry "Debian Czo Rescue [EFI/GRUB]" {
+    search --no-floppy --set=root --label DEBLIVE
+    linux ($root)/live/vmlinuz boot=live
+    initrd ($root)/live/initrd
+}
+
+menuentry "Debian Czo Rescue [EFI/GRUB] (nomodeset)" {
+    search --no-floppy --set=root --label DEBLIVE
+    linux ($root)/live/vmlinuz boot=live nomodeset
+    initrd ($root)/live/initrd
+}
+EOF
+
+cp $LIVE_BOOT/staging/boot/grub/grub.cfg $LIVE_BOOT/staging/EFI/BOOT/
+
+cat <<'EOF' >$LIVE_BOOT/tmp/grub-embed.cfg
+if ! [ -d "$cmdpath" ]; then
+    # On some firmware, GRUB has a wrong cmdpath when booted from an optical disc.
+    # https://gitlab.archlinux.org/archlinux/archiso/-/issues/183
+    if regexp --set=1:isodevice '^(\([^)]+\))\/?[Ee][Ff][Ii]\/[Bb][Oo][Oo][Tt]\/?$' "$cmdpath"; then
+        cmdpath="${isodevice}/EFI/BOOT"
+    fi
+fi
+configfile "${cmdpath}/grub.cfg"
+EOF
+
+#== Prepare Boot Loader Files ===============================
+cp /usr/lib/ISOLINUX/isolinux.bin "$LIVE_BOOT/staging/isolinux/"
+cp /usr/lib/syslinux/modules/bios/* "$LIVE_BOOT/staging/isolinux/"
+
+cp -r /usr/lib/grub/x86_64-efi/* "$LIVE_BOOT/staging/boot/grub/x86_64-efi/"
+
+grub-mkstandalone -O i386-efi \
+    --modules="part_gpt part_msdos fat iso9660" \
+    --locales="" \
+    --themes="" \
+    --fonts="" \
+    --output="$LIVE_BOOT/staging/EFI/BOOT/BOOTIA32.EFI" \
+    "boot/grub/grub.cfg=$LIVE_BOOT/tmp/grub-embed.cfg"
+
+grub-mkstandalone -O x86_64-efi \
+    --modules="part_gpt part_msdos fat iso9660" \
+    --locales="" \
+    --themes="" \
+    --fonts="" \
+    --output="$LIVE_BOOT/staging/EFI/BOOT/BOOTx64.EFI" \
+    "boot/grub/grub.cfg=$LIVE_BOOT/tmp/grub-embed.cfg"
+
+(cd $LIVE_BOOT/staging && \
+    dd if=/dev/zero of=efiboot.img bs=1M count=20 && \
+    mkfs.vfat efiboot.img && \
+    mmd -i efiboot.img ::/EFI ::/EFI/BOOT && \
+    mcopy -vi efiboot.img \
+        $LIVE_BOOT/staging/EFI/BOOT/BOOTIA32.EFI \
+        $LIVE_BOOT/staging/EFI/BOOT/BOOTx64.EFI \
+        $LIVE_BOOT/staging/boot/grub/grub.cfg \
+        ::/EFI/BOOT/
+)
+
+#== Create Bootable ISO =====================================
+rm -f $LIVE_BOOT/debian-custom.iso ; \
+xorriso \
+    -as mkisofs \
+    -iso-level 3 \
+    -full-iso9660-filenames \
+    -volid "DEBLIVE" \
+    --mbr-force-bootable -partition_offset 16 \
+    -joliet -joliet-long -rational-rock \
+    -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
+    -eltorito-boot isolinux/isolinux.bin \
+        -no-emul-boot \
+        -boot-load-size 4 \
+        -boot-info-table \
+        --eltorito-catalog isolinux/isolinux.cat \
+    -eltorito-alt-boot \
+        -e --interval:appended_partition_2:all:: \
+        -no-emul-boot \
+        -isohybrid-gpt-basdat \
+    -append_partition 2 C12A7328-F81F-11D2-BA4B-00A0C93EC93B $LIVE_BOOT/staging/efiboot.img \
+    "$LIVE_BOOT/staging" \
+    -o "$LIVE_BOOT/debian-custom.iso" \
+
+
+#xorriso -as mkisofs -iso-level 3 -full-iso9660-filenames -volid RESCUE806 -eltorito-boot boot/syslinux/isolinux.bin -eltorito-catalog boot/syslinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -isohybrid-mbr boot/syslinux/isohdpfx.bin -eltorito-alt-boot -e EFI/archiso/efiboot.img -no-emul-boot -isohybrid-gpt-basdat -o ../$NAME.iso .
+
+
+exit
+#== END ==================================================
+
+
+#== TRUC ================================================
+exit
+# AI apache2 libapache2-mod-php php php-curl php-gd imagemagick tidy
+
+
+netcat
+
+amd-ucode
+bash-completion
+beep
+bind-tools
+borg
+btrfs-progs
+busybox
+cabextract
+chntpw
+cifs-utils
+clonezilla
+cpio
+crda
+cronie
+darkhttpd
+dd_rescue
+ddrescue
+dhclient
+dialog
+diffutils
+discount
+dislocker
+dmidecode
+dmraid
+dnsmasq
+dosfstools
+dstat
+dump
+dvd+rw-tools
+e2fsprogs
+efitools
+elinks
+ethtool
+exfatprogs
+expac
+ext4magic
+f2fs-tools
+firefox
+firefox-ublock-origin
+flashrom
+foremost
+fsarchiver
+ghex
+git
+gnu-netcat
+gpart
+gparted
+gpm
+gptfdisk
+growpartfs
+grsync
+grub
+gsmartcontrol
+gvim
+hardinfo
+hdparm
+hexedit
+htop
+hwinfo
+iftop
+inetutils
+intel-ucode
+iotop
+iperf3
+ipmitool
+ipw2100-fw
+ipw2200-fw
+irssi
+jfsutils
+keepassxc
+lftp
+libvncserver
+linux-atm
+linux-firmware
+linux-lts
+linux-lts-headers
+localepurge
+lshw
+lsof
+lsscsi
+lvm2
+lzip
+man-db
+man-pages
+mc
+mdadm
+memtest86+
+memtester
+minicom
+mkinitcpio
+mkinitcpio-nfs-utils
+mlocate
+mpg123
+ms-sys
+mtools
+mtr
+nano
+nbd
+ncdu
+ndisc6
+net-tools
+network-manager-applet
+networkmanager-openvpn
+networkmanager-vpnc
+nfs-utils
+nilfs-utils
+nmap
+ntfs-3g
+ntfs-3g-system-compression
+ntp
+nvme-cli
+nwipe
+openconnect
+openssh
+openvpn
+p7zip
+pam-u2f
+paperkey
+par2cmdline
+partclone
+parted
+partimage
+pavucontrol
+picocom
+ppp
+pptpclient
+pulseaudio-alsa
+pv
+python-pip
+qemu-guest-agent
+rdesktop
+refind
+reiserfsprogs
+remmina
+ristretto
+rkhunter
+rp-pppoe
+rsync
+ruby
+screen
+sdparm
+sg3_utils
+smartmontools
+socat
+squashfs-tools
+strace
+stress
+sudo
+sysstat
+tcpdump
+testdisk
+tmux
+traceroute
+tree
+ttf-dejavu
+udftools
+udpcast
+unzip
+usb_modeswitch
+usbutils
+vi
+vpnc
+wget
+whdd
+wimlib
+wipe
+wireguard-tools
+wireless-regdb
+wireless_tools
+wpa_supplicant
+wqy-microhei
+wvdial
+x11vnc
+xarchiver
+xfburn
+xfsdump
+xfsprogs
+xkbsel
+xkeyboard-config
+xl2tpd
+xorg-apps
+xorg-drivers
+xorg-server
+xorg-xinit
+yubikey-manager
+yubikey-personalization-gui
+zerofree
+zfs-dkms
+zile
+zip
+zsh
+
