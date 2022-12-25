@@ -1,0 +1,12 @@
+[Unit]
+Description=SSH ssh-keygen host keys
+Before=ssh.service
+ConditionFileIsExecutable=/usr/bin/ssh-keygen
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/ssh-keygen -A
+ExecStartPost=/bin/systemctl disable ssh-keygen-host
+
+[Install]
+WantedBy=multi-user.target
