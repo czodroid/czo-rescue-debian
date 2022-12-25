@@ -1,0 +1,63 @@
+# Filename: terminalrc
+# Author: Olivier Sirol <czo@free.fr>
+# License: GPL-2.0 (http://www.gnu.org/copyleft)
+# File Created: 13 November 2011
+# Last Modified: Thursday 13 October 2022, 18:33
+# $Id: terminalrc,v 1.10 2022/10/13 16:34:20 czo Exp $
+# Edit Time: 0:35:23
+# Description:
+#               xfce terminal config
+#
+# Copyright: (C) 2011-2022 Olivier Sirol <czo@free.fr>
+
+[Configuration]
+MiscAlwaysShowTabs=FALSE
+MiscBell=TRUE
+MiscBellUrgent=FALSE
+MiscBordersDefault=TRUE
+MiscCursorBlinks=TRUE
+MiscCursorShape=TERMINAL_CURSOR_SHAPE_BLOCK
+MiscDefaultGeometry=90x25
+MiscInheritGeometry=FALSE
+MiscMenubarDefault=FALSE
+MiscMouseAutohide=TRUE
+MiscMouseWheelZoom=TRUE
+MiscToolbarDefault=FALSE
+MiscConfirmClose=FALSE
+MiscCycleTabs=TRUE
+MiscTabCloseButtons=TRUE
+MiscTabCloseMiddleClick=TRUE
+MiscTabPosition=GTK_POS_TOP
+MiscHighlightUrls=TRUE
+MiscMiddleClickOpensUri=FALSE
+MiscCopyOnSelect=FALSE
+MiscDefaultWorkingDir=
+MiscRewrapOnResize=TRUE
+MiscUseShiftArrowsToScroll=FALSE
+MiscSlimTabs=FALSE
+ScrollingBar=TERMINAL_SCROLLBAR_NONE
+ScrollingUnlimited=TRUE
+ShortcutsNoMnemonics=TRUE
+ShortcutsNoMenukey=TRUE
+ShortcutsNoHelpkey=TRUE
+ColorForeground=#c9c9b7b78888
+ColorBackground=#282828282828
+ColorPalette=rgb(40,40,40);rgb(204,36,29);rgb(152,151,26);rgb(254,128,25);rgb(69,133,136);rgb(177,98,134);rgb(104,157,106);rgb(201,183,136);rgb(74,66,57);rgb(251,73,52);rgb(184,187,38);rgb(250,189,47);rgb(131,165,152);rgb(211,134,155);rgb(142,192,124);rgb(251,241,199)
+ColorCursor=#989897971a1a
+TabActivityColor=#a4a400000000
+MiscShowRelaunchDialog=TRUE
+MiscNewTabAdjacent=FALSE
+MiscSearchDialogOpacity=100
+MiscShowUnsafePasteDialog=FALSE
+ColorCursorUseDefault=FALSE
+ColorCursorForeground=#282828282828
+ColorBoldUseDefault=FALSE
+ColorBold=#fefe80801919
+ColorSelectionBackground=#454585858888
+ColorSelection=#ebebdbdbb2b2
+FontAllowBold=FALSE
+TitleMode=TERMINAL_TITLE_PREPEND
+ColorSelectionUseDefault=FALSE
+FontName=Source Code Pro for Powerline 13
+#FontName=Monospace 13
+
