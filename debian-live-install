@@ -4,8 +4,8 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: févr. 2021
-# Last Modified: Sunday 25 December 2022, 19:11
-# Edit Time: 45:00:51
+# Last Modified: Monday 26 December 2022, 19:22
+# Edit Time: 47:17:37
 # Description:
 #
 # $Id: debian-live-install,v 1.30 2022/12/23 07:35:21 czo Exp $
@@ -38,7 +38,7 @@ run_once() {
 ##================================================================
 make_01_prepare() {
 
-echo "-> PREPARE ================================================="
+echo "-> Prepare ================================================="
 
 # del old
 rm -fr $LIVE_BOOT
@@ -51,7 +51,7 @@ debootstrap --arch=amd64 --variant=minbase --merged-usr --components=main,contri
 ##================================================================
 make_02_chroot() {
 
-echo "-> CHROOT =================================================="
+echo "-> Chroot =================================================="
 
 ## test
 # cp -f ~/.bashrc $LIVE_BOOT/chroot/root
@@ -82,7 +82,14 @@ echo $(date +%Y-%m-%d) > /etc/lsb-czo-updatedate
 echo "czo-rescue-debian" > /etc/hostname
 echo "czo-rescue-debian" > /etc/mailname
 
+
 echo "--> apt update"
+cat << 'OVER' > /etc/apt/sources.list
+deb http://deb.debian.org/debian/ bullseye main contrib non-free
+deb http://security.debian.org/ bullseye-security main contrib non-free
+deb http://deb.debian.org/debian/ bullseye-updates main contrib non-free
+OVER
+
 apt $QUIET update
 
 echo "--> Update keyboard and console"
@@ -101,8 +108,7 @@ apt $QUIET install linux-image-amd64 linux-headers-amd64 live-boot
 
 # TODO: verify
 echo "--> czo's packages"
-apt $QUIET install aptitude autofs bash bash-completion bc colordiff command-not-found cron cryptsetup curl cvs debconf-utils debootstrap dmraid dnsutils dosfstools efibootmgr ethtool exuberant-ctags firmware-iwlwifi firmware-linux-free firmware-misc-nonfree gdisk git gpart hashalot hexcurse htop iftop ioping iotop iperf iptraf isolinux jfsutils kpartx lftp libguestfs-tools libnet-xmpp-perl libpam-mount libqcow-utils libusb-dev lm-sensors lsb-release mc mlocate moreutils mtools nano ncdu network-manager nfs-client nmap p7zip-full parted perltidy rcs recode reiser4progs reiserfsprogs rsync screen squashfs-tools ssh strace sysstat tcpdump tidy tmate tmux tree tzdata vim wget wireless-tools xfsprogs xorriso zsh zsh-doc zstd gddrescue zfs-initramfs ttf-mscorefonts-installer rar net-tools xauth xsel xclip localepurge chntpw clonezilla dislocker ext4magic netcat hexedit iperf3 ipmitool lshw memtest86+ picocom mpg123 network-manager-openvpn network-manager-vpnc libnfs-utils openconnect paperkey par2 partclone qemu-guest-agent rdesktop socat squashfs-tools-ng stress
-
+apt $QUIET install aptitude autofs bash bash-completion bc chntpw clonezilla colordiff command-not-found cron cryptsetup curl cvs debconf-utils debootstrap dislocker dmraid dnsutils dosfstools efibootmgr ethtool ext4magic exuberant-ctags firmware-iwlwifi firmware-linux-free firmware-misc-nonfree gddrescue gdisk git gpart hashalot hexcurse hexedit htop iftop ioping iotop iperf iperf3 ipmitool iptraf isolinux jfsutils kpartx lftp libguestfs-tools libnet-xmpp-perl libnfs-utils libpam-mount libqcow-utils libusb-dev lm-sensors localepurge lsb-release lshw mc memtest86+ mlocate moreutils mpg123 mtools nano ncdu netcat net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nmap openconnect p7zip-full paperkey par2 partclone parted perltidy picocom qemu-guest-agent rar rcs rdesktop recode reiser4progs reiserfsprogs rsync screen socat squashfs-tools squashfs-tools-ng ssh strace stress sysstat tcpdump tidy tmate tmux tree ttf-mscorefonts-installer tzdata vim wget wireless-tools xauth xclip xfsprogs xorriso xsel zfs-initramfs zsh zsh-doc zstd
 
 echo "--> microcode"
 apt $QUIET install amd64-microcode intel-microcode
@@ -115,7 +121,7 @@ apt $QUIET install xfce4 xfce4-screenshooter xfce4-systemload-plugin xfce4-taskm
 # xserver-xorg-input-synaptics
 
 echo "--> firefox gparted"
-apt $QUIET install gparted vim-gtk xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver remmina ristretto feh x11vnc galculator
+apt $QUIET install gparted vim-gtk xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver remmina ristretto feh x11vnc galculator mousepad
 
 # Configuration
 sed -i 's/#\(Storage=\)auto/\1volatile/' /etc/systemd/journald.conf
@@ -166,7 +172,8 @@ rm -fr /root/.ssh_fast_*
 # passwd
 echo 'root:toor' | chpasswd
 
-aptitude search '~i !~M' -F %p | LANG=C sort > pkg_inst_debian11.txt
+dpkg-query -Wf '${Package}\n' | LANG=C sort -n > pkg_debian11_list.txt
+dpkg-query -Wf '${Installed-Size}\t${Package}\n' | LANG=C sort -rn > pkg_debian11_size.txt
 
 date > /root/czo@free.fr
 
@@ -179,12 +186,12 @@ mkdir -p /mnt/sdb2
 
 # cleanup from syslinux rescue
 find /usr/lib -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
-find /usr/lib -type f,l -name '*.a' -delete
-rm -rf /usr/lib/{libgo.*,libgphobos.*,libgfortran.*}
-rm -rf /usr/share/gtk-doc /usr/share/doc /usr/share/keepassxc/docs/*.pdf
-rm -rf /usr/share/keepassxc/translations
-rm -rf /usr/share/help/*/ghex/
-rm -rf /usr/share/gir*
+# find /usr/lib -type f,l -name '*.a' -delete
+# rm -rf /usr/lib/{libgo.*,libgphobos.*,libgfortran.*}
+# rm -rf /usr/share/gtk-doc /usr/share/doc /usr/share/keepassxc/docs/*.pdf
+# rm -rf /usr/share/keepassxc/translations
+# rm -rf /usr/share/help/*/ghex/
+# rm -rf /usr/share/gir*
 # rm -rf /usr/include
 # rm -rf /usr/share/man/man3
 
@@ -202,11 +209,17 @@ rm -fr   /var/lib/aptitude
 mkdir -p /var/lib/aptitude
 
 # ssh
-rm -f /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub
 ln -s /etc/systemd/system/ssh-keygen-host.service /etc/systemd/system/multi-user.target.wants/ssh-keygen-host.service
 
 # updatedb
 /usr/bin/updatedb
+
+# rm sshkey machine_id fstab
+rm -f /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub
+#rm -f /etc/machine-id /var/lib/dbus/machine-id
+cat /dev/null > /etc/machine-id
+cat /dev/null > /var/lib/dbus/machine-id
+cat /dev/null > /etc/fstab
 
 # exit
 EOF
@@ -223,26 +236,32 @@ echo " <- end chroot"
 ##================================================================
 make_03_copyfiles() {
 
-echo "-> COPY FILES =============================================="
+echo "-> Copy files =============================================="
 
-# manque ssh-keygen -A
 rm -f $LIVE_BOOT/chroot/etc/ssh/ssh_host_*_key $LIVE_BOOT/chroot/etc/ssh/ssh_host_*_key.pub
 
-rsync -av --chown=root:root $LIVE_BOOT/../crdrootfs/ $LIVE_BOOT/chroot
+rsync -av --chown=root:root $LIVE_BOOT/../liverootfs/ $LIVE_BOOT/chroot
 
 mkdir -p $LIVE_BOOT/{staging/{EFI/BOOT,boot/grub/x86_64-efi,isolinux,live},tmp}
-
-rm -f $LIVE_BOOT/staging/live/filesystem.squashfs
-mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -e boot
 
 cp -f $LIVE_BOOT/chroot/boot/vmlinuz-* $LIVE_BOOT/staging/live/vmlinuz
 cp -f $LIVE_BOOT/chroot/boot/initrd.img-* $LIVE_BOOT/staging/live/initrd
 
 }
 
+##================================================================
+make_04_squashfs() {
+
+echo "-> Squashfs ==============================================="
+
+rm -f $LIVE_BOOT/staging/live/filesystem.squashfs
+mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -e boot
+
+}
+
 
 ##================================================================
-make_04_bootloader() {
+make_05_bootloader() {
 
 echo "-> Prepare Boot Loader Menus ==============================="
 
@@ -350,7 +369,7 @@ grub-mkstandalone -O x86_64-efi \
 
 
 ##================================================================
-make_05_iso() {
+make_06_iso() {
 
 echo "-> Create Bootable ISO ====================================="
 
@@ -384,8 +403,9 @@ xorriso \
 run_once make_01_prepare
 run_once make_02_chroot
 run_once make_03_copyfiles
-run_once make_04_bootloader
-run_once make_05_iso
+run_once make_04_squashfs
+run_once make_05_bootloader
+run_once make_06_iso
 
 ) 2>&1 | tee -a $LOG
 
