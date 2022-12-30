@@ -1,4 +1,4 @@
-favorites=xfce4-file-manager.desktop,xfce4-terminal-emulator.desktop,xfce4-screenshooter.desktop,firefox-esr.desktop,xfce-display-settings.desktop
+favorites=xfce4-file-manager.desktop,firefox-esr.desktop,xfce4-terminal-emulator.desktop,gparted.desktop,xfce4-screenshooter.desktop,xfce-display-settings.desktop
 recent=xfce-settings-manager.desktop,xfce4-file-manager.desktop
 button-icon=xfce4-whiskermenu
 button-single-row=false
