@@ -3,12 +3,12 @@
 # Filename: make-czo-rescue-debian-iso
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
-# File Created: 28 November 2022
-# Last Modified: Monday 02 January 2023, 17:34
+# File Created: 18 December 2022
+# Last Modified: Monday 02 January 2023, 21:33
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 74:14:52
+# Edit Time: 76:19:08
 # Description:
-#
+#       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
 #       > apt install debootstrap squashfs-tools xorriso isolinux syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin mtools dosfstools bash coreutils
 #
@@ -26,6 +26,7 @@ mkdir -p $LIVE_BOOT
 rm -fr $LOG
 unset LANGUAGE LC_ALL LC_MONETARY LC_PAPER LC_MEASUREMENT LC_TIME LC_NUMERIC LANG
 export LANG=en_US.UTF-8
+echo "export LIVE_BOOT=$LIVE_BOOT"
 
 ##================================================================
 run_once() {
@@ -52,8 +53,6 @@ debootstrap --arch=amd64 --merged-usr --components=main,contrib,non-free --force
 # --variant=minbase
 # --print-debs
 
-# adduser apt apt-utils base-files base-passwd bash bsdutils coreutils cpio cron dash debconf debconf-i18n debian-archive-keyring debianutils diffutils dmidecode dmsetup dpkg e2fsprogs fdisk findutils gcc-10-base gcc-9-base gpgv grep gzip hostname ifupdown init init-system-helpers iproute2 iputils-ping isc-dhcp-client isc-dhcp-common kmod less libacl1 libapparmor1 libapt-pkg6.0 libargon2-1 libattr1 libaudit1 libaudit-common libblkid1 libbpf0 libbsd0 libbz2-1.0 libc6 libcap2 libcap2-bin libcap-ng0 libc-bin libcom-err2 libcrypt1 libcryptsetup12 libdb5.3 libdebconfclient0 libdevmapper1.02.1 libdns-export1110 libedit2 libelf1 libestr0 libext2fs2 libfastjson4 libfdisk1 libffi7 libgcc-s1 libgcrypt20 libgmp10 libgnutls30 libgpg-error0 libgssapi-krb5-2 libhogweed6 libidn2-0 libip4tc2 libisc-export1105 libjansson4 libjson-c5 libk5crypto3 libkeyutils1 libkmod2 libkrb5-3 libkrb5support0 liblocale-gettext-perl liblognorm5 liblz4-1 liblzma5 libmd0 libmnl0 libmount1 libncurses6 libncursesw6 libnettle8 libnewt0.52 libnftables1 libnftnl11 libnsl2 libp11-kit0 libpam0g libpam-modules libpam-modules-bin libpam-runtime libpcre2-8-0 libpcre3 libpopt0 libprocps8 libreadline8 libseccomp2 libselinux1 libsemanage1 libsemanage-common libsepol1 libslang2 libsmartcols1 libss2 libssl1.1 libstdc++6 libsystemd0 libtasn1-6 libtext-charwidth-perl libtext-iconv-perl libtext-wrapi18n-perl libtinfo6 libtirpc3 libtirpc-common libudev1 libunistring2 libuuid1 libxtables12 libxxhash0 libzstd1 login logrotate logsave lsb-base mawk mount nano ncurses-base ncurses-bin netbase nftables passwd perl-base procps readline-common rsyslog sed sensible-utils systemd systemd-sysv sysvinit-utils tar tasksel tasksel-data tzdata udev util-linux vim-common vim-tiny whiptail xxd zlib1g
-
 }
 
 ##================================================================
@@ -61,14 +60,12 @@ make_02_chroot() {
 
 echo "-> Chroot =================================================="
 
-dpkg-query -Wf '${Package}\n' | sed 's/\s\+$//' | LANG=C sort > $LIVE_BOOT/chroot/root/pkg1
-
 ## test
 # cp -f ~/.bashrc $LIVE_BOOT/chroot/root
 # cp -f /etc/resolv.conf $LIVE_BOOT/chroot/etc/resolv.conf
 # rsync --delete -av $LIVE_BOOT/../build/ $LIVE_BOOT/../savebuild
 # echo
-# echo 'export LIVE_BOOT=/tank/data/czo/Desktop/LIVE/build'
+# echo "export LIVE_BOOT=$LIVE_BOOT"
 # echo
 # echo 'umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc} ; sleep 1 && rsync --delete -av $LIVE_BOOT/../savebuild/ $LIVE_BOOT && for p in run dev sys proc; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done && chroot $LIVE_BOOT/chroot /bin/bash ; umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}'
 # exit
@@ -81,12 +78,9 @@ mount --make-rslave --rbind /run  $LIVE_BOOT/chroot/run
 
 chroot $LIVE_BOOT/chroot /bin/bash <<'EOF'
 
-#export LC_ALL=C.UTF-8
-#export LC_ALL=en_US.UTF-8
-
 export QUIET="-q -y"
 export DEBIAN_FRONTEND=noninteractive
-##export DEBIAN_PRIORITY=critical
+#export DEBIAN_PRIORITY=critical
 
 unset LANGUAGE LC_ALL LC_MONETARY LC_PAPER LC_MEASUREMENT LC_TIME LC_NUMERIC LANG
 export LANG=en_US.UTF-8
@@ -107,26 +101,21 @@ OVER
 
 apt-get $QUIET update
 
-##############################################
+##==================================================##
 
 echo "--> install kernel"
 #--no-install-recommends
-apt-get $QUIET --no-install-recommends install linux-image-amd64 linux-headers-amd64 intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas
-#firmware-ipw2x00
-dpkg-query -Wf '${Package}\n' | sed 's/\s\+$//' | LANG=C sort > /root/pkg2
+apt-get $QUIET --no-install-recommends install linux-image-amd64 linux-headers-amd64 intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
 
 echo "--> install packages"
-apt-get $QUIET install aptitude apt-listchanges apt-utils autofs bash bash-completion bc bind9-dnsutils bind9-host bzip2 ca-certificates chntpw clonezilla colordiff command-not-found cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debian-faq debootstrap dmraid dnsutils doc-debian dosfstools efibootmgr ethtool ext4magic exuberant-ctags fdisk file gddrescue gdisk gettext-base git gpart groff-base grub-efi-amd64-bin grub-efi-amd64-signed grub-efi-ia32-bin grub-pc-bin hashalot hexcurse hexedit htop iftop ifupdown init ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-ping isc-dhcp-client isc-dhcp-common isolinux jfsutils kmod kpartx krb5-locales less lftp libguestfs-tools liblockfile-bin libnet-xmpp-perl libnfs-utils libnss-systemd libpam-mount libpam-systemd libqcow-utils libterm-readline-gnu-perl libusb-dev live-boot lm-sensors localepurge logrotate lsb-release lshw lsof man-db manpages mc media-types memtest86+ mime-support mlocate moreutils mpg123 mtools nano ncdu ncurses-term netcat netcat-traditional net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nftables nmap nullmailer openconnect openssh-client p7zip-full paperkey par2 partclone parted pciutils perltidy picocom procps python3-reportbug qemu-guest-agent rar rcs readline-common recode reiser4progs reiserfsprogs reportbug rsync rsyslog screen sensible-utils socat squashfs-tools squashfs-tools-ng ssh strace stress syslinux-efi sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet tidy tmate tmux traceroute tree tzdata ucf udev vim vim-common vim-tiny wamerican wget whiptail wireless-tools xfsprogs xorriso xz-utils zsh zsh-doc zstd xinit xfce4 xfce4-screenshooter xfce4-power-manager-plugins xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin xterm lightdm- gparted vim-gtk xauth xsel xclip xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver rdesktop remmina ristretto feh x11vnc galculator mousepad dislocker meld yelp- fonts-dejavu fonts-noto-color-emoji fonts-wqy-microhei fonts-lato- fonts-droid-fallback- fonts-noto-mono- fonts-font-awesome- fonts-urw-base35- ghostscript- zfs-initramfs
-
-dpkg-query -Wf '${Package}\n' | sed 's/\s\+$//' | LANG=C sort > /root/pkg3
+apt-get $QUIET install aptitude apt-listchanges apt-utils autofs bash bash-completion bc bind9-dnsutils bind9-host bzip2 ca-certificates chntpw clonezilla colordiff command-not-found cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debian-faq debootstrap dmraid dnsutils doc-debian dosfstools efibootmgr ethtool ext4magic exuberant-ctags fdisk file gddrescue gdisk gettext-base git gpart groff-base grub-efi-amd64-bin grub-efi-amd64-signed grub-efi-ia32-bin grub-pc-bin hashalot hexcurse hexedit htop iftop ifupdown init ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-ping isc-dhcp-client isc-dhcp-common isolinux jfsutils kmod kpartx krb5-locales less lftp libguestfs-tools liblockfile-bin libnet-xmpp-perl libnfs-utils libnss-systemd libpam-mount libpam-systemd libqcow-utils libterm-readline-gnu-perl libusb-dev live-boot lm-sensors localepurge logrotate lsb-release lshw lsof man-db manpages mc media-types memtest86+ mime-support mlocate moreutils mpg123 mtools nano ncdu ncurses-term netcat netcat-traditional net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nftables nmap nullmailer openconnect openssh-client p7zip-full paperkey par2 partclone parted pciutils perltidy picocom procps python3-reportbug qemu-guest-agent rar rcs readline-common recode reiser4progs reiserfsprogs reportbug rsync rsyslog screen sensible-utils socat squashfs-tools squashfs-tools-ng ssh strace stress syslinux-efi sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet tidy tmate tmux traceroute tree tzdata ucf udev vim vim-common vim-tiny wamerican wget whiptail wireless-tools xfsprogs xorriso xz-utils zsh zsh-doc zstd xinit xfce4 xfce4-screenshooter xfce4-power-manager-plugins xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin xterm lightdm- gparted vim-gtk xauth xsel xclip xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver rdesktop remmina ristretto feh x11vnc galculator mousepad dislocker meld yelp- fonts-dejavu fonts-noto-color-emoji fonts-wqy-microhei fonts-lato- fonts-droid-fallback- fonts-noto-mono- fonts-font-awesome- fonts-urw-base35- ghostscript- live-boot-doc- pocketsphinx-en-us- libpocketsphinx3- zfs-initramfs
 
 # net-tools
 # broadcom-sta-dkms
 # xserver-xorg-input-synaptics
 # keepassxc
 
-
-##############################################
+##==================================================##
 
 # Configuration
 sed -i 's/#\(Storage=\)auto/\1volatile/' /etc/systemd/journald.conf
@@ -211,7 +200,7 @@ cat /dev/null > /etc/machine-id
 cat /dev/null > /etc/fstab
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 
-# exit
+#end!
 EOF
 
 cd
@@ -252,8 +241,8 @@ echo "-> Squashfs ==============================================="
 rm -f $LIVE_BOOT/staging/live/filesystem.squashfs
 
 ## fatser
-mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -e boot
-#mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k -e boot
+#mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -e boot
+mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k -e boot
 
 }
 
@@ -479,32 +468,3 @@ exit
 #== END ==================================================
 
 # AI apache2 libapache2-mod-php php php-curl php-gd imagemagick tidy
-
-
-echo "--> Update keyboard and console"
-apt-get $QUIET install console-setup keyboard-configuration locales
-perl -i -pe 's,# en_US.UTF-8 UTF-8,en_US.UTF-8 UTF-8,' /etc/locale.gen
-perl -i -pe 's,# fr_FR.UTF-8 UTF-8,fr_FR.UTF-8 UTF-8,' /etc/locale.gen
-update-locale LANG=en_US.UTF-8
-locale-gen
-
-echo "--> linux image and headers"
-apt-get $QUIET --no-install-recommends install linux-image-amd64 linux-headers-amd64 amd64-microcode intel-microcode
-
-apt-get $QUIET install live-boot tasksel nullmailer mime-support file wget wamerican systemd-timesyncd ucf debian-faq fdisk telnet systemd isc-dhcp-common libpam-systemd doc-debian netcat-traditional apt-listchanges nftables media-types bzip2 pciutils lsof reportbug bind9-host cpio iproute2 vim-common less manpages apt-utils krb5-locales xz-utils ca-certificates ifupdown bind9-dnsutils readline-common systemd-sysv liblockfile-bin whiptail nano rsyslog man-db groff-base isc-dhcp-client debconf-i18n gettext-base ncurses-term procps traceroute sensible-utils bash-completion dbus iputils-ping vim-tiny kmod udev logrotate python3-reportbug openssh-client libnss-systemd init cron aptitude autofs bash bash-completion bc chntpw clonezilla colordiff command-not-found cron cryptsetup curl cvs debconf-utils debootstrap dmraid dnsutils dosfstools efibootmgr ethtool ext4magic exuberant-ctags firmware-iwlwifi firmware-linux-free firmware-misc-nonfree gddrescue gdisk git gpart hashalot hexcurse hexedit htop iftop ioping iotop iperf iperf3 ipmitool iptraf isolinux jfsutils kpartx lftp libguestfs-tools libnet-xmpp-perl libnfs-utils libpam-mount libqcow-utils libterm-readline-gnu-perl libusb-dev lm-sensors localepurge lsb-release lshw mc memtest86+ mlocate moreutils mpg123 mtools nano ncdu netcat net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nmap openconnect p7zip-full paperkey par2 partclone parted perltidy picocom qemu-guest-agent rar rcs recode reiser4progs reiserfsprogs rsync screen socat squashfs-tools squashfs-tools-ng ssh strace stress sysstat tcpdump tidy tmate tmux tree tzdata vim wget wireless-tools xfsprogs xorriso zsh zsh-doc zstd syslinux-efi grub-efi-amd64-bin grub-efi-amd64-signed grub-efi-ia32-bin grub-pc-bin zfs-initramfs
-
-
-
-apt-get $QUIET install xinit xfce4 xfce4-screenshooter xfce4-power-manager-plugins xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin xterm lightdm-
-#xserver-xorg-input-synaptics
-
-echo "--> firefox gparted"
-apt-get $QUIET install gparted vim-gtk xauth xsel xclip xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver rdesktop remmina ristretto feh x11vnc galculator mousepad
-#papirus-icon-theme
-#keepassxc
-
-echo "--> meld"
-apt-get $QUIET install meld yelp- fonts-dejavu fonts-noto-color-emoji ttf-wqy-microhei fonts-lato- fonts-droid-fallback- fonts-noto-mono- fonts-font-awesome- fonts-urw-base35-
-
-apt-get $QUIET --no-install-recommends install amd64-microcode aptitude apt-listchanges apt-utils autofs bash bash-completion bc bind9-dnsutils bind9-host busybox bzip2 ca-certificates chntpw clonezilla colordiff command-not-found console-setup console-setup-linux cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debian-faq debootstrap dmraid dnsutils dosfstools efibootmgr ethtool ext4magic exuberant-ctags fdisk file gddrescue gdisk gettext-base git gnupg gpart groff-base grub-efi-amd64-bin grub-efi-amd64-signed grub-efi-ia32-bin grub-pc-bin hashalot hexcurse hexedit htop iftop ifupdown init intel-microcode ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-ping isc-dhcp-client isc-dhcp-common iso-codes isolinux javascript-common jfsutils kbd keyboard-configuration kmod kpartx krb5-locales less lftp libc-l10n libdpkg-perl libfile-fcntllock-perl libguestfs-tools libjs-jquery liblockfile-bin libnet-xmpp-perl libnfs-utils libnss-systemd libpam-mount libpam-systemd libqcow-utils libterm-readline-gnu-perl libusb-dev linux-headers-amd64 linux-image-amd64 live-boot live-boot-initramfs-tools live-tools lm-sensors localepurge locales logrotate lsb-release lshw lsof man-db manpages mc media-types memtest86+ mime-support mlocate moreutils mpg123 mtools nano ncdu ncurses-term netcat netcat-traditional network-manager network-manager-openvpn network-manager-vpnc nfs-client nfs-common nftables nmap nullmailer openconnect os-prober p7zip-full paperkey par2 partclone parted partimage patch pciutils perltidy picocom procps python3-reportbug qemu-guest-agent rar rcs readline-common recode reiser4progs reiserfsprogs reportbug rsync rsyslog screen sensible-utils shim-signed socat squashfs-tools squashfs-tools-ng ssh strace stress syslinux-common syslinux-efi sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet tidy tmate tmux traceroute tree tzdata ucf udev unzip uuid-runtime vim vim-common wamerican wget whiptail wireless-tools xauth xfsprogs xkb-data xorriso xz-utils zip zsh zstd eject   cryptsetup-initramfs cryptsetup-run arch-test openipmi alsa-ucm-conf alsa-topology-conf manpages-dev libc-devtools libglib2.0-data shared-mime-info xdg-user-dirs gstreamer1.0-plugins-base virt-p2v libguestfs-hfsplus libguestfs-reiserfs libguestfs-xfs libhtml-format-perl libclone-perl ibverbs-providers libintl-xs-perl libldap-common modemmanager libnet-dns-perl libdigest-hmac-perl libpam-mount-bin publicsuffix libsasl2-modules gstreamer1.0-libav gstreamer1.0-plugins-good libdata-dump-perl libhtml-form-perl libhttp-daemon-perl libmailtools-perl  usb.ids thin-provisioning-tools ppp dnsmasq-base iptables wireless-regdb python3-asn1crypto python3-mechanize python3-netifaces easy-rsa ovmf dns-root-data opensc gstreamer1.0-x  usb-modeswitch  pcscd
-
