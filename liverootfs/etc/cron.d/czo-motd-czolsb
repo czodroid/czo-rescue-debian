@@ -1,0 +1,4 @@
+# Filename: czo-email-at-reboot
+# 2022/05/21 : Modified by Olivier Sirol <czo@free.fr>
+
+@reboot      root   /etc/czolsb > /etc/motd 2> /dev/null
