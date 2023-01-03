@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Tuesday 03 January 2023, 11:56
+# Last Modified: Tuesday 03 January 2023, 15:34
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 77:35:59
+# Edit Time: 79:39:36
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -67,16 +67,12 @@ echo "-> Chroot =================================================="
 # echo
 # echo "export LIVE_BOOT=$LIVE_BOOT"
 # echo
-# echo 'umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc} ; sleep 1 && rsync --delete -av $LIVE_BOOT/../savebuild/ $LIVE_BOOT && for p in run dev sys proc; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done && chroot $LIVE_BOOT/chroot /bin/bash ; umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}'
+# echo 'umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc} ; sleep 1 && rsync --delete -av $LIVE_BOOT/../savebuild/ $LIVE_BOOT && for p in proc sys dev dev/pts run; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done && chroot $LIVE_BOOT/chroot /bin/bash ; umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}'
 # exit
 
-mount --make-rslave --rbind /proc $LIVE_BOOT/chroot/proc
-mount --make-rslave --rbind /sys  $LIVE_BOOT/chroot/sys
-mount --make-rslave --rbind /dev  $LIVE_BOOT/chroot/dev
-mount --make-rslave --rbind /run  $LIVE_BOOT/chroot/run
+for p in proc sys dev dev/pts run ; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done
 
-
-chroot $LIVE_BOOT/chroot /bin/bash <<'EOF'
+# chroot $LIVE_BOOT/chroot /bin/bash <<'EOF'
 
 export QUIET="-q -y"
 export DEBIAN_FRONTEND=noninteractive
@@ -108,25 +104,37 @@ echo "--> install kernel"
 apt-get $QUIET --no-install-recommends install linux-image-amd64 linux-headers-amd64 intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
 
 echo "--> install packages"
-apt-get $QUIET install aptitude apt-utils autofs bash bash-completion bc bind9-dnsutils bind9-host bzip2 ca-certificates chntpw clonezilla colordiff command-not-found cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debian-faq debootstrap dmraid dnsutils doc-debian dosfstools ethtool ext4magic exuberant-ctags fdisk file gddrescue gdisk gettext-base git gpart groff-base grub-efi-amd64-bin grub-efi-ia32-bin grub-pc-bin hashalot hexcurse htop iftop ifupdown init ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-ping isc-dhcp-client isc-dhcp-common isolinux jfsutils kmod kpartx krb5-locales less lftp libguestfs-tools liblockfile-bin libnet-xmpp-perl libnfs-utils libnss-systemd libpam-mount libpam-systemd libqcow-utils libterm-readline-gnu-perl libusb-dev live-boot lm-sensors localepurge logrotate lsb-release lshw lsof man-db manpages mc media-types memtest86+ mime-support mlocate moreutils mpg123 mtools nano ncdu ncurses-term netcat netcat-traditional net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nftables nmap nullmailer openconnect openssh-client p7zip-full paperkey par2 partclone parted pciutils perltidy picocom procps python3-reportbug qemu-guest-agent rar rcs readline-common recode reiser4progs reiserfsprogs reportbug rsync rsyslog screen sensible-utils socat squashfs-tools squashfs-tools-ng ssh strace stress syslinux-efi sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet tidy tmate tmux traceroute tree tzdata ucf udev vim vim-common vim-tiny wamerican wget whiptail wireless-tools xfsprogs xorriso xz-utils zsh zsh-doc zstd xinit xfce4 xfce4-screenshooter xfce4-power-manager-plugins xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin xterm lightdm- gparted vim-gtk xauth xsel xclip xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver rdesktop remmina ristretto feh x11vnc galculator mousepad dislocker meld yelp- fonts-dejavu fonts-noto-color-emoji fonts-wqy-microhei fonts-lato- fonts-droid-fallback- fonts-noto-mono- fonts-font-awesome- fonts-urw-base35- ghostscript- live-boot-doc- pocketsphinx-en-us- libpocketsphinx3- zfs-initramfs
+apt-get $QUIET install aptitude apt-utils autofs bash bash-completion bc bind9-dnsutils bind9-host bzip2 ca-certificates chntpw clonezilla colordiff command-not-found cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debootstrap dmraid dnsutils dosfstools ethtool ext4magic exuberant-ctags fdisk file gddrescue gdisk gettext-base git gpart groff-base grub-efi-amd64-bin grub-efi-ia32-bin grub-pc-bin hashalot hexcurse htop iftop ifupdown init ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-ping isc-dhcp-client isc-dhcp-common isolinux jfsutils kmod kpartx krb5-locales less lftp liblockfile-bin libnet-xmpp-perl libnfs-utils libnss-systemd libpam-mount libpam-systemd libqcow-utils libterm-readline-gnu-perl libusb-dev live-boot lm-sensors localepurge logrotate lsb-release lshw lsof man-db manpages mc media-types memtest86+ mime-support mlocate moreutils mtools nano ncdu ncurses-term netcat netcat-traditional net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nftables nmap nullmailer openconnect openssh-client p7zip-full paperkey par2 partclone parted pciutils perltidy picocom procps python3-reportbug qemu-guest-agent rar rcs readline-common recode reiser4progs reiserfsprogs reportbug rsync rsyslog screen sensible-utils socat squashfs-tools squashfs-tools-ng ssh strace stress syslinux-efi sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet tidy tmate tmux traceroute tree tzdata ucf udev vim vim-common vim-tiny wamerican wget whiptail wireless-tools xfsprogs xorriso xz-utils zsh zsh-doc zstd xinit xfce4 xfce4-screenshooter xfce4-power-manager-plugins xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin xterm lightdm- gparted vim-gtk xauth xsel xclip xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver rdesktop remmina ristretto x11vnc galculator mousepad dislocker meld yelp- fonts-dejavu fonts-noto-color-emoji fonts-wqy-microhei fonts-lato- fonts-droid-fallback- fonts-noto-mono- fonts-font-awesome- fonts-urw-base35- ghostscript- live-boot-doc- pocketsphinx-en-us- libpocketsphinx3- zfs-initramfs
 
+# libguestfs-tools
 # net-tools
 # broadcom-sta-dkms
 # xserver-xorg-input-synaptics
 # keepassxc
 
-find /usr/lib/modules/$(uname -r) -type f -name "*.ko" -exec strip --strip-unneeded {} \;
+# EOF
+# exit
+
+#find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
+#find /usr/lib/modules/$(uname -r) -type f -name "*.ko" -exec strip --strip-unneeded {} \;
 mkinitramfs -c xz -o /boot/initrd.img-$(uname -r)
 
 ##==================================================##
 
 # Configuration
-sed -i 's/#\(Storage=\)auto/\1volatile/' /etc/systemd/journald.conf
-sed -i 's/#\(Audit=\)yes/\1no/' /etc/systemd/journald.conf
 
-sed -i 's/#\(HandleSuspendKey=\)suspend/\1ignore/' /etc/systemd/logind.conf
-sed -i 's/#\(HandleHibernateKey=\)hibernate/\1ignore/' /etc/systemd/logind.conf
-sed -i 's/#\(HandleLidSwitch=\)suspend/\1ignore/' /etc/systemd/logind.conf
+# dpkg-reconfigure locales
+perl -i -pe 's,# en_US.UTF-8 UTF-8,en_US.UTF-8 UTF-8,' /etc/locale.gen
+perl -i -pe 's,# fr_FR.UTF-8 UTF-8,fr_FR.UTF-8 UTF-8,' /etc/locale.gen
+update-locale LANG=en_US.UTF-8
+locale-gen
+
+perl -i -pe 's/#(Storage=)auto/$1volatile/' /etc/systemd/journald.conf
+perl -i -pe 's/#(Audit=)/$1no/' /etc/systemd/journald.conf
+
+perl -i -pe 's/#(HandleSuspendKey=)suspend/$1ignore/' /etc/systemd/logind.conf
+perl -i -pe 's/#(HandleHibernateKey=)hibernate/$1ignore/' /etc/systemd/logind.conf
+perl -i -pe 's/#(HandleLidSwitch=)suspend/$1ignore/' /etc/systemd/logind.conf
 
 # PulseAudio takes care of volume restore
 ln -sf /dev/null /etc/udev/rules.d/90-alsa-restore.rules
@@ -143,12 +151,6 @@ ln -s /etc/systemd/system/ssh-keygen-host.service /etc/systemd/system/multi-user
 #ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
 ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime
 dpkg-reconfigure -f noninteractive tzdata
-
-# dpkg-reconfigure locales
-perl -i -pe 's,# en_US.UTF-8 UTF-8,en_US.UTF-8 UTF-8,' /etc/locale.gen
-perl -i -pe 's,# fr_FR.UTF-8 UTF-8,fr_FR.UTF-8 UTF-8,' /etc/locale.gen
-update-locale LANG=en_US.UTF-8
-locale-gen
 
 perl -i -pe 's,^#/net\s*-hosts.*,/net    -hosts,' /etc/auto.master
 systemctl restart autofs
@@ -182,8 +184,8 @@ localepurge
 apt-get $QUIET purge 'linux-headers-*'
 apt-get $QUIET autoremove
 
-dpkg-query -Wf '${Package}\n' | sed 's/\s\+$//' | LANG=C sort > pkg_list_rescue.txt
-dpkg-query -Wf '${Installed-Size}\t${Package} (${version})\n' | LANG=C sort -rn > pkg_size_rescue.txt
+dpkg-query -Wf '${Package}\n' | sed 's/\s\+$//' | LANG=C sort > /root/pkg_list_rescue.txt
+dpkg-query -Wf '${Installed-Size}\t${Package} (${version})\n' | LANG=C sort -rn > /root/pkg_size_rescue.txt
 apt-get $QUIET clean
 
 rm -fr   /var/cache/ldconfig
@@ -203,7 +205,6 @@ cat /dev/null > /etc/machine-id
 cat /dev/null > /etc/fstab
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 
-#end!
 EOF
 
 cd
@@ -221,10 +222,6 @@ make_03_copyfiles() {
 echo "-> Copy files =============================================="
 
 rsync -av --chown=root:root $LIVE_BOOT/../liverootfs/ $LIVE_BOOT/chroot
-
-echo "-> Strip large binaries ===================================="
-
-find $LIVE_BOOT/chroot/usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
 
 echo "-> Copy staging ============================================"
 
@@ -251,8 +248,8 @@ echo "-> Squashfs ==============================================="
 
 rm -f $LIVE_BOOT/staging/live/filesystem.squashfs
 
-#mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -e boot
-mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp zstd -Xcompression-level 5 -e boot
+mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -e boot
+#mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp zstd -Xcompression-level 5 -e boot
 #minsize
 #mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k -e boot
 
