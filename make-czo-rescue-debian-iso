@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Tuesday 03 January 2023, 15:34
+# Last Modified: Tuesday 03 January 2023, 16:53
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 79:39:36
+# Edit Time: 79:43:14
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -49,7 +49,6 @@ mkdir -p $LIVE_BOOT
 
 debootstrap --arch=amd64 --merged-usr --components=main,contrib,non-free --force-check-gpg bullseye $LIVE_BOOT/chroot http://deb.debian.org/debian/
 
-
 # --variant=minbase
 # --print-debs
 
@@ -72,7 +71,7 @@ echo "-> Chroot =================================================="
 
 for p in proc sys dev dev/pts run ; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done
 
-# chroot $LIVE_BOOT/chroot /bin/bash <<'EOF'
+chroot $LIVE_BOOT/chroot /bin/bash <<'EOF'
 
 export QUIET="-q -y"
 export DEBIAN_FRONTEND=noninteractive
@@ -129,15 +128,10 @@ perl -i -pe 's,# fr_FR.UTF-8 UTF-8,fr_FR.UTF-8 UTF-8,' /etc/locale.gen
 update-locale LANG=en_US.UTF-8
 locale-gen
 
-perl -i -pe 's/#(Storage=)auto/$1volatile/' /etc/systemd/journald.conf
-perl -i -pe 's/#(Audit=)/$1no/' /etc/systemd/journald.conf
-
-perl -i -pe 's/#(HandleSuspendKey=)suspend/$1ignore/' /etc/systemd/logind.conf
-perl -i -pe 's/#(HandleHibernateKey=)hibernate/$1ignore/' /etc/systemd/logind.conf
-perl -i -pe 's/#(HandleLidSwitch=)suspend/$1ignore/' /etc/systemd/logind.conf
-
-# PulseAudio takes care of volume restore
-ln -sf /dev/null /etc/udev/rules.d/90-alsa-restore.rules
+# dpkg-reconfigure tzdata
+#ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
+ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime
+dpkg-reconfigure -f noninteractive tzdata
 
 # sshd
 #in debian 7,8,9 ^Permit, in debian 10 ^#Permit
@@ -147,14 +141,22 @@ perl -i -pe 's,^#?X11Forwarding.*,X11Forwarding yes,' /etc/ssh/sshd_config
 #systemctl restart sshd
 ln -s /etc/systemd/system/ssh-keygen-host.service /etc/systemd/system/multi-user.target.wants/ssh-keygen-host.service
 
-# dpkg-reconfigure tzdata
-#ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
-ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime
-dpkg-reconfigure -f noninteractive tzdata
+# systemd
+perl -i -pe 's/#(Storage=)auto/$1volatile/' /etc/systemd/journald.conf
+perl -i -pe 's/#(Audit=)/$1no/' /etc/systemd/journald.conf
 
+perl -i -pe 's/#(HandleSuspendKey=)suspend/$1ignore/' /etc/systemd/logind.conf
+perl -i -pe 's/#(HandleHibernateKey=)hibernate/$1ignore/' /etc/systemd/logind.conf
+perl -i -pe 's/#(HandleLidSwitch=)suspend/$1ignore/' /etc/systemd/logind.conf
+
+# PulseAudio
+ln -sf /dev/null /etc/udev/rules.d/90-alsa-restore.rules
+
+# autofs
 perl -i -pe 's,^#/net\s*-hosts.*,/net    -hosts,' /etc/auto.master
 systemctl restart autofs
 
+# my dot config
 cd /root
 curl -fsSL https://raw.githubusercontent.com/czodroid/dotfiles/master/config-fast-copy | sh
 curl -fsSL https://raw.githubusercontent.com/czodroid/dotfiles/master/config-fast-ssh  | sh
@@ -163,8 +165,6 @@ rm -fr /root/.ssh_fast_*
 # passwd
 echo 'root:toor' | chpasswd
 
-date > /root/czo@free.fr
-
 # mnt
 mkdir -p /mnt/rootfs
 mkdir -p /mnt/sda1
@@ -172,7 +172,11 @@ mkdir -p /mnt/sda2
 mkdir -p /mnt/sdb1
 mkdir -p /mnt/sdb2
 
+date > /root/czo@free.fr
+
+
 # Cleanup
+
 find /usr/lib -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
 rm -rf /usr/share/gtk-doc /usr/share/doc
 rm -rf /usr/share/help
@@ -198,7 +202,6 @@ mkdir -p /var/lib/aptitude
 
 updatedb
 
-# rm sshkey machine_id fstab
 rm -f /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub
 rm -f /var/lib/dbus/machine-id
 cat /dev/null > /etc/machine-id
