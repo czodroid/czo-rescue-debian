@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 04 January 2023, 12:20
+# Last Modified: Wednesday 04 January 2023, 18:07
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 80:14:12
+# Edit Time: 80:18:20
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -49,6 +49,8 @@ mkdir -p $LIVE_BOOT
 
 debootstrap --arch=amd64 --merged-usr --components=main,contrib,non-free --force-check-gpg bullseye $LIVE_BOOT/chroot http://deb.debian.org/debian/
 
+# --arch=i386
+# --arch=amd64
 # --variant=minbase
 # --print-debs
 
@@ -71,6 +73,8 @@ echo "-> Chroot =================================================="
 for p in proc sys dev dev/pts run ; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done
 
 chroot $LIVE_BOOT/chroot /bin/bash <<'EOF'
+
+set -e -u
 
 export QUIET="-q -y"
 export DEBIAN_FRONTEND=noninteractive
@@ -109,10 +113,13 @@ apt-get $QUIET install aptitude apt-utils autofs bash bash-completion bc bind9-d
 # broadcom-sta-dkms
 # xserver-xorg-input-synaptics
 # keepassxc
+# gstreamer1.0-libav
+# zfs-initramfs
 
 # EOF
 # exit
 
+echo "--> mkinitramfs"
 #find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
 #find /usr/lib/modules/$(uname -r) -type f -name "*.ko" -exec strip --strip-unneeded {} \;
 mkinitramfs -c xz -o /boot/initrd.img-$(uname -r)
@@ -124,8 +131,8 @@ echo "--> configuration"
 # dpkg-reconfigure locales
 perl -i -pe 's,# en_US.UTF-8 UTF-8,en_US.UTF-8 UTF-8,' /etc/locale.gen
 perl -i -pe 's,# fr_FR.UTF-8 UTF-8,fr_FR.UTF-8 UTF-8,' /etc/locale.gen
-update-locale LANG=en_US.UTF-8
 locale-gen
+update-locale LANG=en_US.UTF-8
 
 # dpkg-reconfigure tzdata
 #ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
