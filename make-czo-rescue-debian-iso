@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Thursday 05 January 2023, 14:55
+# Last Modified: Thursday 05 January 2023, 15:34
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 82:21:35
+# Edit Time: 82:27:21
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -20,13 +20,13 @@ set -e -u
 SCRIPT_PATH=$(readlink -f ${0%/*})
 export ISO_VERSION="$(<${SCRIPT_PATH}/VERSION)"
 
-export ARCH="amd64"
-#export ARCH="i386"
+#export ARCH="amd64"
+export ARCH="686"
 
 if [ $ARCH = "amd64" ]; then
     ISO_SUFFIXE=""
 else
-    ISO_SUFFIXE="-nozfs-i386"
+    ISO_SUFFIXE="-i686"
 fi
 
 export LIVE_BOOT=$SCRIPT_PATH/build
@@ -270,10 +270,8 @@ if [ $ARCH = "amd64" ]; then
     cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-amd64 $LIVE_BOOT/staging/live/vmlinuz
     cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-amd64 $LIVE_BOOT/staging/live/initrd
 else
-    cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-686 $LIVE_BOOT/staging/live/vmlinuz
-    cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-686 $LIVE_BOOT/staging/live/initrd
-    cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-pae $LIVE_BOOT/staging/live/vmlinuz-pae
-    cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-pae $LIVE_BOOT/staging/live/initrd-pae
+    cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-pae $LIVE_BOOT/staging/live/vmlinuz
+    cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-pae $LIVE_BOOT/staging/live/initrd
 fi
 
 cp -f $LIVE_BOOT/chroot/boot/memtest.bin $LIVE_BOOT/staging/live/memtest.bin
