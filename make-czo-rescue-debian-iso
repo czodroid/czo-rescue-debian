@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Thursday 05 January 2023, 13:47
+# Last Modified: Thursday 05 January 2023, 13:51
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 81:49:12
+# Edit Time: 81:51:25
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -318,8 +318,8 @@ insmod iso9660
 # Global options
 set timeout=300
 # start with 0
-set default=1
-set fallback=1
+set default=2
+set fallback=2
 set pager=1
 
 #serial --speed=115200 efi0
@@ -375,6 +375,12 @@ menuentry "Run Memtest86+" {
     echo "Memtest86+ launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/memtest.efi keyboard=both
+}
+
+menuentry "Start EFI Shell" {
+    insmod chain
+    terminal_output console
+    chainloader /EFI/shell.efi
 }
 
 menuentry "EFI Firmware setup" {
