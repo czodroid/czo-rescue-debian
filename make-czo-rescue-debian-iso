@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Thursday 05 January 2023, 13:51
+# Last Modified: Thursday 05 January 2023, 14:49
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 81:51:25
+# Edit Time: 82:19:51
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -18,15 +18,27 @@
 set -e -u
 
 SCRIPT_PATH=$(readlink -f ${0%/*})
+export ISO_VERSION="$(<${SCRIPT_PATH}/VERSION)"
+
+export ARCH="amd64"
+#export ARCH="i386"
+
+if [ $ARCH = "amd64" ]; then
+    ISO_SUFFIXE=""
+else
+    ISO_SUFFIXE="-nozfs-i386"
+fi
+
 export LIVE_BOOT=$SCRIPT_PATH/build
 export LOG=$SCRIPT_PATH/build.log
-export ISO_VERSION="$(<${SCRIPT_PATH}/VERSION)"
-export ISO_NAME="czo-rescue-debian-${ISO_VERSION}.iso"
 mkdir -p $LIVE_BOOT
-rm -fr $LOG
+
+export ISO_NAME="czo-rescue-debian-${ISO_VERSION}${ISO_SUFFIXE}.iso"
+
 unset LANGUAGE LC_ALL LC_MONETARY LC_PAPER LC_MEASUREMENT LC_TIME LC_NUMERIC LANG
 export LANG=en_US.UTF-8
 echo "export LIVE_BOOT=$LIVE_BOOT"
+rm -fr $LOG
 
 ##================================================================
 run_once() {
@@ -47,7 +59,11 @@ echo "-> Prepare ================================================="
 rm -fr $LIVE_BOOT
 mkdir -p $LIVE_BOOT
 
-debootstrap --arch=amd64 --merged-usr --components=main,contrib,non-free --force-check-gpg bullseye $LIVE_BOOT/chroot http://deb.debian.org/debian/
+if [ $ARCH = "amd64" ]; then
+    debootstrap --arch=amd64 --merged-usr --components=main,contrib,non-free --force-check-gpg bullseye $LIVE_BOOT/chroot http://deb.debian.org/debian/
+else
+    debootstrap --arch=i386 --merged-usr --components=main,contrib,non-free --force-check-gpg bullseye $LIVE_BOOT/chroot http://deb.debian.org/debian/
+fi
 
 # --arch=i386
 # --arch=amd64
@@ -103,12 +119,17 @@ apt-get $QUIET update
 
 echo "--> install kernel"
 #--no-install-recommends
-apt-get $QUIET --no-install-recommends install linux-image-amd64 linux-headers-amd64 intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
+
+if [ $ARCH = "amd64" ]; then
+    apt-get $QUIET --no-install-recommends install linux-image-amd64 linux-headers-amd64 intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
+else
+    apt-get $QUIET --no-install-recommends install linux-image-686 linux-headers-686 linux-image-686-pae linux-headers-686-pae intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
+fi
 
 echo "--> install packages"
 apt-get $QUIET install aptitude apt-utils autofs bash bash-completion bc bind9-dnsutils bind9-host bzip2 ca-certificates chntpw clonezilla colordiff command-not-found cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debootstrap dmraid dnsutils dosfstools ethtool ext4magic exuberant-ctags fdisk file gddrescue gdisk gettext-base git gpart groff-base grub-efi-amd64-bin grub-efi-ia32-bin grub-pc-bin hashalot hexcurse htop iftop ifupdown init ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-ping isc-dhcp-client isc-dhcp-common isolinux jfsutils kmod kpartx krb5-locales less lftp libguestfs-tools liblockfile-bin libnet-xmpp-perl libnfs-utils libnss-systemd libpam-mount libpam-systemd libqcow-utils libterm-readline-gnu-perl libusb-dev live-boot lm-sensors localepurge logrotate lsb-release lshw lsof man-db manpages mc media-types memtest86+ mime-support mlocate moreutils mtools nano ncdu ncurses-term netcat netcat-traditional net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nftables nmap nullmailer openconnect openssh-client p7zip-full paperkey par2 partclone parted pciutils perltidy picocom procps python3-reportbug qemu-guest-agent rar rcs readline-common recode reiser4progs reiserfsprogs reportbug rsync rsyslog screen sensible-utils socat squashfs-tools squashfs-tools-ng ssh strace stress syslinux-efi sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet tidy tmate tmux traceroute tree tzdata ucf udev vim vim-common vim-tiny wamerican wget whiptail wireless-tools xfsprogs xorriso xz-utils zsh zstd xinit xfce4 xfce4-screenshooter xfce4-power-manager-plugins xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin xterm lightdm- gparted vim-gtk xauth xsel xclip xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver rdesktop remmina ristretto x11vnc galculator mousepad dislocker meld yelp- fonts-dejavu fonts-noto-color-emoji fonts-wqy-microhei fonts-lato- fonts-droid-fallback- fonts-noto-mono- fonts-font-awesome- fonts-urw-base35- ghostscript- live-boot-doc- pocketsphinx-en-us- libpocketsphinx3- zfs-initramfs
 
-#  x11-apps xfonts-100dpi- xfonts-75dpi- xfonts-base- xfonts-scalable-
+# x11-apps xfonts-100dpi- xfonts-75dpi- xfonts-base- xfonts-scalable-
 # net-tools
 # broadcom-sta-dkms
 # xserver-xorg-input-synaptics
@@ -244,8 +265,16 @@ $(date)
 czo@free.fr
 HEREDOC
 
-cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-amd64 $LIVE_BOOT/staging/live/vmlinuz
-cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-amd64 $LIVE_BOOT/staging/live/initrd
+if [ $ARCH = "amd64" ]; then
+    cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-amd64 $LIVE_BOOT/staging/live/vmlinuz
+    cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-amd64 $LIVE_BOOT/staging/live/initrd
+else
+    cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-686 $LIVE_BOOT/staging/live/vmlinuz
+    cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-686 $LIVE_BOOT/staging/live/initrd
+    cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-pae $LIVE_BOOT/staging/live/vmlinuz-pae
+    cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-pae $LIVE_BOOT/staging/live/initrd-pae
+fi
+
 cp -f $LIVE_BOOT/chroot/boot/memtest.bin $LIVE_BOOT/staging/live/memtest.bin
 cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/live/memtest.efi
 cp -f $LIVE_BOOT/chroot/boot/LICENSE.memtest $LIVE_BOOT/staging/live/LICENSE.memtest
@@ -297,6 +326,11 @@ label Czo Rescue Debian, $ISO_VERSION, zfs (root/toor)
 label Czo Rescue Debian, $ISO_VERSION, zfs, failsafe (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
+
+label TEST ISO Czo Rescue Debian $ISO_VERSION
+    kernel /boot/memdisk iso
+    append initrd=/boot/images/czo-rescue-debian-11.6.iso
+}
 
 label Run Memtest86+
     linux /live/memtest.bin
@@ -355,7 +389,15 @@ menuentry "Czo Rescue Debian, $ISO_VERSION, zfs, failsafe (root/toor)" {
     initrd (\$root)/live/initrd
 }
 
-menuentry "TEST ISO Czo Rescue Debian, $ISO_VERSION, zfs (root/toor)" {
+menuentry "TEST ISO Czo Rescue Debian $ISO_VERSION" {
+    echo "ISO Czo Rescue Debian launch in progress, please stand by..."
+    set root='hd0,msdos1'
+    #search --no-floppy --set=root --label RESCUE
+    linux16 (\$root)/isolinux/memdisk iso
+    initrd16 (\$root)/boot/images/czo-rescue-debian-11.6.iso
+}
+
+menuentry "TEST ISO Czo Rescue Debian $ISO_VERSION, initrd" {
     echo "ISO Czo Rescue Debian launch in progress, please stand by..."
     set isoname="/boot/images/czo-rescue-debian-11.6.iso"
     loopback loop (hd0,msdos1)"\${isoname}"
@@ -363,24 +405,10 @@ menuentry "TEST ISO Czo Rescue Debian, $ISO_VERSION, zfs (root/toor)" {
     initrd (loop)/live/initrd
 }
 
-menuentry "TEST Bootable Czo Rescue Debian, $ISO_VERSION, zfs (root/toor)" {
-    echo "ISO Czo Rescue Debian launch in progress, please stand by..."
-    set root='hd0,msdos1'
-    #search --no-floppy --set=root --label RESCUE
-    linux16 (\$root)/isolinux/memdisk
-    initrd16 (\$root)/boot/images/czo-rescue-debian-11.6.iso
-}
-
 menuentry "Run Memtest86+" {
     echo "Memtest86+ launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/memtest.efi keyboard=both
-}
-
-menuentry "Start EFI Shell" {
-    insmod chain
-    terminal_output console
-    chainloader /EFI/shell.efi
 }
 
 menuentry "EFI Firmware setup" {
