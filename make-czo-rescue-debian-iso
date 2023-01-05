@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Thursday 05 January 2023, 11:34
+# Last Modified: Thursday 05 January 2023, 13:47
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 81:43:38
+# Edit Time: 81:49:12
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -248,6 +248,7 @@ cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-amd64 $LIVE_BOOT/staging/live/vmlinuz
 cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-amd64 $LIVE_BOOT/staging/live/initrd
 cp -f $LIVE_BOOT/chroot/boot/memtest.bin $LIVE_BOOT/staging/live/memtest.bin
 cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/live/memtest.efi
+cp -f $LIVE_BOOT/chroot/boot/LICENSE.memtest $LIVE_BOOT/staging/live/LICENSE.memtest
 
 }
 
@@ -317,8 +318,8 @@ insmod iso9660
 # Global options
 set timeout=300
 # start with 0
-set default=2
-set fallback=2
+set default=1
+set fallback=1
 set pager=1
 
 #serial --speed=115200 efi0
