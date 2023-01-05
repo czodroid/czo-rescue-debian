@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Thursday 05 January 2023, 14:49
+# Last Modified: Thursday 05 January 2023, 14:55
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 82:19:51
+# Edit Time: 82:21:35
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -252,6 +252,7 @@ make_03_copyfiles() {
 echo "-> Copy files =============================================="
 
 rsync -av --chown=root:root $LIVE_BOOT/../liverootfs/ $LIVE_BOOT/chroot
+#    cp -af --no-preserve=ownership ${script_path}/airootfs ${work_dir}/${arch}
 
 echo "-> Copy staging ============================================"
 
