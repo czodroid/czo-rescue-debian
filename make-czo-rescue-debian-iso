@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 04 January 2023, 21:35
+# Last Modified: Thursday 05 January 2023, 11:34
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 80:52:35
+# Edit Time: 81:43:38
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -246,7 +246,8 @@ HEREDOC
 
 cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-amd64 $LIVE_BOOT/staging/live/vmlinuz
 cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-amd64 $LIVE_BOOT/staging/live/initrd
-cp -f $LIVE_BOOT/chroot/boot/memtest86+.bin $LIVE_BOOT/staging/live/memtest86+.bin
+cp -f $LIVE_BOOT/chroot/boot/memtest.bin $LIVE_BOOT/staging/live/memtest.bin
+cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/live/memtest.efi
 
 }
 
@@ -297,7 +298,7 @@ label Czo Rescue Debian, $ISO_VERSION, zfs, failsafe (root/toor)
     append initrd=/live/initrd boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
 
 label Run Memtest86+
-    linux /live/memtest86+.bin
+    linux /live/memtest.bin
 
 label Reboot
     com32 reboot.c32
@@ -353,23 +354,26 @@ menuentry "Czo Rescue Debian, $ISO_VERSION, zfs, failsafe (root/toor)" {
     initrd (\$root)/live/initrd
 }
 
-menuentry "ISO Czo Rescue Debian, $ISO_VERSION, zfs (root/toor)" {
-      echo "ISO Czo Rescue Debian launch in progress, please stand by..."
-      set isoname="/boot/images/czo-rescue-debian-11.6.iso"
-      loopback loop (hd0,msdos1)"\${isoname}"
-      linux (loop)/live/vmlinuz boot=live findiso="\${isoname}" toram=filesystem.squashfs
-      initrd (loop)/live/initrd
+menuentry "TEST ISO Czo Rescue Debian, $ISO_VERSION, zfs (root/toor)" {
+    echo "ISO Czo Rescue Debian launch in progress, please stand by..."
+    set isoname="/boot/images/czo-rescue-debian-11.6.iso"
+    loopback loop (hd0,msdos1)"\${isoname}"
+    linux (loop)/live/vmlinuz boot=live findiso="\${isoname}" toram=filesystem.squashfs
+    initrd (loop)/live/initrd
 }
 
-menuentry "BLABLA, Bootable ISO Image: czo-rescue-debian-11.6" {
-	set root='hd0,msdos1'
-	if [ x\$feature_platform_search_hint = xy ]; then
-	  search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos1 --hint-efi=hd0,msdos1 --hint-baremetal=ahci0,msdos1  4ac67f13-a909-4cec-9697-ab2eb773d7fc
-	else
-	  search --no-floppy --fs-uuid --set=root 4ac67f13-a909-4cec-9697-ab2eb773d7fc
-	fi
-	linux16 /boot/memdisk iso
-	initrd16 /boot/images/czo-rescue-debian-11.6.iso
+menuentry "TEST Bootable Czo Rescue Debian, $ISO_VERSION, zfs (root/toor)" {
+    echo "ISO Czo Rescue Debian launch in progress, please stand by..."
+    set root='hd0,msdos1'
+    #search --no-floppy --set=root --label RESCUE
+    linux16 (\$root)/isolinux/memdisk
+    initrd16 (\$root)/boot/images/czo-rescue-debian-11.6.iso
+}
+
+menuentry "Run Memtest86+" {
+    echo "Memtest86+ launch in progress, please stand by..."
+    search --no-floppy --set=root --label RESCUE
+    linux (\$root)/live/memtest.efi keyboard=both
 }
 
 menuentry "EFI Firmware setup" {
