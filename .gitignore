@@ -1,4 +1,5 @@
 build.log
 build/
+build-i686/
 savebuild/
-*.swp
+*.sw?
