@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 08 January 2023, 19:13
+# Last Modified: Sunday 08 January 2023, 22:11
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 83:42:10
+# Edit Time: 83:49:07
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -76,11 +76,9 @@ make_02_chroot() {
 echo "-> Chroot =================================================="
 
 ## test
-# ##cp -f ~/.bashrc $LIVE_BOOT/chroot/root
-# ##rsync --delete -av $LIVE_BOOT/../build/ $LIVE_BOOT/../savebuild
 # echo
 # echo "export LIVE_BOOT=$LIVE_BOOT"
-# echo
+# echo 'cp -f ~/.bashrc $LIVE_BOOT/chroot/root'
 # echo 'umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc} ; sleep 1 && rsync --delete -av $LIVE_BOOT/../savebuild/ $LIVE_BOOT && for p in proc sys dev dev/pts run; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done && chroot $LIVE_BOOT/chroot /bin/bash ; umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}'
 # exit
 
@@ -164,6 +162,12 @@ perl -i -pe 's,^#?X11Forwarding.*,X11Forwarding yes,' /etc/ssh/sshd_config
 #systemctl restart sshd
 ln -fs /etc/systemd/system/ssh-keygen-host.service /etc/systemd/system/multi-user.target.wants/ssh-keygen-host.service
 
+# rescue-initialize
+ln -fs /etc/systemd/system/rescue-initialize.service /etc/systemd/system/multi-user.target.wants/rescue-initialize.service
+
+# pulseaudio
+ln -fs /dev/null /etc/udev/rules.d/90-alsa-restore.rules
+
 # systemd
 perl -i -pe 's/#(Storage=)auto/$1volatile/' /etc/systemd/journald.conf
 perl -i -pe 's/#(Audit=)/$1no/' /etc/systemd/journald.conf
@@ -171,9 +175,6 @@ perl -i -pe 's/#(Audit=)/$1no/' /etc/systemd/journald.conf
 perl -i -pe 's/#(HandleSuspendKey=)suspend/$1ignore/' /etc/systemd/logind.conf
 perl -i -pe 's/#(HandleHibernateKey=)hibernate/$1ignore/' /etc/systemd/logind.conf
 perl -i -pe 's/#(HandleLidSwitch=)suspend/$1ignore/' /etc/systemd/logind.conf
-
-# PulseAudio
-ln -fs /dev/null /etc/udev/rules.d/90-alsa-restore.rules
 
 # autofs
 perl -i -pe 's,^#/net\s*-hosts.*,/net    -hosts,' /etc/auto.master
