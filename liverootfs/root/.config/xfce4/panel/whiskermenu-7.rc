@@ -1,5 +1,5 @@
-favorites=xfce4-file-manager.desktop,firefox-esr.desktop,xfce4-terminal-emulator.desktop,gparted.desktop,xfce4-screenshooter.desktop,xfce-display-settings.desktop
-recent=xfce-settings-manager.desktop,xfce4-file-manager.desktop
+favorites=xfce4-file-manager.desktop,firefox-esr.desktop,xfce4-terminal-emulator.desktop,org.remmina.Remmina.desktop,gparted.desktop,gsmartcontrol.desktop,xfce4-screenshooter.desktop,xfce-display-settings.desktop
+recent=org.remmina.Remmina.desktop,xfce-settings-manager.desktop,xfce4-file-manager.desktop
 button-icon=xfce4-whiskermenu
 button-single-row=false
 show-button-title=false
