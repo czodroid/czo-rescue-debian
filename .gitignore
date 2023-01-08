@@ -1,3 +1,4 @@
-build.log
-build/
+build-czo-rescue.log
+build-czo-rescue/
 savebuild/
+*.sw?
