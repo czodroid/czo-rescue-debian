@@ -1,5 +1,4 @@
-build.log
-build/
-build-i686/
+build-czo-rescue.log
+build-czo-rescue/
 savebuild/
 *.sw?
