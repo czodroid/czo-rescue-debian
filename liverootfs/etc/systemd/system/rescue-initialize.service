@@ -1,0 +1,12 @@
+[Unit]
+Description=Rescue Initialization
+Before=sshd.service getty-pre.target iptables.service ip6tables.service
+Wants=getty-pre.target
+
+[Service]
+Type=oneshot
+ExecStart=/etc/systemd/scripts/rescue-initialize
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
