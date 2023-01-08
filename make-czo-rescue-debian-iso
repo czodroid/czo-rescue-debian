@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 07 January 2023, 16:07
+# Last Modified: Sunday 08 January 2023, 16:19
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 83:00:56
+# Edit Time: 83:10:21
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -23,17 +23,15 @@ export ISO_VERSION="$(<${SCRIPT_PATH}/VERSION)"
 export ARCH="amd64"
 #export ARCH="686-pae"
 
-if [ $ARCH = "amd64" ]; then
-    ISO_SUFFIXE=""
-else
-    ISO_SUFFIXE="-i686"
-fi
-
-export LIVE_BOOT=$SCRIPT_PATH/build$ISO_SUFFIXE
-export LOG=$SCRIPT_PATH/build.log
+export LIVE_BOOT=$SCRIPT_PATH/build-czo-rescue
+export LOG=$SCRIPT_PATH/build-czo-rescue.log
 mkdir -p $LIVE_BOOT
 
-export ISO_NAME="czo-rescue-debian-${ISO_VERSION}${ISO_SUFFIXE}.iso"
+if [ $ARCH = "amd64" ]; then
+    export ISO_NAME="czo-rescue-debian-${ISO_VERSION}.iso"
+else
+    export ISO_NAME="czo-rescue-debian-${ISO_VERSION}-${ARCH}.iso"
+fi
 
 unset LANGUAGE LC_ALL LC_MONETARY LC_PAPER LC_MEASUREMENT LC_TIME LC_NUMERIC LANG
 export LANG=en_US.UTF-8
@@ -202,16 +200,16 @@ date > /root/czo@free.fr
 
 echo "--> cleanup"
 
+apt-get $QUIET purge 'linux-headers-*'
+apt-get $QUIET autoremove
+
 find /usr/lib -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
 rm -rf /usr/share/gtk-doc /usr/share/doc
-rm -rf /usr/share/help
 rm -rf /usr/share/keepassxc/docs /usr/share/keepassxc/translations
+rm -rf /usr/share/help
 
 echo -e "MANDELETE\nDONTBOTHERNEWLOCALE\nSHOWFREEDSPACE\nen\nen_US\nen_US.UTF-8" > /etc/locale.nopurge
 localepurge
-
-apt-get $QUIET purge 'linux-headers-*'
-apt-get $QUIET autoremove
 
 dpkg-query -Wf '${Package}\n'| LANG=C sort > /root/pkg_list_rescue.txt
 dpkg-query -Wf '${Installed-Size}\t${Package} (${version})\n' | LANG=C sort -rn > /root/pkg_size_rescue.txt
