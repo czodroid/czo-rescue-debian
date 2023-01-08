@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 08 January 2023, 18:02
+# Last Modified: Sunday 08 January 2023, 18:10
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 83:36:11
+# Edit Time: 83:41:02
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -125,7 +125,7 @@ else
 fi
 
 echo "--> install packages"
-apt-get $QUIET install aptitude apt-utils autofs bash bash-completion bc bind9-dnsutils bind9-host bzip2 ca-certificates chntpw clonezilla colordiff command-not-found cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debootstrap dmraid dnsutils dosfstools ethtool ext4magic exuberant-ctags fdisk file gddrescue gdisk gettext-base git gpart groff-base grub-efi-amd64-bin grub-efi-ia32-bin grub-pc-bin hashalot hexcurse htop iftop ifupdown init ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-ping isc-dhcp-client isc-dhcp-common isolinux jfsutils kmod kpartx krb5-locales less lftp libguestfs-tools liblockfile-bin libnet-xmpp-perl libnfs-utils libnss-systemd libpam-mount libpam-systemd libqcow-utils libterm-readline-gnu-perl libusb-dev live-boot lm-sensors localepurge logrotate lsb-release lshw lsof man-db manpages mc media-types mime-support mlocate moreutils mtools nano ncdu ncurses-term netcat netcat-traditional net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nftables nmap nullmailer openconnect openssh-client p7zip-full paperkey par2 partclone parted pciutils perltidy picocom procps python3-reportbug qemu-guest-agent rar rcs readline-common recode reiser4progs reiserfsprogs reportbug rsync rsyslog screen sensible-utils socat squashfs-tools squashfs-tools-ng ssh strace stress syslinux-efi sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet tidy tmate tmux traceroute tree tzdata ucf udev vim vim-common vim-tiny wamerican wget whiptail wireless-tools xfsprogs xorriso xz-utils zsh zstd xinit xfce4 xfce4-screenshooter xfce4-power-manager-plugins xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin xterm lightdm- gparted vim-gtk xauth xsel xclip xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver rdesktop remmina ristretto x11vnc galculator mousepad dislocker meld yelp- fonts-dejavu fonts-noto-color-emoji fonts-wqy-microhei fonts-lato- fonts-droid-fallback- fonts-noto-mono- fonts-font-awesome- fonts-urw-base35- ghostscript- live-boot-doc- pocketsphinx-en-us- libpocketsphinx3- zfs-initramfs
+apt-get $QUIET install aptitude apt-utils autofs bash bash-completion bc bind9-dnsutils bind9-host bzip2 ca-certificates chntpw clonezilla colordiff command-not-found cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debootstrap dmraid dnsutils dosfstools ethtool ext4magic exuberant-ctags fdisk file gddrescue gdisk gettext-base git gpart groff-base grub-efi-amd64-bin grub-efi-ia32-bin grub-pc-bin hashalot hexcurse htop iftop ifupdown init ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-ping isc-dhcp-client isc-dhcp-common isolinux jfsutils kmod kpartx krb5-locales less lftp libguestfs-tools liblockfile-bin libnet-xmpp-perl libnfs-utils libnss-systemd libpam-mount libpam-systemd libqcow-utils libterm-readline-gnu-perl libusb-dev live-boot lm-sensors localepurge logrotate lsb-release lshw lsof man-db manpages mc media-types mime-support mlocate moreutils mtools nano ncdu ncurses-term netcat netcat-traditional net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nftables nmap nullmailer openconnect openssh-client p7zip-full paperkey par2 partclone parted pciutils perltidy picocom procps python3-reportbug qemu-guest-agent rar rcs readline-common recode reiser4progs reiserfsprogs reportbug rsync rsyslog screen sensible-utils socat squashfs-tools squashfs-tools-ng ssh strace stress syslinux-efi sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet tidy tmate tmux traceroute tree tzdata ucf udev vim vim-common vim-tiny wamerican wget whiptail wireless-tools whois xfsprogs xorriso xz-utils zsh zstd xinit xfce4 xfce4-screenshooter xfce4-power-manager-plugins xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin xterm lightdm- gparted vim-gtk xauth xsel xclip xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver rdesktop remmina ristretto x11vnc galculator mousepad dislocker meld yelp- fonts-dejavu fonts-noto-color-emoji fonts-wqy-microhei fonts-lato- fonts-droid-fallback- fonts-noto-mono- fonts-font-awesome- fonts-urw-base35- ghostscript- live-boot-doc- pocketsphinx-en-us- libpocketsphinx3- zfs-initramfs
 
 # gstreamer1.0-libav
 # net-tools
@@ -162,7 +162,7 @@ perl -i -pe 's,^#?PermitRootLogin.*,PermitRootLogin yes,' /etc/ssh/sshd_config
 #arch linux
 perl -i -pe 's,^#?X11Forwarding.*,X11Forwarding yes,' /etc/ssh/sshd_config
 #systemctl restart sshd
-ln -s /etc/systemd/system/ssh-keygen-host.service /etc/systemd/system/multi-user.target.wants/ssh-keygen-host.service
+ln -fs /etc/systemd/system/ssh-keygen-host.service /etc/systemd/system/multi-user.target.wants/ssh-keygen-host.service
 
 # systemd
 perl -i -pe 's/#(Storage=)auto/$1volatile/' /etc/systemd/journald.conf
@@ -173,7 +173,7 @@ perl -i -pe 's/#(HandleHibernateKey=)hibernate/$1ignore/' /etc/systemd/logind.co
 perl -i -pe 's/#(HandleLidSwitch=)suspend/$1ignore/' /etc/systemd/logind.conf
 
 # PulseAudio
-ln -sf /dev/null /etc/udev/rules.d/90-alsa-restore.rules
+ln -fs /dev/null /etc/udev/rules.d/90-alsa-restore.rules
 
 # autofs
 perl -i -pe 's,^#/net\s*-hosts.*,/net    -hosts,' /etc/auto.master
