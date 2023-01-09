@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Monday 9 January 2023, 13:35
+# Last Modified: Monday 09 January 2023, 14:02
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 83:49:07
+# Edit Time: 83:54:51
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -137,7 +137,9 @@ apt-get $QUIET install aptitude apt-utils autofs bash bash-completion bc bind9-d
 echo "--> mkinitramfs"
 #find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
 #find /usr/lib/modules/$(uname -r) -type f -name "*.ko" -exec strip --strip-unneeded {} \;
-mkinitramfs -c xz -o /boot/initrd.img-$(uname -r)
+
+
+#debug mkinitramfs -c xz -o /boot/initrd.img-$(uname -r)
 
 ##==================================================##
 
@@ -201,8 +203,8 @@ date > /root/czo@free.fr
 
 echo "--> cleanup"
 
-apt-get $QUIET purge 'linux-headers-*'
-apt-get $QUIET autoremove
+#debug apt-get $QUIET purge 'linux-headers-*'
+#debug apt-get $QUIET autoremove
 
 find /usr/lib -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
 rm -rf /usr/share/gtk-doc /usr/share/doc
@@ -312,7 +314,7 @@ menu cmdlinerow 16
 label Czo Rescue Debian, $ISO_VERSION, zfs, toram (root/toor)
     menu default
     kernel /live/vmlinuz
-    append initrd=/live/initrd boot=live toram=filesystem.squashfs
+    append initrd=/live/initrd boot=live toram=filesystem.squashfs dostartx
 
 label Czo Rescue Debian, $ISO_VERSION, zfs (root/toor)
     kernel /live/vmlinuz
@@ -366,7 +368,7 @@ menuentry "" { czo }
 menuentry "Czo Rescue Debian, $ISO_VERSION, zfs, toram (root/toor)" {
     echo "Czo Rescue Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
-    linux (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs
+    linux (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs dostartx
     initrd (\$root)/live/initrd
 }
 
