@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 11 January 2023, 10:38
+# Last Modified: Wednesday 11 January 2023, 20:11
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 84:51:31
+# Edit Time: 85:34:08
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -19,6 +19,7 @@ set -e -u
 
 SCRIPT_PATH=$(readlink -f ${0%/*})
 export ISO_VERSION="$(<${SCRIPT_PATH}/VERSION)"
+export ISO_DATE="$(date +%Y-%m-%d)"
 
 export ARCH="amd64"
 #export ARCH="686-pae"
@@ -198,9 +199,6 @@ mkdir -p /mnt/sda2
 mkdir -p /mnt/sdb1
 mkdir -p /mnt/sdb2
 
-date > /root/czo@free.fr
-
-
 echo "--> cleanup"
 
 #debug apt-get $QUIET purge 'linux-headers-*'
@@ -252,17 +250,29 @@ echo "-> Copy files =============================================="
 
 rsync -av --chown=root:root $LIVE_BOOT/../liverootfs/ $LIVE_BOOT/chroot
 #    cp -af --no-preserve=ownership ${script_path}/airootfs ${work_dir}/${arch}
+#             Czo Rescue Debian 11.6 (2023-01-11)\e[m
+
+cat << HEREDOC > $LIVE_BOOT/chroot/etc/issue
+
+\e[97m        Czo Rescue Debian $ISO_VERSION ($ISO_DATE)\e[m
+
+\e[32m===== https://gitlab.com/czo/czo-rescue-debian =====\e[m
+
+Debian GNU/Linux 11 \n \l
+
+HEREDOC
+
 
 echo "-> Copy staging ============================================"
 
 mkdir -p $LIVE_BOOT/{staging/{EFI/BOOT,EFI/debianiso,boot/grub/x86_64-efi,isolinux,live},tmp}
 
 cat << HEREDOC > $LIVE_BOOT/staging/czo-rescue-debian
-Czo Rescue Debian, version $ISO_VERSION
-$(date)
+Czo Rescue Debian $ISO_VERSION ($ISO_DATE)
 
 --
-czo@free.fr
+https://gitlab.com/czo/czo-rescue-debian
+
 HEREDOC
 
 if [ $ARCH = "amd64" ]; then
@@ -304,7 +314,7 @@ timeout 3000
 menu default
 prompt 0
 
-menu title Czo Rescue Debian ($(date +%Y-%m-%d))
+menu title Czo Rescue Debian $ISO_VERSION ($ISO_DATE)
 
 menu margin 8
 menu rows 10
@@ -365,7 +375,7 @@ terminal_input serial console
 insmod efi_gop
 insmod efi_uga
 
-menuentry "                Czo Rescue Debian ($(date +%Y-%m-%d))" { czo }
+menuentry "                Czo Rescue Debian $ISO_VERSION ($ISO_DATE)" { czo }
 
 menuentry "" { czo }
 
