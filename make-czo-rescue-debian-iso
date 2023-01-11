@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 11 January 2023, 10:32
+# Last Modified: Wednesday 11 January 2023, 10:38
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 84:50:17
+# Edit Time: 84:51:31
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -365,32 +365,32 @@ terminal_input serial console
 insmod efi_gop
 insmod efi_uga
 
-menuentry "                   Czo Rescue Debian ($(date +%Y-%m-%d))" { czo }
+menuentry "                Czo Rescue Debian ($(date +%Y-%m-%d))" { czo }
 
 menuentry "" { czo }
 
-menuentry "Czo Rescue Debian, toram, startx (root/toor)" {
+menuentry "Czo Rescue Debian, toram               startx (root/toor)" {
     echo "Czo Rescue Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs dostartx
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, console, toram, SERIAL (root/toor)" {
+menuentry "Czo Rescue Debian, console, toram      SERIAL (root/toor)" {
     echo "Czo Rescue Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs console=ttyS0,115200n8
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, console (root/toor)" {
+menuentry "Czo Rescue Debian, console                    (root/toor)" {
     echo "Czo Rescue Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, failsafe (root/toor)" {
+menuentry "Czo Rescue Debian, failsafe                   (root/toor)" {
     echo "Czo Rescue Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
