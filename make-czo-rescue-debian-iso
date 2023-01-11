@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 11 January 2023, 09:37
+# Last Modified: Wednesday 11 January 2023, 10:32
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 84:49:27
+# Edit Time: 84:50:17
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -316,7 +316,7 @@ label Boot Czo Rescue Debian, toram             startx (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs dostartx
 
-label Boot Czo Rescue Debian, toram, console    SERIAL (root/toor)
+label Boot Czo Rescue Debian, console, toram    SERIAL (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs console=ttyS0,115200n8
 
@@ -376,7 +376,7 @@ menuentry "Czo Rescue Debian, toram, startx (root/toor)" {
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, toram, console, SERIAL (root/toor)" {
+menuentry "Czo Rescue Debian, console, toram, SERIAL (root/toor)" {
     echo "Czo Rescue Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs console=ttyS0,115200n8
