@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Friday 13 January 2023, 18:30
+# Last Modified: Friday 13 January 2023, 18:37
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 96:42:47
+# Edit Time: 96:47:50
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -80,6 +80,8 @@ echo "-> Chroot =================================================="
 # echo
 # echo "export LIVE_BOOT=$LIVE_BOOT"
 # echo 'cp -f ~/.bashrc $LIVE_BOOT/chroot/root'
+# echo 'rm $LIVE_BOOT/build.make_0{3,4,5,6}*'
+# echo 'umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}'
 # echo 'umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc} ; sleep 1 && rsync --delete -av $LIVE_BOOT/../savebuild/ $LIVE_BOOT && for p in proc sys dev dev/pts run; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done && chroot $LIVE_BOOT/chroot /bin/bash ; umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}'
 # exit
 
