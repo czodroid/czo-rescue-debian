@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Friday 13 January 2023, 18:37
+# Last Modified: Friday 13 January 2023, 20:04
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 96:47:50
+# Edit Time: 98:14:07
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -126,13 +126,13 @@ else
 fi
 
 echo "--> install packages"
-apt-get $QUIET install aptitude apt-utils autofs bash bash-completion bc bind9-dnsutils bind9-host bzip2 ca-certificates chntpw clonezilla colordiff command-not-found cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debootstrap dmraid dnsutils dosfstools ethtool ext4magic exuberant-ctags fdisk file gddrescue gdisk gettext-base git gpart groff-base grub-efi-amd64-bin grub-efi-ia32-bin grub-pc-bin hashalot hexcurse htop iftop ifupdown init ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-ping isc-dhcp-client isc-dhcp-common isolinux jfsutils kmod kpartx krb5-locales less lftp libguestfs-tools liblockfile-bin libnet-xmpp-perl libnfs-utils libnss-systemd libpam-mount libpam-systemd libqcow-utils libterm-readline-gnu-perl libusb-dev live-boot lm-sensors localepurge logrotate lsb-release lshw lsof man-db manpages mc media-types mime-support mlocate moreutils mtools nano ncdu ncurses-term netcat netcat-traditional net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nftables nmap nullmailer openconnect openssh-client p7zip-full paperkey par2 partclone parted pciutils perltidy picocom procps python3-reportbug qemu-guest-agent rar rcs readline-common recode reiser4progs reiserfsprogs reportbug rsync rsyslog screen sensible-utils socat squashfs-tools squashfs-tools-ng ssh strace stress syslinux-efi sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet tidy tmate tmux traceroute tree tzdata ucf udev vim vim-common vim-tiny wamerican wget whiptail wireless-tools whois xfsprogs xorriso xz-utils zsh zstd xinit xfce4 xfce4-screenshooter xfce4-power-manager-plugins xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin xterm lightdm- gparted vim-gtk xauth xsel xclip xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver rdesktop remmina ristretto x11vnc galculator mousepad dislocker meld yelp- fonts-dejavu fonts-noto-color-emoji fonts-wqy-microhei fonts-lato- fonts-droid-fallback- fonts-noto-mono- fonts-font-awesome- fonts-urw-base35- ghostscript- live-boot-doc- pocketsphinx-en-us- libpocketsphinx3- zfs-initramfs cloud-guest-utils cloud-image-utils dump fatresize fsarchiver gocryptfs graphicsmagick-imagemagick-compat hdparm hwinfo inxi lrzip lz4 m4 nfs-kernel-server ntpdate nwipe pv rclone rdiff rename sdparm smbclient sqlite3 stoken testdisk vlock wipe atm-tools ffmpeg fido2-tools foremost hardinfo hardlink icu-devtools jq lame ldnsutils libcap-ng-utils libnss3-tools mtr wimtools xbacklight
+apt-get $QUIET install aptitude apt-utils autofs bash bash-completion bc bind9-dnsutils bind9-host bzip2 ca-certificates chntpw clonezilla cloud-guest-utils cloud-image-utils colordiff command-not-found cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debootstrap dmraid dnsutils dosfstools ethtool ext4magic exuberant-ctags fdisk file gddrescue gdisk gettext-base git gocryptfs gpart groff-base grub-efi-amd64-bin grub-efi-ia32-bin grub-pc-bin hashalot hdparm hexcurse htop iftop ifupdown init ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-ping isc-dhcp-client isc-dhcp-common isolinux jfsutils kmod kpartx less lftp libguestfs-tools liblockfile-bin libnet-xmpp-perl libnfs-utils libnss-systemd libpam-mount libpam-systemd libqcow-utils libterm-readline-gnu-perl libusb-dev live-boot lm-sensors localepurge logrotate lrzip lsb-release lshw lsof lz4 m4 man-db manpages mc media-types mime-support mlocate moreutils mtools nano ncdu ncurses-term netcat netcat-traditional net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nfs-kernel-server nftables nmap ntpdate nullmailer openconnect openssh-client p7zip-full paperkey par2 partclone parted pciutils perltidy picocom procps pv python3-reportbug qemu-guest-agent rar rcs readline-common recode reiser4progs reiserfsprogs rename reportbug rsync rsyslog screen sdparm sensible-utils smbclient socat sqlite3 squashfs-tools squashfs-tools-ng ssh strace stress syslinux-efi sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet tidy tmate tmux traceroute tree tzdata ucf udev vim vim-common vim-tiny vlock wamerican wget whiptail whois wireless-tools xfsprogs xorriso xz-utils zfs-initramfs zsh zstd xinit xfce4 xfce4-screenshooter xfce4-power-manager-plugins xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin xterm lightdm- gparted vim-gtk xauth xsel xclip xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver rdesktop remmina ristretto x11vnc galculator mousepad dislocker meld yelp- fonts-dejavu fonts-noto-color-emoji fonts-wqy-microhei fonts-lato- fonts-droid-fallback- fonts-noto-mono- fonts-font-awesome- fonts-urw-base35- live-boot-doc- atm-tools dump fatresize fido2-tools foremost fsarchiver graphicsmagick-imagemagick-compat hardinfo hardlink hwinfo icu-devtools inxi jq lame ldnsutils libcap-ng-utils libnss3-tools mtr nwipe rclone rdiff stoken testdisk wimtools wipe xbacklight ffmpeg
 
+# pocketsphinx-en-us- libpocketsphinx3-
+# ghostscript-
 # krb5-user
-# yubikey
-# ecryptfs-utils
+# krb5-locales
 # gstreamer1.0-libav
-# net-tools
 # broadcom-sta-dkms
 # xserver-xorg-input-synaptics
 # keepassxc
