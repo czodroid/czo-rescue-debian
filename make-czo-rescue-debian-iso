@@ -4,13 +4,13 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 14 January 2023, 05:05
+# Last Modified: Saturday 14 January 2023, 15:33
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 99:16:38
+# Edit Time: 99:19:06
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
-#       > apt install debootstrap squashfs-tools xorriso isolinux syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin mtools dosfstools bash coreutils
+#       > apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin debootstrap squashfs-tools xorriso isolinux mtools dosfstools bash coreutils
 #
 # Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
 
