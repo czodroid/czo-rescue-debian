@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 15 January 2023, 20:23
+# Last Modified: Sunday 15 January 2023, 21:19
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 100:00:48
+# Edit Time: 100:01:13
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -151,8 +151,7 @@ echo "--> mkinitramfs"
 #find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
 #find /usr/lib/modules/$(uname -r) -type f -name "*.ko" -exec strip --strip-unneeded {} \;
 
-
-#debug mkinitramfs -c xz -o /boot/initrd.img-$(uname -r)
+mkinitramfs -c xz -o /boot/initrd.img-$(uname -r)
 
 ##==================================================##
 
@@ -213,8 +212,8 @@ mkdir -p /mnt/sdb2
 
 echo "--> cleanup"
 
-#debug apt-get $QUIET purge 'linux-headers-*'
-#debug apt-get $QUIET autoremove
+apt-get $QUIET purge 'linux-headers-*'
+apt-get $QUIET autoremove
 
 find /usr/lib -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
 rm -rf /usr/share/gtk-doc /usr/share/doc
