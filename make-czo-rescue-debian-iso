@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Tuesday 17 January 2023, 11:37
+# Last Modified: Tuesday 17 January 2023, 18:30
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 101:25:43
+# Edit Time: 101:28:23
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -565,10 +565,9 @@ xorriso \
         cd $LIVE_BOOT
         implantisomd5 $ISO_NAME
         sha512sum $ISO_NAME > $ISO_NAME.sha512
+        echo
+        ls -alh $ISO_NAME
     )
-
-echo
-ls -alh "$LIVE_BOOT/$ISO_NAME"
 
 }
 
