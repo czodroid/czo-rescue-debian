@@ -4,13 +4,13 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Monday 16 January 2023, 18:41
+# Last Modified: Tuesday 17 January 2023, 11:08
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 100:03:00
+# Edit Time: 101:09:02
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
-#       > apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin debootstrap squashfs-tools xorriso isolinux mtools dosfstools bash coreutils
+#       > apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin debootstrap squashfs-tools xorriso isomd5sum isolinux mtools dosfstools bash coreutils
 #
 # Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
 
@@ -20,6 +20,8 @@ set -e -u
 SCRIPT_PATH=$(readlink -f ${0%/*})
 export ISO_VERSION="$(<${SCRIPT_PATH}/VERSION)"
 export ISO_DATE="$(date +%Y-%m-%d)"
+export ISO_PUBLISHER="Czo-Rescue-Debian <https://gitlab.com/czo/czo-rescue-debian>"
+export ISO_APPLICATION="Czo-Rescue-Debian"
 
 export ARCH="amd64"
 #export ARCH="686-pae"
@@ -518,6 +520,8 @@ xorriso \
     -iso-level 3 \
     -full-iso9660-filenames \
     -volid RESCUE \
+    -publisher "$ISO_PUBLISHER" \
+    -appid "$ISO_APPLICATION" \
     --mbr-force-bootable -partition_offset 16 \
     -joliet -joliet-long -rational-rock \
     -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
@@ -525,7 +529,7 @@ xorriso \
         -no-emul-boot \
         -boot-load-size 4 \
         -boot-info-table \
-        --eltorito-catalog isolinux/isolinux.cat \
+        -eltorito-catalog isolinux/isolinux.cat \
     -eltorito-alt-boot \
         -e --interval:appended_partition_2:all:: \
         -no-emul-boot \
@@ -534,28 +538,34 @@ xorriso \
     $LIVE_BOOT/staging \
     -o $LIVE_BOOT/$ISO_NAME
 
-#    -append_partition 2 C12A7328-F81F-11D2-BA4B-00A0C93EC93B $LIVE_BOOT/staging/EFI/debianiso/efiboot.img \
-#    -append_partition 2 0xef $LIVE_BOOT/staging/EFI/debianiso/efiboot.img \
+## rescue nearly mkarch iso
+xorriso \
+    -as mkisofs \
+    -iso-level 3 \
+    -full-iso9660-filenames \
+    -volid RESCUE \
+    -publisher "$ISO_PUBLISHER" \
+    -appid "$ISO_APPLICATION" \
+    --mbr-force-bootable -partition_offset 16 \
+    -joliet -joliet-long -rational-rock \
+    -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
+    -eltorito-boot isolinux/isolinux.bin \
+        -no-emul-boot \
+        -boot-load-size 4 \
+        -boot-info-table \
+        -eltorito-catalog isolinux/isolinux.cat \
+    -eltorito-alt-boot \
+        -e EFI/debianiso/efiboot.img \
+        -no-emul-boot \
+        -isohybrid-gpt-basdat \
+    $LIVE_BOOT/staging \
+    -o $LIVE_BOOT/mkarch.$ISO_NAME
 
-## rescue arch iso
-
-# xorriso \
-#     -as mkisofs \
-#     -iso-level 3 \
-#     -full-iso9660-filenames \
-#     -volid RESCUE \
-#     -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
-#     -eltorito-boot isolinux/isolinux.bin \
-#         -no-emul-boot \
-#         -boot-load-size 4 \
-#         -boot-info-table \
-#         -eltorito-catalog isolinux/isolinux.cat \
-#     -eltorito-alt-boot \
-#         -e EFI/debianiso/efiboot.img \
-#         -no-emul-boot \
-#         -isohybrid-gpt-basdat \
-#     $LIVE_BOOT/staging \
-#     -o $LIVE_BOOT/$ISO_NAME
+    (
+        cd $LIVE_BOOT
+        implantisomd5 $ISO_NAME
+        sha512sum $ISO_NAME > $ISO_NAME.sha512
+    )
 
 echo
 ls -alh "$LIVE_BOOT/$ISO_NAME"
