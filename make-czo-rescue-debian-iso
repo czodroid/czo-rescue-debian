@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Tuesday 17 January 2023, 11:08
+# Last Modified: Tuesday 17 January 2023, 11:10
 # $Id: make-czo-rescue-debian-iso,v 1.63 2023/01/02 16:34:37 czo Exp $
-# Edit Time: 101:09:02
+# Edit Time: 101:10:07
 # Description:
 #       Live Debian for System Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO, to run on your host:
@@ -513,8 +513,7 @@ make_07_iso() {
 
 echo "-> Create Bootable ISO ====================================="
 
-rm -f $LIVE_BOOT/$ISO_NAME ; \
-
+rm -f $LIVE_BOOT/$ISO_NAME
 xorriso \
     -as mkisofs \
     -iso-level 3 \
@@ -539,6 +538,7 @@ xorriso \
     -o $LIVE_BOOT/$ISO_NAME
 
 ## rescue nearly mkarch iso
+rm -f $LIVE_BOOT/mkarch.$ISO_NAME
 xorriso \
     -as mkisofs \
     -iso-level 3 \
