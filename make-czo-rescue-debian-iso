@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Tuesday 17 January 2023, 22:28
+# Last Modified: Tuesday 17 January 2023, 23:02
 # $Id: make-czo-rescue-debian-iso,v 1.81 2023/01/17 20:36:56 czo Exp $
-# Edit Time: 102:58:25
+# Edit Time: 103:19:33
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -312,10 +312,23 @@ prompt 0
 
 menu title Czo Rescue Debian $ISO_VERSION ($ISO_DATE)
 
-menu margin 8
-menu rows 10
-menu tabmsgrow 16
+# https://www.syslinux.org/wiki/index.php?title=Comboot/menu.c32
+# 25 for text mode, 28 for VESA graphics mode.
+# rows go from 12 to 17, so +5, so help = -1
+
+menu margin      8
+menu rows       10
+menu tabmsgrow  16
 menu cmdlinerow 16
+
+# menu rows       12
+# menu tabmsgrow  18
+# menu cmdlinerow 18
+
+# debian
+#menu color border 36;44
+#menu color sel    1;37;44
+#menu color unsel  36;44
 
 label Boot Czo Rescue Debian, zfs/toram/startx         (root/toor)
     menu default
