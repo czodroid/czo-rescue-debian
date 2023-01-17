@@ -4,13 +4,14 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Tuesday 17 January 2023, 20:19
+# Last Modified: Tuesday 17 January 2023, 21:54
 # $Id: make-czo-rescue-debian-iso,v 1.81 2023/01/17 20:36:56 czo Exp $
-# Edit Time: 102:49:48
+# Edit Time: 102:55:27
 # Description:
-#       Live Debian for System Rescue, like Linux Arch SystemRescue
-#       script to make a czo-rescue-debian ISO, to run on your host:
-#       > apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin debootstrap squashfs-tools xorriso isomd5sum isolinux mtools dosfstools bash coreutils
+#       Live Linux Debian Rescue, like Linux Arch SystemRescue
+#       script to make a czo-rescue-debian ISO
+#       to run on your host:
+#           > apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin debootstrap squashfs-tools xorriso isomd5sum isolinux mtools dosfstools bash coreutils
 #
 # Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
 
@@ -142,17 +143,15 @@ apt-get $QUIET install aptitude apt-utils autofs bash bash-completion bc bind9-d
 # krb5-user
 # krb5-locales
 # gstreamer1.0-libav
-# broadcom-sta-dkms
-# xserver-xorg-input-synaptics
 # keepassxc
+# xserver-xorg-input-synaptics
+# broadcom-sta-dkms
+# apache2 libapache2-mod-php php php-curl php-gd imagemagick tidy
 
 # EOF
 # exit
 
 echo "--> mkinitramfs"
-#find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
-#find /usr/lib/modules/$(uname -r) -type f -name "*.ko" -exec strip --strip-unneeded {} \;
-
 mkinitramfs -c xz -o /boot/initrd.img-$(uname -r)
 
 ##==================================================##
@@ -284,8 +283,8 @@ echo "-> Squashfs ==============================================="
 
 rm -f $LIVE_BOOT/staging/live/filesystem.squashfs
 
+# faster:
 #mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp zstd -e boot
-#minsize
 mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k -e boot
 
 }
@@ -482,10 +481,10 @@ cp -f $LIVE_BOOT/chroot/boot/LICENSE.memtest $LIVE_BOOT/staging/live/LICENSE.mem
 gzip -c -9 $LIVE_BOOT/chroot/usr/share/misc/pci.ids > $LIVE_BOOT/staging/isolinux/hdt/pciids.gz
 gzip -c -9 $LIVE_BOOT/chroot/usr/lib/modules/$(uname -r)/modules.alias > $LIVE_BOOT/staging/isolinux/hdt/modalias.gz
 
-cp /usr/lib/ISOLINUX/isolinux.bin "$LIVE_BOOT/staging/isolinux/"
-cp /usr/lib/syslinux/modules/bios/* "$LIVE_BOOT/staging/isolinux/"
+cp /usr/lib/ISOLINUX/isolinux.bin $LIVE_BOOT/staging/isolinux/
+cp /usr/lib/syslinux/modules/bios/* $LIVE_BOOT/staging/isolinux/
 
-cp -r /usr/lib/grub/x86_64-efi/* "$LIVE_BOOT/staging/boot/grub/x86_64-efi/"
+cp -r /usr/lib/grub/x86_64-efi/* $LIVE_BOOT/staging/boot/grub/x86_64-efi/
 rm -fr $LIVE_BOOT/staging/boot/grub/x86_64-efi/monolithic
 
 grub-mkstandalone -O i386-efi \
@@ -575,4 +574,3 @@ run_once make_07_iso
 exit
 #== END ==================================================
 
-# AI apache2 libapache2-mod-php php php-curl php-gd imagemagick tidy
