@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 18 January 2023, 12:48
+# Last Modified: Wednesday 18 January 2023, 19:23
 # $Id: make-czo-rescue-debian-iso,v 1.81 2023/01/17 20:36:56 czo Exp $
-# Edit Time: 104:27:47
+# Edit Time: 109:52:07
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -219,6 +219,7 @@ mkdir -p /mnt/sdb2
 echo "--> cleanup"
 
 apt-get $QUIET purge 'linux-headers-*'
+#apt-get $QUIET purge  build-essential gcc gcc-10  g++ g++-10  gcc-9-base
 apt-get $QUIET autoremove
 
 find /usr/lib -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
@@ -230,7 +231,7 @@ echo -e "MANDELETE\nDONTBOTHERNEWLOCALE\nSHOWFREEDSPACE\nen\nen_US\nen_US.UTF-8"
 localepurge
 
 dpkg-query -Wf '${Package}\n'| LANG=C sort > /root/pkg_list_rescue.txt
-dpkg-query -Wf '${Package} (${version})\n' | LANG=C sort -rn > /root/pkg_version_rescue.txt
+dpkg-query -Wf '${Package}\t${version}\n' | LANG=C sort > /root/pkg_version_rescue.txt
 dpkg-query -Wf '${Installed-Size}\t${Package} (${version})\n' | LANG=C sort -rn > /root/pkg_size_rescue.txt
 apt-get $QUIET clean
 
@@ -496,7 +497,6 @@ cp -f $LIVE_BOOT/chroot/root/pkg_version_rescue.txt $LIVE_BOOT/staging/live/pkg_
 
 cp -f $LIVE_BOOT/chroot/boot/memtest.bin $LIVE_BOOT/staging/live/memtest.bin
 cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/live/memtest.efi
-cp -f $LIVE_BOOT/chroot/boot/LICENSE.memtest $LIVE_BOOT/staging/live/LICENSE.memtest
 
 #hdt
 gzip -c -9 $LIVE_BOOT/chroot/usr/share/misc/pci.ids > $LIVE_BOOT/staging/isolinux/hdt/pciids.gz
