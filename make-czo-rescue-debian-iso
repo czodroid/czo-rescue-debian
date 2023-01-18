@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 18 January 2023, 19:23
+# Last Modified: Wednesday 18 January 2023, 20:04
 # $Id: make-czo-rescue-debian-iso,v 1.81 2023/01/17 20:36:56 czo Exp $
-# Edit Time: 109:52:07
+# Edit Time: 110:27:57
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -219,10 +219,11 @@ mkdir -p /mnt/sdb2
 echo "--> cleanup"
 
 apt-get $QUIET purge 'linux-headers-*'
-#apt-get $QUIET purge  build-essential gcc gcc-10  g++ g++-10  gcc-9-base
+#apt-get $QUIET purge  build-essential gcc gcc-10  g++ g++-10 gcc-10-base gcc-9-base
 apt-get $QUIET autoremove
 
 find /usr/lib -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
+#find /usr/lib -type f,l -name '*.a' -delete
 rm -rf /usr/share/gtk-doc /usr/share/doc
 rm -rf /usr/share/keepassxc/docs /usr/share/keepassxc/translations
 rm -rf /usr/share/help
@@ -525,7 +526,7 @@ grub-mkstandalone -O x86_64-efi \
     "boot/grub/grub.cfg=$LIVE_BOOT/tmp/grub-embed.cfg"
 
 (cd $LIVE_BOOT/staging/EFI/debianiso && \
-    dd if=/dev/zero of=efiboot.img bs=1M count=7 && \
+    dd if=/dev/zero of=efiboot.img bs=1M count=6 && \
     mkfs.vfat efiboot.img && \
     mmd -i efiboot.img ::/EFI ::/EFI/BOOT && \
     mcopy -vi efiboot.img \
