@@ -2,7 +2,7 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 18 January 2023, 09:38
+# Last Modified: Wednesday 18 January 2023, 09:45
 
 # console
 aptitude
@@ -215,6 +215,7 @@ galculator
 mousepad
 dislocker
 meld
+yelp-
 fonts-dejavu
 fonts-noto-color-emoji
 fonts-wqy-microhei
@@ -224,7 +225,6 @@ fonts-noto-mono-
 fonts-font-awesome-
 fonts-urw-base35-
 live-boot-doc-
-yelp-
 # pocketsphinx-en-us-
 # libpocketsphinx3-
 # ghostscript-
