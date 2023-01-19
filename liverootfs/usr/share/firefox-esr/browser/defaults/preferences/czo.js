@@ -27,7 +27,7 @@ pref("network.trr.mode", 5);
 // homepage
 //pref("browser.startup.homepage", "http://www.system-rescue.org/");
 //pref("browser.startup.homepage", "http://czo.free.fr/");
-pref("browser.startup.homepage", "https://www.system-rescue.org/");
+pref("browser.startup.homepage", "https://duckduckgo.com/");
 // bookmarks
 pref("browser.toolbars.bookmarks.visibility", "never");
 // strict contentblocking
