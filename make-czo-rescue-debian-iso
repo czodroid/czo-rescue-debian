@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 18 January 2023, 20:04
+# Last Modified: Thursday 19 January 2023, 15:31
 # $Id: make-czo-rescue-debian-iso,v 1.81 2023/01/17 20:36:56 czo Exp $
-# Edit Time: 110:27:57
+# Edit Time: 110:28:28
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -17,6 +17,11 @@
 
 
 set -e -u
+
+if [ `id -u` -ne 0 ]; then
+    echo "ERROR: this script must be run as root"
+    exit 42
+fi
 
 SCRIPT_PATH=$(readlink -f ${0%/*})
 export ISO_VERSION="$(<${SCRIPT_PATH}/VERSION)"
