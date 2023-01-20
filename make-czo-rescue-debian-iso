@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Thursday 19 January 2023, 22:11
+# Last Modified: Friday 20 January 2023, 15:43
 # $Id: make-czo-rescue-debian-iso,v 1.81 2023/01/17 20:36:56 czo Exp $
-# Edit Time: 112:02:48
+# Edit Time: 114:59:38
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -504,7 +504,7 @@ cp /usr/lib/syslinux/modules/bios/* $LIVE_BOOT/staging/isolinux/
 cp -r /usr/lib/grub/x86_64-efi/* $LIVE_BOOT/staging/boot/grub/x86_64-efi/
 rm -fr $LIVE_BOOT/staging/boot/grub/x86_64-efi/monolithic
 
-grub-mkstandalone -O i386-efi \
+grub-mkstandalone --compress xz -O i386-efi \
     --modules="part_gpt part_msdos fat iso9660" \
     --locales="" \
     --themes="" \
@@ -512,7 +512,7 @@ grub-mkstandalone -O i386-efi \
     --output="$LIVE_BOOT/staging/EFI/BOOT/BOOTIA32.EFI" \
     "boot/grub/grub.cfg=$LIVE_BOOT/tmp/grub-embed.cfg"
 
-grub-mkstandalone -O x86_64-efi \
+grub-mkstandalone --compress xz -O x86_64-efi \
     --modules="part_gpt part_msdos fat iso9660" \
     --locales="" \
     --themes="" \
@@ -520,8 +520,10 @@ grub-mkstandalone -O x86_64-efi \
     --output="$LIVE_BOOT/staging/EFI/BOOT/BOOTx64.EFI" \
     "boot/grub/grub.cfg=$LIVE_BOOT/tmp/grub-embed.cfg"
 
-(cd $LIVE_BOOT/staging/EFI/debianiso && \
-    dd if=/dev/zero of=efiboot.img bs=1M count=6 && \
+(
+    # 2500K for boot
+    cd $LIVE_BOOT/staging/EFI/debianiso && \
+    dd if=/dev/zero of=efiboot.img bs=2500K count=1 && \
     mkfs.vfat efiboot.img && \
     mmd -i efiboot.img ::/EFI ::/EFI/BOOT && \
     mcopy -vi efiboot.img \
