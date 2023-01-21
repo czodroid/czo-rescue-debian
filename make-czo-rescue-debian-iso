@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 21 January 2023, 10:26
+# Last Modified: Saturday 21 January 2023, 11:12
 # $Id: make-czo-rescue-debian-iso,v 1.81 2023/01/17 20:36:56 czo Exp $
-# Edit Time: 115:51:37
+# Edit Time: 115:59:34
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -332,13 +332,18 @@ label Boot Czo Rescue Debian, zfs/toram/startx         (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs dostartx
 
-label Boot Czo Rescue Debian, zfs/console/toram/SERIAL (root/toor)
+label Boot Czo Rescue Debian, zfs/toram/console/SERIAL (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs console=ttyS0,115200n8
 
-label Boot Czo Rescue Debian, zfs/console              (root/toor)
+label Boot Czo Rescue Debian, zfs/startx               (root/toor)
+    menu default
     kernel /live/vmlinuz
-    append initrd=/live/initrd boot=live
+    append initrd=/live/initrd boot=live dostartx
+
+label Boot Czo Rescue Debian, zfs/console/SERIAL       (root/toor)
+    kernel /live/vmlinuz
+    append initrd=/live/initrd boot=live console=ttyS0,115200n8
 
 label Boot Czo Rescue Debian, failsafe                 (root/toor)
     kernel /live/vmlinuz
@@ -398,21 +403,28 @@ menuentry "Czo Rescue Debian, zfs/toram/startx           (root/toor)" {
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, zfs/console/toram/SERIAL   (root/toor)" {
+menuentry "Czo Rescue Debian, zfs/toram/console/SERIAL   (root/toor)" {
     echo "Czo Rescue Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs console=ttyS0,115200n8
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, zfs/console                (root/toor)" {
+menuentry "Czo Rescue Debian, zfs/startx                 (root/toor)" {
     echo "Czo Rescue Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
-    linux (\$root)/live/vmlinuz boot=live
+    linux (\$root)/live/vmlinuz boot=live dostartx
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, failsafe                   (root/toor)" {
+menuentry "Czo Rescue Debian, zfs/console/SERIAL         (root/toor)" {
+    echo "Czo Rescue Debian launch in progress, please stand by..."
+    search --no-floppy --set=root --label RESCUE
+    linux (\$root)/live/vmlinuz boot=live console=ttyS0,115200n8
+    initrd (\$root)/live/initrd
+}
+
+menuentry "Czo Rescue Debian, failsafe" {
     echo "Czo Rescue Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
