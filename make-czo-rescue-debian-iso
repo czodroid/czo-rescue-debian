@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 21 January 2023, 12:43
+# Last Modified: Saturday 21 January 2023, 14:23
 # $Id: make-czo-rescue-debian-iso,v 1.81 2023/01/17 20:36:56 czo Exp $
-# Edit Time: 116:11:10
+# Edit Time: 116:26:25
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -279,8 +279,8 @@ Debian GNU/Linux 11 \n \l
    Run \e[01;37msetxkbmap fr mac\e[00;37m to choose the macfr keyboard layout
    Type \e[01;37mstartx\e[00;37m to run the graphical environment
 
-\e[31m*\e[01;31m Change cowspace\e[m :
-   mount -o remount,size=1G /run/archiso/cowspace
+\e[31m*\e[01;31m Change overlay\e[m :
+   mount -o remount,size=1G /run/live/overlay
 
 HEREDOC
 
@@ -311,6 +311,10 @@ echo "-> Prepare Boot Loader Menus ==============================="
 echo " -> isolinux.cfg"
 
 cat <<EOF > $LIVE_BOOT/staging/isolinux/isolinux.cfg
+# Filename: isolinux.cfg
+# Author: Olivier Sirol <czo@free.fr>
+# License: GPL-2.0 (http://www.gnu.org/copyleft)
+
 serial 0 115200
 ui menu.c32
 timeout 3000
@@ -358,9 +362,9 @@ label Boot Czo Rescue Debian, failsafe                 (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
 
-label TEST ISO Czo Rescue Debian
-    kernel /boot/memdisk iso
-    append initrd=/boot/images/czo-rescue-debian-11.6.iso
+# label TEST ISO Czo Rescue Debian
+#     kernel /boot/memdisk iso
+#     append initrd=/boot/images/czo-rescue-debian-11.6.iso
 
 label Hardware Detection Tool
     com32  hdt.c32
@@ -381,6 +385,10 @@ EOF
 echo " -> grub.cfg"
 
 cat <<EOF > $LIVE_BOOT/staging/boot/grub/grub.cfg
+# Filename: grub.cfg
+# Author: Olivier Sirol <czo@free.fr>
+# License: GPL-2.0 (http://www.gnu.org/copyleft)
+
 insmod part_gpt
 insmod part_msdos
 insmod fat
@@ -440,21 +448,21 @@ menuentry "Czo Rescue Debian, failsafe" {
     initrd (\$root)/live/initrd
 }
 
-menuentry "TEST ISO Czo Rescue Debian" {
-    echo "ISO Czo Rescue Debian launch in progress, please stand by..."
-    set root='hd0,msdos1'
-    #search --no-floppy --set=root --label RESCUE
-    linux16 (\$root)/isolinux/memdisk iso
-    initrd16 (\$root)/boot/images/czo-rescue-debian-11.6.iso
-}
+#menuentry "TEST ISO Czo Rescue Debian" {
+#    echo "ISO Czo Rescue Debian launch in progress, please stand by..."
+#    set root='hd0,msdos1'
+#    #search --no-floppy --set=root --label RESCUE
+#    linux16 (\$root)/isolinux/memdisk iso
+#    initrd16 (\$root)/boot/images/czo-rescue-debian-11.6.iso
+#}
 
-menuentry "TEST ISO Czo Rescue Debian, kernel and initrd" {
-    echo "ISO Czo Rescue Debian launch in progress, please stand by..."
-    set isoname="/boot/images/czo-rescue-debian-11.6.iso"
-    loopback loop (hd0,msdos1)"\${isoname}"
-    linux (loop)/live/vmlinuz boot=live findiso="\${isoname}" toram=filesystem.squashfs
-    initrd (loop)/live/initrd
-}
+#menuentry "TEST ISO Czo Rescue Debian, kernel and initrd" {
+#    echo "ISO Czo Rescue Debian launch in progress, please stand by..."
+#    set isoname="/boot/images/czo-rescue-debian-11.6.iso"
+#    loopback loop (hd0,msdos1)"\${isoname}"
+#    linux (loop)/live/vmlinuz boot=live findiso="\${isoname}" toram=filesystem.squashfs
+#    initrd (loop)/live/initrd
+#}
 
 menuentry "Run Memtest86+" {
     echo "Memtest86+ launch in progress, please stand by..."
