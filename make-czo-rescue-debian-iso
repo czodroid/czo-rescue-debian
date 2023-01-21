@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 21 January 2023, 16:06
+# Last Modified: Saturday 21 January 2023, 17:50
 # $Id: make-czo-rescue-debian-iso,v 1.81 2023/01/17 20:36:56 czo Exp $
-# Edit Time: 116:32:15
+# Edit Time: 117:10:21
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -265,6 +265,7 @@ echo "-> Copy files =============================================="
 rsync -av --chown=root:root $LIVE_BOOT/../liverootfs/ $LIVE_BOOT/chroot
 
 cat << HEREDOC > $LIVE_BOOT/chroot/etc/issue
+cat << HEREDOC > /etc/issue
 
 Debian GNU/Linux 11 \n \l
 
@@ -272,15 +273,9 @@ Debian GNU/Linux 11 \n \l
 
 \e[97m===== https://gitlab.com/czo/czo-rescue-debian =====\e[m
 
-\e[31m*\e[01;31m Console environment\e[m :
-   Type \e[01;37msetkmap\e[00;37m to choose the keyboard layout
-
-\e[31m*\e[01;31m Graphical environment\e[m :
-   Run \e[01;37msetxkbmap fr mac\e[00;37m to choose the macfr keyboard layout
-   Type \e[01;37mstartx\e[00;37m to run the graphical environment
-
-\e[31m*\e[01;31m Change overlay\e[m :
-   mount -o remount,size=1G /run/live/overlay
+Type \e[97msetkmap\e[m to choose the keyboard layout
+Type \e[97mstartx\e[m to run the graphical environment
+Type \e[97mmount -o remount,size=1G /run/live/overlay\e[m to change overlay
 
 HEREDOC
 
@@ -534,32 +529,24 @@ rm -fr $LIVE_BOOT/staging/boot/grub/x86_64-efi/monolithic
 
 grub-mkstandalone --compress xz -O i386-efi \
     --modules="part_gpt part_msdos fat iso9660" \
-    --locales="" \
-    --themes="" \
-    --fonts="" \
+    --locales="" --themes="" --fonts="" \
     --output="$LIVE_BOOT/staging/EFI/BOOT/BOOTIA32.EFI" \
     "boot/grub/grub.cfg=$LIVE_BOOT/tmp/grub-embed.cfg"
 
 grub-mkstandalone --compress xz -O x86_64-efi \
     --modules="part_gpt part_msdos fat iso9660" \
-    --locales="" \
-    --themes="" \
-    --fonts="" \
+    --locales="" --themes="" --fonts="" \
     --output="$LIVE_BOOT/staging/EFI/BOOT/BOOTx64.EFI" \
     "boot/grub/grub.cfg=$LIVE_BOOT/tmp/grub-embed.cfg"
 
-(
-    # 2500K for boot
-    cd $LIVE_BOOT/staging/EFI/debianiso && \
-    dd if=/dev/zero of=efiboot.img bs=2500K count=1 && \
-    mkfs.vfat efiboot.img && \
-    mmd -i efiboot.img ::/EFI ::/EFI/BOOT && \
-    mcopy -vi efiboot.img \
-        $LIVE_BOOT/staging/EFI/BOOT/BOOTIA32.EFI \
-        $LIVE_BOOT/staging/EFI/BOOT/BOOTx64.EFI \
-        $LIVE_BOOT/staging/boot/grub/grub.cfg \
-        ::/EFI/BOOT/
-)
+rm -f $LIVE_BOOT/staging/EFI/debianiso/efiboot.img
+mkfs.fat -C $LIVE_BOOT/staging/EFI/debianiso/efiboot.img 2880
+mmd -i $LIVE_BOOT/staging/EFI/debianiso/efiboot.img ::/EFI ::/EFI/BOOT
+mcopy -vi $LIVE_BOOT/staging/EFI/debianiso/efiboot.img \
+    $LIVE_BOOT/staging/EFI/BOOT/BOOTIA32.EFI \
+    $LIVE_BOOT/staging/EFI/BOOT/BOOTx64.EFI \
+    $LIVE_BOOT/staging/boot/grub/grub.cfg \
+    ::/EFI/BOOT/
 
 }
 
