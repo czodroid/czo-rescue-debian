@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 21 January 2023, 11:12
+# Last Modified: Saturday 21 January 2023, 11:26
 # $Id: make-czo-rescue-debian-iso,v 1.81 2023/01/17 20:36:56 czo Exp $
-# Edit Time: 115:59:34
+# Edit Time: 116:00:08
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -337,7 +337,6 @@ label Boot Czo Rescue Debian, zfs/toram/console/SERIAL (root/toor)
     append initrd=/live/initrd boot=live toram=filesystem.squashfs console=ttyS0,115200n8
 
 label Boot Czo Rescue Debian, zfs/startx               (root/toor)
-    menu default
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live dostartx
 
