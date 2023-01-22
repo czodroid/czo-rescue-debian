@@ -3,9 +3,8 @@ Filename: README.md
 Author: Olivier Sirol <czo@free.fr>
 License: GPL-2.0 (http://www.gnu.org/copyleft)
 File Created: 30 December 2022
-Last Modified: Sunday 22 January 2023, 08:54
-$Id:$
-Edit Time: 0:13:13
+Last Modified: Sunday 22 January 2023, 08:59
+Edit Time: 0:14:09
 Description:
 
 Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
@@ -13,13 +12,11 @@ Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
 
 # Czo Rescue Debian
 
-## Czo Rescue Debian with ZFS
-
 Czo Debian Rescue: a usb or iso Live Linux Debian Rescue, like Linux Arch SystemRescue.
 
 It's has zfs binaries + 3ware raid + my configuration files (.bashrc/.vimrc/.tmux.conf).
 
-Xfce has its whisker menu and its xfce4-xkb plugin. There is also firefox (no-esr) and firefox-ublock-origin.
+Xfce has its whisker menu and its xfce4-xkb plugin. There is also firefox-esr and firefox-ublock-origin.
 
 Version 11.6 contains kernel/5.10.0-20-amd64 and zfs/2.0.3-9
 
