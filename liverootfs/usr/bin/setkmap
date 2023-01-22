@@ -1,0 +1,18 @@
+#! /usr/bin/env sh
+#
+# Filename: setkmap
+# Author: Olivier Sirol <czo@free.fr>
+# License: GPL-2.0 (http://www.gnu.org/copyleft)
+# File Created: 16 January 2023
+# Last Modified: Monday 16 January 2023, 18:25
+# $Id:$
+# Edit Time: 0:03:10
+# Description:
+#       like setkmap's SystemRescue for console
+#       use 'setxkbmap fr mac' for x11
+#
+# Copyright: (C) 2023 Olivier Sirol <czo@free.fr>
+
+dpkg-reconfigure keyboard-configuration
+setupcon -k -f
+
