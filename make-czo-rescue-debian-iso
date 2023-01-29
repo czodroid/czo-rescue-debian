@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 29 January 2023, 18:38
+# Last Modified: Sunday 29 January 2023, 23:45
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 121:49:54
+# Edit Time: 121:50:06
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -519,7 +519,7 @@ https://gitlab.com/czo/czo-rescue-debian
 
 HEREDOC
 
-cp -f $LIVE_BOOT/chroot/root/pkg_version_rescue.txt $LIVE_BOOT/staging/czo-rescue-debian.pkg
+cp -f $LIVE_BOOT/chroot/root/pkg_version_rescue.txt $LIVE_BOOT/staging/pkg-czo-rescue-debian
 
 if [ $ARCH = "amd64" ]; then
     cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-amd64 $LIVE_BOOT/staging/live/vmlinuz
