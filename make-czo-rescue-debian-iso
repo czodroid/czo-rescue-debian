@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Friday 27 January 2023, 15:56
+# Last Modified: Sunday 29 January 2023, 18:38
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 121:42:52
+# Edit Time: 121:49:54
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -304,6 +304,10 @@ rm -f $LIVE_BOOT/staging/live/filesystem.squashfs
 # faster:
 #mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp zstd -e boot
 mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k -e boot
+(
+cd $LIVE_BOOT/chroot $LIVE_BOOT/staging/live
+sha512sum filesystem.squashfs > filesystem.squashfs.sha512
+)
 
 }
 
@@ -515,6 +519,8 @@ https://gitlab.com/czo/czo-rescue-debian
 
 HEREDOC
 
+cp -f $LIVE_BOOT/chroot/root/pkg_version_rescue.txt $LIVE_BOOT/staging/czo-rescue-debian.pkg
+
 if [ $ARCH = "amd64" ]; then
     cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-amd64 $LIVE_BOOT/staging/live/vmlinuz
     cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-amd64 $LIVE_BOOT/staging/live/initrd
@@ -522,8 +528,6 @@ else
     cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-pae $LIVE_BOOT/staging/live/vmlinuz
     cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-pae $LIVE_BOOT/staging/live/initrd
 fi
-
-cp -f $LIVE_BOOT/chroot/root/pkg_version_rescue.txt $LIVE_BOOT/staging/live/pkg_version_rescue.txt
 
 cp -f $LIVE_BOOT/chroot/boot/memtest.bin $LIVE_BOOT/staging/live/memtest.bin
 cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/live/memtest.efi
