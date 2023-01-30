@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 29 January 2023, 23:45
+# Last Modified: Monday 30 January 2023, 07:03
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 121:50:06
+# Edit Time: 121:59:49
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -280,7 +280,7 @@ cat << HEREDOC > $LIVE_BOOT/chroot/etc/issue
 
 Debian GNU/Linux 11 \n \l
 
-\e[97m        Czo Rescue Debian $ISO_VERSION ($ISO_DATE)\e[m
+\e[97m        Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)\e[m
 
 \e[32m===== https://gitlab.com/czo/czo-rescue-debian =====\e[m
 
@@ -305,7 +305,7 @@ rm -f $LIVE_BOOT/staging/live/filesystem.squashfs
 #mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp zstd -e boot
 mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k -e boot
 (
-cd $LIVE_BOOT/chroot $LIVE_BOOT/staging/live
+cd $LIVE_BOOT/staging/live
 sha512sum filesystem.squashfs > filesystem.squashfs.sha512
 )
 
@@ -331,7 +331,7 @@ timeout 3000
 menu default
 prompt 0
 
-menu title Czo Rescue Debian $ISO_VERSION ($ISO_DATE)
+menu title Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)
 
 # https://www.syslinux.org/wiki/index.php?title=Comboot/menu.c32
 # 25 for text mode, 28 for VESA graphics mode.
@@ -351,28 +351,28 @@ menu cmdlinerow 16
 #menu color sel    1;37;44
 #menu color unsel  36;44
 
-label Boot Czo Rescue Debian, zfs/toram/startx         (root/toor)
+label Boot Czo-Rescue-Debian, zfs/toram/startx         (root/toor)
     menu default
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs dostartx
 
-label Boot Czo Rescue Debian, zfs/toram/console/SERIAL (root/toor)
+label Boot Czo-Rescue-Debian, zfs/toram/console/SERIAL (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs console=ttyS0,115200n8
 
-label Boot Czo Rescue Debian, zfs/startx               (root/toor)
+label Boot Czo-Rescue-Debian, zfs/startx               (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live dostartx
 
-label Boot Czo Rescue Debian, zfs/console/SERIAL       (root/toor)
+label Boot Czo-Rescue-Debian, zfs/console/SERIAL       (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live console=ttyS0,115200n8
 
-label Boot Czo Rescue Debian, failsafe
+label Boot Czo-Rescue-Debian, failsafe
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
 
-# label TEST ISO Czo Rescue Debian
+# label TEST ISO Czo-Rescue-Debian
 #     kernel /boot/memdisk iso
 #     append initrd=/boot/images/czo-rescue-debian-11.6.iso
 
@@ -419,55 +419,55 @@ terminal_input serial console
 insmod efi_gop
 insmod efi_uga
 
-menuentry "                Czo Rescue Debian $ISO_VERSION ($ISO_DATE)" { czo }
+menuentry "                Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)" { czo }
 
 menuentry "" { czo }
 
-menuentry "Czo Rescue Debian, zfs/toram/startx           (root/toor)" {
-    echo "Czo Rescue Debian launch in progress, please stand by..."
+menuentry "Czo-Rescue-Debian, zfs/toram/startx           (root/toor)" {
+    echo "Czo-Rescue-Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs dostartx
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, zfs/toram/console/SERIAL   (root/toor)" {
-    echo "Czo Rescue Debian launch in progress, please stand by..."
+menuentry "Czo-Rescue-Debian, zfs/toram/console/SERIAL   (root/toor)" {
+    echo "Czo-Rescue-Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs console=ttyS0,115200n8
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, zfs/startx                 (root/toor)" {
-    echo "Czo Rescue Debian launch in progress, please stand by..."
+menuentry "Czo-Rescue-Debian, zfs/startx                 (root/toor)" {
+    echo "Czo-Rescue-Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live dostartx
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, zfs/console/SERIAL         (root/toor)" {
-    echo "Czo Rescue Debian launch in progress, please stand by..."
+menuentry "Czo-Rescue-Debian, zfs/console/SERIAL         (root/toor)" {
+    echo "Czo-Rescue-Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live console=ttyS0,115200n8
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, failsafe" {
-    echo "Czo Rescue Debian launch in progress, please stand by..."
+menuentry "Czo-Rescue-Debian, failsafe" {
+    echo "Czo-Rescue-Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
     initrd (\$root)/live/initrd
 }
 
-#menuentry "TEST ISO Czo Rescue Debian" {
-#    echo "ISO Czo Rescue Debian launch in progress, please stand by..."
+#menuentry "TEST ISO Czo-Rescue-Debian" {
+#    echo "ISO Czo-Rescue-Debian launch in progress, please stand by..."
 #    set root='hd0,msdos1'
 #    #search --no-floppy --set=root --label RESCUE
 #    linux16 (\$root)/isolinux/memdisk iso
 #    initrd16 (\$root)/boot/images/czo-rescue-debian-11.6.iso
 #}
 
-#menuentry "TEST ISO Czo Rescue Debian, kernel and initrd" {
-#    echo "ISO Czo Rescue Debian launch in progress, please stand by..."
+#menuentry "TEST ISO Czo-Rescue-Debian, kernel and initrd" {
+#    echo "ISO Czo-Rescue-Debian launch in progress, please stand by..."
 #    set isoname="/boot/images/czo-rescue-debian-11.6.iso"
 #    loopback loop (hd0,msdos1)"\${isoname}"
 #    linux (loop)/live/vmlinuz boot=live findiso="\${isoname}" toram=filesystem.squashfs
@@ -512,7 +512,7 @@ EOF
 echo " -> Prepare Boot Loader Files"
 
 cat << HEREDOC > $LIVE_BOOT/staging/czo-rescue-debian
-Czo Rescue Debian $ISO_VERSION ($ISO_DATE)
+Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)
 
 --
 https://gitlab.com/czo/czo-rescue-debian
