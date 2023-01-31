@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Monday 30 January 2023, 07:03
+# Last Modified: Tuesday 31 January 2023, 17:24
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 121:59:49
+# Edit Time: 122:10:37
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -403,6 +403,7 @@ insmod part_gpt
 insmod part_msdos
 insmod fat
 insmod iso9660
+insmod chain
 
 # Global options
 set timeout=300
@@ -480,6 +481,12 @@ menuentry "Run Memtest86+" {
     linux (\$root)/live/memtest.efi keyboard=both
 }
 
+menuentry "Start EFI Shell" {
+    terminal_output console
+    search --no-floppy --set=root --label RESCUE
+    chainloader (\$root)/EFI/shell.efi
+}
+
 menuentry "EFI Firmware setup" {
     fwsetup
 }
@@ -541,6 +548,8 @@ cp /usr/lib/syslinux/modules/bios/* $LIVE_BOOT/staging/isolinux/
 
 cp -r /usr/lib/grub/x86_64-efi/* $LIVE_BOOT/staging/boot/grub/x86_64-efi/
 rm -fr $LIVE_BOOT/staging/boot/grub/x86_64-efi/monolithic
+
+cp -f $LIVE_BOOT/chroot/boot/shell.efi $LIVE_BOOT/staging/EFI
 
 grub-mkstandalone --compress xz -O i386-efi \
     --modules="part_gpt part_msdos fat iso9660" \
