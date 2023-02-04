@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Tuesday 31 January 2023, 17:24
+# Last Modified: Friday 03 February 2023, 16:20
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 122:10:37
+# Edit Time: 122:11:26
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -161,6 +161,9 @@ apt-get $QUIET install aptitude apt-utils autofs bash bash-completion bc bind9-d
 
 # EOF
 # exit
+
+#find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
+#find /usr/lib/modules/$(uname -r) -type f -name "*.ko" -exec strip --strip-unneeded {} \;
 
 echo "--> mkinitramfs"
 mkinitramfs -c xz -o /boot/initrd.img-$(uname -r)
