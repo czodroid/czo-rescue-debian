@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 05 February 2023, 18:32
+# Last Modified: Sunday 05 February 2023, 19:06
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 122:23:14
+# Edit Time: 122:32:07
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -521,6 +521,9 @@ EOF
 ##================================================================
 echo " -> Prepare Boot Loader Files"
 
+cp -f $SCRIPT_PATH/mkiso $LIVE_BOOT/staging/mkiso
+cp -f $LIVE_BOOT/chroot/root/pkg_version_rescue.txt $LIVE_BOOT/staging/pkg-czo-rescue-debian
+
 cat << HEREDOC > $LIVE_BOOT/staging/czo-rescue-debian
 Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)
 
@@ -528,8 +531,6 @@ Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)
 https://gitlab.com/czo/czo-rescue-debian
 
 HEREDOC
-
-cp -f $LIVE_BOOT/chroot/root/pkg_version_rescue.txt $LIVE_BOOT/staging/pkg-czo-rescue-debian
 
 if [ $ARCH = "amd64" ]; then
     cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-amd64 $LIVE_BOOT/staging/live/vmlinuz
@@ -585,7 +586,8 @@ make_07_iso() {
 echo "-> Create Bootable ISO ====================================="
 
 rm -f $LIVE_BOOT/$ISO_NAME
-
+(
+cd $LIVE_BOOT/staging
 xorriso \
     -as mkisofs \
     -iso-level 3 \
@@ -598,14 +600,15 @@ xorriso \
         -no-emul-boot \
         -boot-load-size 4 \
         -boot-info-table \
-        -eltorito-catalog isolinux/isolinux.cat \
+        -eltorito-catalog isolinux/boot.cat \
     -eltorito-alt-boot \
         -e EFI/debianiso/efiboot.img \
         -no-emul-boot \
         -isohybrid-gpt-basdat \
-    -o $LIVE_BOOT/$ISO_NAME $LIVE_BOOT/staging
+    -o $LIVE_BOOT/$ISO_NAME .
+)
 
-    # --mbr-force-bootable -partition_offset 16 ??
+    # ?? --mbr-force-bootable -partition_offset 16 \
     # -joliet -joliet-long \
 
     # -e --interval:appended_partition_2:all:: \
@@ -613,13 +616,13 @@ xorriso \
 
     # -rational-rock: dir and file are not r/w...
 
-    (
-        cd $LIVE_BOOT
-        implantisomd5 $ISO_NAME
-        sha512sum $ISO_NAME > $ISO_NAME.sha512
-        echo
-        ls -alh $ISO_NAME
-    )
+(
+    cd $LIVE_BOOT
+    implantisomd5 $ISO_NAME
+    sha512sum $ISO_NAME > $ISO_NAME.sha512
+    echo
+    ls -alh $ISO_NAME
+)
 
 }
 
