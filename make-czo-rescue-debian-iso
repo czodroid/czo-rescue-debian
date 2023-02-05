@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Friday 03 February 2023, 16:20
+# Last Modified: Sunday 05 February 2023, 18:32
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 122:11:26
+# Edit Time: 122:23:14
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -546,8 +546,9 @@ cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/live/memtest.efi
 gzip -c -9 $LIVE_BOOT/chroot/usr/share/misc/pci.ids > $LIVE_BOOT/staging/isolinux/hdt/pciids.gz
 gzip -c -9 $LIVE_BOOT/chroot/usr/lib/modules/$(uname -r)/modules.alias > $LIVE_BOOT/staging/isolinux/hdt/modalias.gz
 
-cp /usr/lib/ISOLINUX/isolinux.bin $LIVE_BOOT/staging/isolinux/
-cp /usr/lib/syslinux/modules/bios/* $LIVE_BOOT/staging/isolinux/
+cp -f /usr/lib/ISOLINUX/isolinux.bin $LIVE_BOOT/staging/isolinux/isolinux.bin
+cp -f /usr/lib/ISOLINUX/isohdpfx.bin $LIVE_BOOT/staging/isolinux/isohdpfx.bin
+cp -f /usr/lib/syslinux/modules/bios/* $LIVE_BOOT/staging/isolinux/
 
 cp -r /usr/lib/grub/x86_64-efi/* $LIVE_BOOT/staging/boot/grub/x86_64-efi/
 rm -fr $LIVE_BOOT/staging/boot/grub/x86_64-efi/monolithic
@@ -584,6 +585,7 @@ make_07_iso() {
 echo "-> Create Bootable ISO ====================================="
 
 rm -f $LIVE_BOOT/$ISO_NAME
+
 xorriso \
     -as mkisofs \
     -iso-level 3 \
@@ -591,9 +593,7 @@ xorriso \
     -volid RESCUE \
     -publisher "$ISO_PUBLISHER" \
     -appid "$ISO_APPLICATION" \
-    --mbr-force-bootable -partition_offset 16 \
-    -joliet -joliet-long \
-    -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
+    -isohybrid-mbr isolinux/isohdpfx.bin \
     -eltorito-boot isolinux/isolinux.bin \
         -no-emul-boot \
         -boot-load-size 4 \
@@ -603,8 +603,10 @@ xorriso \
         -e EFI/debianiso/efiboot.img \
         -no-emul-boot \
         -isohybrid-gpt-basdat \
-    $LIVE_BOOT/staging \
-    -o $LIVE_BOOT/$ISO_NAME
+    -o $LIVE_BOOT/$ISO_NAME $LIVE_BOOT/staging
+
+    # --mbr-force-bootable -partition_offset 16 ??
+    # -joliet -joliet-long \
 
     # -e --interval:appended_partition_2:all:: \
     # -append_partition 2 C12A7328-F81F-11D2-BA4B-00A0C93EC93B $LIVE_BOOT/staging/EFI/debianiso/efiboot.img \
