@@ -3,8 +3,8 @@ Filename: README.md
 Author: Olivier Sirol <czo@free.fr>
 License: GPL-2.0 (http://www.gnu.org/copyleft)
 File Created: 30 December 2022
-Last Modified: Sunday 05 February 2023, 13:06
-Edit Time: 0:25:13
+Last Modified: Sunday 05 February 2023, 19:39
+Edit Time: 0:26:47
 Description:
 
 Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
@@ -18,7 +18,7 @@ It's has zfs binaries + 3ware raid + my configuration files (.bashrc/.vimrc/.tmu
 
 Xfce has its whisker menu and its xfce4-xkb plugin. There is also firefox-esr and firefox-ublock-origin.
 
-Version 11.6 contains kernel/5.10.0-20-amd64 and zfs/2.0.3-9
+Version 11.6 contains kernel/5.10.0-21-amd64 and zfs/2.0.3-9
 
 ## Project
 
