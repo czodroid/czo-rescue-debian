@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Thursday 09 February 2023, 19:57
+# Last Modified: Thursday 09 February 2023, 20:01
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 124:00:07
+# Edit Time: 124:01:44
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -130,6 +130,7 @@ deb http://deb.debian.org/debian/ bullseye-updates main contrib non-free
 HEREDOC
 
 apt-get $QUIET update
+apt-get $QUIET upgrade
 
 ##==================================================##
 
