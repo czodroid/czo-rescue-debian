@@ -4,15 +4,15 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 11 February 2023, 14:53
+# Last Modified: Saturday 11 February 2023, 18:02
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 132:02:03
+# Edit Time: 132:12:18
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
 #       to run on your host:
 #           > apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin debootstrap squashfs-tools xorriso isomd5sum isolinux mtools dosfstools bash coreutils
-#       references:
+#       References:
 #           https://www.willhaley.com/blog/custom-debian-live-environment
 #           https://gitlab.com/systemrescue/systemrescue-sources
 #
@@ -35,7 +35,7 @@ export ISO_APPLICATION="Czo-Rescue-Debian"
 export LIVE_BOOT=$SCRIPT_PATH/build-czo-rescue
 export LOG=$LIVE_BOOT/build-czo-rescue.log
 
-# Debootstrap for arch
+# Debootstrap for amd64 or 686-pae
 export ARCH="amd64"
 #export ARCH="686-pae"
 
@@ -297,7 +297,7 @@ Type \e[97mmount -o remount,size=1G /run/live/overlay\e[m to change overlay
 HEREDOC
 
 mkdir -p $LIVE_BOOT/{staging/{EFI/BOOT,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live},tmp}
-cp -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian $LIVE_BOOT/../pkg-czo-rescue-debian
+cp -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian $LIVE_BOOT/pkg-czo-rescue-debian
 cp -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian $LIVE_BOOT/staging/pkg-czo-rescue-debian
 cp -f $LIVE_BOOT/chroot/tmp/release $LIVE_BOOT/tmp/release
 rm -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian
@@ -332,7 +332,7 @@ echo "==> Prepare Boot Loader Menus ==============================="
 ##================================================================
 echo " -> isolinux.cfg"
 
-cat <<EOF > $LIVE_BOOT/staging/isolinux/isolinux.cfg
+cat <<HEREDOC > $LIVE_BOOT/staging/isolinux/isolinux.cfg
 # Filename: isolinux.cfg
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
@@ -401,12 +401,12 @@ label Reboot
 label Power Off
     com32 poweroff.c32
 
-EOF
+HEREDOC
 
 ##================================================================
 echo " -> grub.cfg"
 
-cat <<EOF > $LIVE_BOOT/staging/boot/grub/grub.cfg
+cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/grub.cfg
 # Filename: grub.cfg
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
@@ -511,12 +511,12 @@ menuentry "Power Off" {
     halt
 }
 
-EOF
+HEREDOC
 
 ##================================================================
 cp $LIVE_BOOT/staging/boot/grub/grub.cfg $LIVE_BOOT/staging/EFI/BOOT/
 
-cat <<'EOF' > $LIVE_BOOT/tmp/grub-embed.cfg
+cat <<'HEREDOC' > $LIVE_BOOT/tmp/grub-embed.cfg
 if ! [ -d "$cmdpath" ]; then
     # On some firmware, GRUB has a wrong cmdpath when booted from an optical disc.
     # https://gitlab.archlinux.org/archlinux/archiso/-/issues/183
@@ -525,7 +525,7 @@ if ! [ -d "$cmdpath" ]; then
     fi
 fi
 configfile "${cmdpath}/grub.cfg"
-EOF
+HEREDOC
 
 ##================================================================
 echo " -> Prepare Boot Loader Files"
