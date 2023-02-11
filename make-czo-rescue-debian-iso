@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 11 February 2023, 14:44
+# Last Modified: Saturday 11 February 2023, 14:53
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 132:01:33
+# Edit Time: 132:02:03
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -158,7 +158,7 @@ fi
 
 RELEASE=$(dpkg-query -W -f='${binary:Package}\n' linux-image-* | head -n 1 | sed 's/linux-image-//')
 echo $RELEASE > /tmp/release
-echo "==> $RELEASE ($ARCH) ========================="
+echo "==> CHROOT: $RELEASE ($ARCH) ========================="
 
 echo "--> install packages"
 grep -v '^\s*#' /tmp/packages | xargs apt-get $QUIET install
