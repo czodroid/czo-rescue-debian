@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 11 February 2023, 10:25
+# Last Modified: Saturday 11 February 2023, 11:35
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 128:04:09
+# Edit Time: 129:02:49
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -65,15 +65,14 @@ echo ' -> rm old build $LIVE_BOOT'
 rm -fr $LIVE_BOOT
 mkdir -p $LIVE_BOOT
 
-echo " -> export LIVE_BOOT=$LIVE_BOOT"
-echo
-
 }
 
 ##================================================================
 make_02_debootstrap() {
 
 echo "==> Debootstrap ============================================="
+echo " -> export LIVE_BOOT=$LIVE_BOOT"
+echo
 
 # --arch=i386
 # --arch=amd64
@@ -150,8 +149,7 @@ fi
 #exit
 
 RELEASE=$(dpkg-query -W -f='${binary:Package}\n' linux-image-* | head -n 1 | sed 's/linux-image-//')
-echo $RELEASE > /tmp/chrootarch
-echo $ARCH > /tmp/archarch
+echo $RELEASE > /tmp/release
 echo "==> $RELEASE ($ARCH) ========================="
 
 echo "--> install packages"
@@ -161,7 +159,8 @@ grep -v '^\s*#' /tmp/packages | xargs apt-get $QUIET install
 #find /usr/lib/modules/$RELEASE -type f -name "*.ko" -exec strip --strip-unneeded {} \;
 
 echo "==> mkinitramfs =================="
-mkinitramfs -c xz -o /boot/initrd.img-$RELEASE
+#mkinitramfs -c xz -o /boot/initrd.img-$RELEASE
+update-initramfs -c -k $RELEASE
 
 ##==================================================##
 
@@ -291,10 +290,10 @@ HEREDOC
 mkdir -p $LIVE_BOOT/{staging/{EFI/BOOT,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live},tmp}
 cp -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian $LIVE_BOOT/../pkg-czo-rescue-debian
 cp -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian $LIVE_BOOT/staging/pkg-czo-rescue-debian
-cp -f $LIVE_BOOT/chroot/tmp/chrootarch $LIVE_BOOT/tmp/chrootarch
+cp -f $LIVE_BOOT/chroot/tmp/release $LIVE_BOOT/tmp/release
 rm -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian
+rm -f $LIVE_BOOT/chroot/tmp/release
 rm -f $LIVE_BOOT/chroot/tmp/packages
-rm -f $LIVE_BOOT/chroot/tmp/chrootarch
 
 }
 
@@ -544,9 +543,9 @@ cp -f $LIVE_BOOT/chroot/boot/memtest.bin $LIVE_BOOT/staging/live/memtest.bin
 cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/live/memtest.efi
 
 #hdt
-CHROOTARCH="$(<$LIVE_BOOT/tmp/chrootarch)"
+RELEASE="$(<$LIVE_BOOT/tmp/release)"
 gzip -c -9 $LIVE_BOOT/chroot/usr/share/misc/pci.ids > $LIVE_BOOT/staging/isolinux/hdt/pciids.gz
-gzip -c -9 $LIVE_BOOT/chroot/usr/lib/modules/$CHROOTARCH/modules.alias > $LIVE_BOOT/staging/isolinux/hdt/modalias.gz
+gzip -c -9 $LIVE_BOOT/chroot/usr/lib/modules/$RELEASE/modules.alias > $LIVE_BOOT/staging/isolinux/hdt/modalias.gz
 
 cp -f /usr/lib/ISOLINUX/isolinux.bin $LIVE_BOOT/staging/isolinux/isolinux.bin
 cp -f /usr/lib/ISOLINUX/isohdpfx.bin $LIVE_BOOT/staging/isolinux/isohdpfx.bin
