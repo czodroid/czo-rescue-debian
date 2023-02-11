@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 11 February 2023, 10:09
+# Last Modified: Saturday 11 February 2023, 10:25
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 127:59:45
+# Edit Time: 128:04:09
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -149,14 +149,19 @@ fi
 #EOF
 #exit
 
+RELEASE=$(dpkg-query -W -f='${binary:Package}\n' linux-image-* | head -n 1 | sed 's/linux-image-//')
+echo $RELEASE > /tmp/chrootarch
+echo $ARCH > /tmp/archarch
+echo "==> $RELEASE ($ARCH) ========================="
+
 echo "--> install packages"
 grep -v '^\s*#' /tmp/packages | xargs apt-get $QUIET install
 
 #find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
-#find /usr/lib/modules/$(uname -r) -type f -name "*.ko" -exec strip --strip-unneeded {} \;
+#find /usr/lib/modules/$RELEASE -type f -name "*.ko" -exec strip --strip-unneeded {} \;
 
-echo "--> mkinitramfs"
-mkinitramfs -c xz -o /boot/initrd.img-$(uname -r)
+echo "==> mkinitramfs =================="
+mkinitramfs -c xz -o /boot/initrd.img-$RELEASE
 
 ##==================================================##
 
@@ -234,7 +239,6 @@ localepurge
 dpkg-query -Wf '${Package}\n'| LANG=C sort > /root/pkg_list_rescue.txt
 dpkg-query -Wf '${Installed-Size}\t${Package}\t${version}\n' | LANG=C sort -rn > /root/pkg_size_rescue.txt
 dpkg-query -Wf '${Package} ${version}\n' | LANG=C sort > /tmp/pkg-czo-rescue-debian
-uname -r > /tmp/chrootarch
 
 apt-get $QUIET clean
 
