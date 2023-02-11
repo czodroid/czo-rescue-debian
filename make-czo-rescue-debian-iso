@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Friday 10 February 2023, 10:30
+# Last Modified: Saturday 11 February 2023, 10:09
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 126:19:52
+# Edit Time: 127:59:45
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -17,7 +17,6 @@
 #           https://gitlab.com/systemrescue/systemrescue-sources
 #
 # Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
-
 
 set -e -u
 
@@ -50,7 +49,7 @@ export LANG=en_US.UTF-8
 ##================================================================
 run_once() {
 
-    echo "<==== $LIVE_BOOT/build.$1 ======================"
+    echo "<==== $LIVE_BOOT/build.$1 $(date "+(%Y-%m-%d %H:%M:%S)") ============================"
     if [ ! -e $LIVE_BOOT/build.$1 ]; then
         $1
         touch $LIVE_BOOT/build.$1
@@ -60,9 +59,9 @@ run_once() {
 ##================================================================
 make_01_prepare() {
 
-echo "-> Prepare ================================================="
+echo "==> Prepare ================================================="
 
-echo ' -> rm old build $LIVE_BOOT ================================'
+echo ' -> rm old build $LIVE_BOOT'
 rm -fr $LIVE_BOOT
 mkdir -p $LIVE_BOOT
 
@@ -74,7 +73,7 @@ echo
 ##================================================================
 make_02_debootstrap() {
 
-echo "-> debootstrap ============================================="
+echo "==> Debootstrap ============================================="
 
 # --arch=i386
 # --arch=amd64
@@ -87,15 +86,17 @@ else
     debootstrap --arch=i386 --merged-usr --components=main,contrib,non-free --force-check-gpg bullseye $LIVE_BOOT/chroot http://deb.debian.org/debian/
 fi
 
-cp $SCRIPT_PATH/packages $LIVE_BOOT/chroot/root
-
 }
 
 ##================================================================
 make_03_chroot() {
 
-echo "-> Chroot =================================================="
+echo "==> Chroot =================================================="
 
+echo " -> Copy packages"
+cp $SCRIPT_PATH/packages $LIVE_BOOT/chroot/tmp
+
+echo " -> Chroot"
 ## test
 # echo
 # echo "export LIVE_BOOT=$LIVE_BOOT"
@@ -149,17 +150,7 @@ fi
 #exit
 
 echo "--> install packages"
-grep -v '^\s*#' /root/packages | xargs apt-get $QUIET install
-
-#apt-get $QUIET install 2to3 acpi aptitude apt-utils argon2 at atm-tools atop autofs avahi-utils bash bash-completion bc bind9 bind9-dnsutils bind9-host broadcom-sta-dkms bzip2 cabextract ca-certificates chntpw cifs-utils clonezilla cloud-guest-utils cloud-image-utils colordiff command-not-found cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debootstrap discount dislocker dmraid dnsmasq-utils dnsutils dosfstools dstat dump dwarves ecryptfs-utils efitools elinks ethtool ext4magic extrace exuberant-ctags fatresize fdisk fido2-tools file foremost fsarchiver gddrescue gdisk gettext-base git gnutls-bin gocryptfs gpart groff-base grub-efi-amd64-bin grub-efi-ia32-bin grub-pc-bin hardlink hashalot hdparm hexcurse htop hwinfo hwloc-nox icu-devtools ideviceinstaller idevicerestore iftop ifupdown info init ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-arping iputils-clockdiff iputils-ping isc-dhcp-client isc-dhcp-common isolinux jfsutils jq kmod kpartx krb5-user ldnsutils less lftp libarchive-tools libcap-ng-utils libguestfs-tools libimobiledevice-utils liblockfile-bin libnet-xmpp-perl libnfs-utils libnl-utils libnss3-tools libnss-systemd libpam-mount libpam-systemd libplist-utils libqcow-utils libsecret-tools libteam-utils libterm-readline-gnu-perl libusb-dev libusbmuxd-tools lm-sensors logrotate lrzip lsb-release lshw lsof lz4 m4 man-db manpages mc media-types memtester mime-support minicom mlocate moreutils mtools mtr multipath-tools nano nbd-client nbd-server ncat ncdu ncurses-term ndisc6 netcat netcat-traditional netdiag nettle-bin net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nfs-kernel-server nftables nmap ntpdate numactl nvme-cli nwipe oathtool openconnect openssh-client p7zip-full paperkey par2 partclone parted partimage-server pciutils perltidy picocom pppoe procps pv qemu-guest-agent qrencode rar rclone rcs rdiff rdiff-backup rdiff-backup-fs readline-common recode reiser4progs reiserfsprogs rename reportbug rsync rsyslog sasl2-bin screen scrounge-ntfs sdparm sensible-utils smbclient socat sqlite3 squashfs-tools squashfs-tools-ng ssh stoken strace stress sysfsutils syslinux-efi syslinux-utils sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet testdisk tidy tmate tmux traceroute tree tzdata ucf udev udftools vim-common vim-tiny vlock vmfs6-tools wamerican wget whiptail whois wimtools wipe wireless-tools wodim xfsprogs xorriso xtrace xz-utils zfs-initramfs zsh zstd live-boot localepurge nullmailer fonts-droid-fallback- fonts-font-awesome- fonts-lato- fonts-noto-mono- fonts-urw-base35- lightdm- ghostscript- libpocketsphinx3- live-boot-doc- pocketsphinx-en-us- yelp- xinit xfce4 xfce4-power-manager-plugins xfce4-screenshooter xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin avahi-discover avahi-ui-utils firefox-esr fonts-dejavu fonts-noto-color-emoji fonts-wqy-microhei galculator geany ghex gnome-themes-extra gparted grsync gsmartcontrol hardinfo lshw-gtk meld network-manager-gnome rdesktop remmina ristretto vim-gtk webext-ublock-origin-firefox x11vnc xarchiver xauth xclip xdotool xfburn xsel xterm
-
-# inxi
-# python3-reportbug
-# xserver-xorg-input-synaptics
-# keepassxc
-# yubikey-personalization-gui
-# ffmpeg
-# lame
+grep -v '^\s*#' /tmp/packages | xargs apt-get $QUIET install
 
 #find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
 #find /usr/lib/modules/$(uname -r) -type f -name "*.ko" -exec strip --strip-unneeded {} \;
@@ -212,6 +203,7 @@ systemctl restart autofs
 cd /root
 curl -fsSL https://raw.githubusercontent.com/czodroid/dotfiles/master/config-fast-copy | sh
 curl -fsSL https://raw.githubusercontent.com/czodroid/dotfiles/master/config-fast-ssh  | sh
+ssh-keygen -c -C 'root@czo-rescue-debian' -f .ssh/id_rsa
 rm -fr /root/.ssh_fast_*
 
 # passwd
@@ -239,9 +231,11 @@ rm -rf /usr/share/help
 echo -e "MANDELETE\nDONTBOTHERNEWLOCALE\nSHOWFREEDSPACE\nen\nen_US\nen_US.UTF-8" > /etc/locale.nopurge
 localepurge
 
-dpkg-query -Wf '${Package}\t${version}\n' | LANG=C sort > /root/pkg-czo-rescue-debian
 dpkg-query -Wf '${Package}\n'| LANG=C sort > /root/pkg_list_rescue.txt
 dpkg-query -Wf '${Installed-Size}\t${Package}\t${version}\n' | LANG=C sort -rn > /root/pkg_size_rescue.txt
+dpkg-query -Wf '${Package} ${version}\n' | LANG=C sort > /tmp/pkg-czo-rescue-debian
+uname -r > /tmp/chrootarch
+
 apt-get $QUIET clean
 
 rm -fr   /var/cache/ldconfig
@@ -266,15 +260,13 @@ cd
 umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}
 sleep 1
 
-echo " <- end chroot"
-
 }
 
 
 ##================================================================
 make_04_copyfiles() {
 
-echo "-> Copy files =============================================="
+echo "==> Copy files =============================================="
 
 rsync -av --chown=root:root $LIVE_BOOT/../liverootfs/ $LIVE_BOOT/chroot
 
@@ -293,16 +285,19 @@ Type \e[97mmount -o remount,size=1G /run/live/overlay\e[m to change overlay
 HEREDOC
 
 mkdir -p $LIVE_BOOT/{staging/{EFI/BOOT,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live},tmp}
-cp -f $LIVE_BOOT/chroot/root/pkg-czo-rescue-debian $LIVE_BOOT/staging/pkg-czo-rescue-debian
-rm -f $LIVE_BOOT/chroot/root/pkg-czo-rescue-debian
-rm -f $LIVE_BOOT/chroot/root/packages
+cp -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian $LIVE_BOOT/../pkg-czo-rescue-debian
+cp -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian $LIVE_BOOT/staging/pkg-czo-rescue-debian
+cp -f $LIVE_BOOT/chroot/tmp/chrootarch $LIVE_BOOT/tmp/chrootarch
+rm -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian
+rm -f $LIVE_BOOT/chroot/tmp/packages
+rm -f $LIVE_BOOT/chroot/tmp/chrootarch
 
 }
 
 ##================================================================
 make_05_squashfs() {
 
-echo "-> Squashfs ==============================================="
+echo "==> Squashfs ================================================"
 
 rm -f $LIVE_BOOT/staging/live/filesystem.squashfs
 
@@ -319,7 +314,7 @@ sha512sum filesystem.squashfs > filesystem.squashfs.sha512
 ##================================================================
 make_06_bootloader() {
 
-echo "-> Prepare Boot Loader Menus ==============================="
+echo "==> Prepare Boot Loader Menus ==============================="
 
 
 ##================================================================
@@ -545,8 +540,9 @@ cp -f $LIVE_BOOT/chroot/boot/memtest.bin $LIVE_BOOT/staging/live/memtest.bin
 cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/live/memtest.efi
 
 #hdt
+CHROOTARCH="$(<$LIVE_BOOT/tmp/chrootarch)"
 gzip -c -9 $LIVE_BOOT/chroot/usr/share/misc/pci.ids > $LIVE_BOOT/staging/isolinux/hdt/pciids.gz
-gzip -c -9 $LIVE_BOOT/chroot/usr/lib/modules/$(uname -r)/modules.alias > $LIVE_BOOT/staging/isolinux/hdt/modalias.gz
+gzip -c -9 $LIVE_BOOT/chroot/usr/lib/modules/$CHROOTARCH/modules.alias > $LIVE_BOOT/staging/isolinux/hdt/modalias.gz
 
 cp -f /usr/lib/ISOLINUX/isolinux.bin $LIVE_BOOT/staging/isolinux/isolinux.bin
 cp -f /usr/lib/ISOLINUX/isohdpfx.bin $LIVE_BOOT/staging/isolinux/isohdpfx.bin
@@ -584,7 +580,7 @@ mcopy -vi $LIVE_BOOT/staging/EFI/debianiso/efiboot.img \
 ##================================================================
 make_07_iso() {
 
-echo "-> Create Bootable ISO ====================================="
+echo "==> Create Bootable ISO ====================================="
 
 rm -f $LIVE_BOOT/$ISO_NAME
 (
