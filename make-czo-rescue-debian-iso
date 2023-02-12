@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 11 February 2023, 18:02
+# Last Modified: Sunday 12 February 2023, 18:38
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 132:12:18
+# Edit Time: 132:15:17
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -297,7 +297,6 @@ Type \e[97mmount -o remount,size=1G /run/live/overlay\e[m to change overlay
 HEREDOC
 
 mkdir -p $LIVE_BOOT/{staging/{EFI/BOOT,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live},tmp}
-cp -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian $LIVE_BOOT/pkg-czo-rescue-debian
 cp -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian $LIVE_BOOT/staging/pkg-czo-rescue-debian
 cp -f $LIVE_BOOT/chroot/tmp/release $LIVE_BOOT/tmp/release
 rm -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian
@@ -648,7 +647,7 @@ run_once make_06_bootloader
 run_once make_07_iso
 ) 2>&1 | tee -a $LOG
 
-if [ -n "$RTMStart" ] ; then echo -n "Execution Time: "; RTMStop=$(date +%s); echo " $((($RTMStop-$RTMStart)/1))s"; RTMStart=$RTMStop ; fi
+if [ -n "$RTMStart" ] ; then echo -n "Execution Time: "; RTMStop=$(date +%s); echo " $((($RTMStop-$RTMStart)/60))min"; RTMStart=$RTMStop ; fi
 
 #== END ==================================================
 
