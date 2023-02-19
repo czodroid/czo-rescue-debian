@@ -1,0 +1,43 @@
+#! /usr/bin/env sh
+#
+# Filename: mkiso
+# Author: Olivier Sirol <czo@free.fr>
+# License: GPL-2.0 (http://www.gnu.org/copyleft)
+# Description: Build an isofs from a rescue cd
+
+
+DIRNAME="$(dirname $(readlink -f $0))"
+NAME="${DIRNAME##*/}"
+ISO_PUBLISHER="Czo-Rescue-Debian <https://gitlab.com/czo/czo-rescue-debian>"
+ISO_APPLICATION="Czo-Rescue-Debian"
+
+echo "$DIRNAME"
+echo "$NAME"
+cd $DIRNAME
+
+rm -f ../$NAME.iso
+
+xorriso \
+    -as mkisofs \
+    -iso-level 3 \
+    -full-iso9660-filenames \
+    -volid RESCUE \
+    -publisher "$ISO_PUBLISHER" \
+    -appid "$ISO_APPLICATION" \
+    -isohybrid-mbr isolinux/isohdpfx.bin \
+    -eltorito-boot isolinux/isolinux.bin \
+        -no-emul-boot \
+        -boot-load-size 4 \
+        -boot-info-table \
+        -eltorito-catalog isolinux/boot.cat \
+    -eltorito-alt-boot \
+        -e EFI/debianiso/efiboot.img \
+        -no-emul-boot \
+        -isohybrid-gpt-basdat \
+    -o ../$NAME.iso .
+
+## change live (must be run as root)
+# ( mkdir czo-rescue-debian-11.6 && cd czo-rescue-debian-11.6 && bsdtar -xf ../czo-rescue-debian-11.6.iso && cd .. && unsquashfs czo-rescue-debian-11.6/live/filesystem.squashfs )
+## make changes: remove my dotconfigs (ok, there too much aliases ;-), configure .ssh/authorized_keys, configure grub.cfg/isolinux.cfg and so on... then:
+# ( cd czo-rescue-debian-11.6/live && rm filesystem.squashfs; mksquashfs ../../squashfs-root filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k && sha512sum filesystem.squashfs > filesystem.squashfs.sha512 && cd .. && ./mkiso )
+

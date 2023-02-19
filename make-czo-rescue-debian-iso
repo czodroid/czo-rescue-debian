@@ -4,20 +4,19 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 22 January 2023, 08:28
+# Last Modified: Tuesday 14 February 2023, 20:40
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 117:40:04
+# Edit Time: 132:35:26
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
 #       to run on your host:
 #           > apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin debootstrap squashfs-tools xorriso isomd5sum isolinux mtools dosfstools bash coreutils
-#       references:
+#       References:
 #           https://www.willhaley.com/blog/custom-debian-live-environment
 #           https://gitlab.com/systemrescue/systemrescue-sources
 #
 # Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
-
 
 set -e -u
 
@@ -27,30 +26,40 @@ if [ `id -u` -ne 0 ]; then
 fi
 
 SCRIPT_PATH=$(readlink -f ${0%/*})
-export ISO_VERSION="$(<${SCRIPT_PATH}/VERSION)"
+export ISO_VERSION="$(<${SCRIPT_PATH}/version)"
 export ISO_DATE="$(date +%Y-%m-%d)"
 export ISO_PUBLISHER="Czo-Rescue-Debian <https://gitlab.com/czo/czo-rescue-debian>"
 export ISO_APPLICATION="Czo-Rescue-Debian"
 
-export ARCH="amd64"
-#export ARCH="686-pae"
-
+# Live build and log
 export LIVE_BOOT=$SCRIPT_PATH/build-czo-rescue
 export LOG=$LIVE_BOOT/build-czo-rescue.log
 
+# Debootstrap for amd64 or 686-pae
+export ARCH="amd64"
+#export ARCH="686-pae"
+
+# Name of the ISO
 if [ $ARCH = "amd64" ]; then
     export ISO_NAME="czo-rescue-debian-${ISO_VERSION}.iso"
 else
     export ISO_NAME="czo-rescue-debian-${ISO_VERSION}-${ARCH}.iso"
 fi
 
+# Execute lang
 unset LANGUAGE LC_ALL LC_MONETARY LC_PAPER LC_MEASUREMENT LC_TIME LC_NUMERIC LANG
 export LANG=en_US.UTF-8
+
+# Execution time
+export RTMStart=$(date +%s)
+
+echo "==> export LIVE_BOOT=$LIVE_BOOT"
+echo
 
 ##================================================================
 run_once() {
 
-    echo "<==== $LIVE_BOOT/build.$1 ======================"
+    echo "<==== $LIVE_BOOT/build.$1 $(date "+(%Y-%m-%d %H:%M:%S)") ============================"
     if [ ! -e $LIVE_BOOT/build.$1 ]; then
         $1
         touch $LIVE_BOOT/build.$1
@@ -58,23 +67,25 @@ run_once() {
 }
 
 ##================================================================
-make_01_prepare() {
+make_00_prepare() {
 
-echo "-> Prepare ================================================="
+echo "==> Prepare ================================================="
 
-echo ' -> rm old build $LIVE_BOOT ================================'
+echo ' -> rm old build $LIVE_BOOT'
 rm -fr $LIVE_BOOT
 mkdir -p $LIVE_BOOT
-
-echo " -> export LIVE_BOOT=$LIVE_BOOT"
-echo
 
 }
 
 ##================================================================
-make_02_debootstrap() {
+make_01_debootstrap() {
 
-echo "-> debootstrap ============================================="
+echo "==> Debootstrap ============================================="
+
+# --arch=i386
+# --arch=amd64
+# --variant=minbase
+# --print-debs
 
 if [ $ARCH = "amd64" ]; then
     debootstrap --arch=amd64 --merged-usr --components=main,contrib,non-free --force-check-gpg bullseye $LIVE_BOOT/chroot http://deb.debian.org/debian/
@@ -82,18 +93,17 @@ else
     debootstrap --arch=i386 --merged-usr --components=main,contrib,non-free --force-check-gpg bullseye $LIVE_BOOT/chroot http://deb.debian.org/debian/
 fi
 
-# --arch=i386
-# --arch=amd64
-# --variant=minbase
-# --print-debs
-
 }
 
 ##================================================================
-make_03_chroot() {
+make_02_chroot() {
 
-echo "-> Chroot =================================================="
+echo "==> Chroot =================================================="
 
+echo " -> Copy packages"
+cp $SCRIPT_PATH/packages $LIVE_BOOT/chroot/tmp
+
+echo " -> Chroot"
 ## test
 # echo
 # echo "export LIVE_BOOT=$LIVE_BOOT"
@@ -130,6 +140,7 @@ deb http://deb.debian.org/debian/ bullseye-updates main contrib non-free
 HEREDOC
 
 apt-get $QUIET update
+apt-get $QUIET upgrade
 
 ##==================================================##
 
@@ -142,19 +153,23 @@ else
     apt-get $QUIET --no-install-recommends install linux-image-686 linux-headers-686 linux-image-686-pae linux-headers-686-pae intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
 fi
 
-# grep -v '^\s*#' packages | xargs apt-get $QUIET install
+#EOF
+#exit
+
+RELEASE=$(dpkg-query -W -f='${binary:Package}\n' linux-image-* | head -n 1 | sed 's/linux-image-//')
+echo $RELEASE > /tmp/release
+echo "==> CHROOT: $RELEASE ($ARCH) ========================="
 
 echo "--> install packages"
-apt-get $QUIET install aptitude apt-utils autofs bash bash-completion bc bind9-dnsutils bind9-host bzip2 ca-certificates chntpw clonezilla cloud-guest-utils cloud-image-utils colordiff command-not-found cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debootstrap dmraid dnsutils dosfstools ethtool ext4magic exuberant-ctags fdisk file gddrescue gdisk gettext-base git gocryptfs gpart groff-base grub-efi-amd64-bin grub-efi-ia32-bin grub-pc-bin hashalot hdparm hexcurse htop iftop ifupdown init ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-ping isc-dhcp-client isc-dhcp-common isolinux jfsutils kmod kpartx less lftp libguestfs-tools liblockfile-bin libnet-xmpp-perl libnfs-utils libnss-systemd libpam-mount libpam-systemd libqcow-utils libterm-readline-gnu-perl libusb-dev lm-sensors logrotate lrzip lsb-release lshw lsof lz4 m4 man-db manpages mc media-types mime-support mlocate moreutils mtools nano ncdu ncurses-term netcat netcat-traditional net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nfs-kernel-server nftables nmap ntpdate openconnect openssh-client p7zip-full paperkey par2 partclone parted pciutils perltidy picocom procps pv python3-reportbug qemu-guest-agent rar rcs readline-common recode reiser4progs reiserfsprogs rename reportbug rsync rsyslog screen sdparm sensible-utils smbclient socat sqlite3 squashfs-tools squashfs-tools-ng ssh strace stress syslinux-efi sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet tidy tmate tmux traceroute tree tzdata ucf udev vim-common vim-tiny vlock wamerican wget whiptail whois wireless-tools xfsprogs xorriso xz-utils zfs-initramfs zsh zstd live-boot localepurge nullmailer xinit xfce4 xfce4-screenshooter xfce4-power-manager-plugins xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin xterm lightdm- gparted vim-gtk xauth xsel xclip xdotool gnome-themes-extra network-manager-gnome gsmartcontrol firefox-esr webext-ublock-origin-firefox xfburn ghex xarchiver rdesktop remmina ristretto x11vnc galculator geany dislocker meld yelp- fonts-dejavu fonts-noto-color-emoji fonts-wqy-microhei fonts-lato- fonts-droid-fallback- fonts-noto-mono- fonts-font-awesome- fonts-urw-base35- live-boot-doc- pocketsphinx-en-us- libpocketsphinx3- ghostscript- atm-tools dump fatresize fido2-tools foremost fsarchiver hardinfo hardlink hwinfo icu-devtools inxi jq ldnsutils libcap-ng-utils libnss3-tools mtr nwipe rclone rdiff stoken testdisk wimtools wipe avahi-utils avahi-ui-utils avahi-discover krb5-user broadcom-sta-dkms
+grep -v '^\s*#' /tmp/packages | xargs apt-get $QUIET install
 
-# xserver-xorg-input-synaptics
-# keepassxc
+#find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
+#find /usr/lib/modules/$RELEASE -type f -name "*.ko" -exec strip --strip-unneeded {} \;
 
-# EOF
-# exit
-
-echo "--> mkinitramfs"
-mkinitramfs -c xz -o /boot/initrd.img-$(uname -r)
+echo "==> mkinitramfs =================="
+#mkinitramfs -c xz -o /boot/initrd.img-$RELEASE
+perl -i -pe 's,^COMPRESS=gzip,COMPRESS=xz,' /etc/initramfs-tools/initramfs.conf
+update-initramfs -c -k $RELEASE
 
 ##==================================================##
 
@@ -201,6 +216,7 @@ systemctl restart autofs
 cd /root
 curl -fsSL https://raw.githubusercontent.com/czodroid/dotfiles/master/config-fast-copy | sh
 curl -fsSL https://raw.githubusercontent.com/czodroid/dotfiles/master/config-fast-ssh  | sh
+ssh-keygen -c -C 'root@czo-rescue-debian' -f .ssh/id_rsa
 rm -fr /root/.ssh_fast_*
 
 # passwd
@@ -229,8 +245,9 @@ echo -e "MANDELETE\nDONTBOTHERNEWLOCALE\nSHOWFREEDSPACE\nen\nen_US\nen_US.UTF-8"
 localepurge
 
 dpkg-query -Wf '${Package}\n'| LANG=C sort > /root/pkg_list_rescue.txt
-dpkg-query -Wf '${Package}\t${version}\n' | LANG=C sort > /root/pkg_version_rescue.txt
 dpkg-query -Wf '${Installed-Size}\t${Package}\t${version}\n' | LANG=C sort -rn > /root/pkg_size_rescue.txt
+dpkg-query -Wf '${Package} ${version}\n' | LANG=C sort > /tmp/pkg-czo-rescue-debian
+
 apt-get $QUIET clean
 
 rm -fr   /var/cache/ldconfig
@@ -255,15 +272,13 @@ cd
 umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}
 sleep 1
 
-echo " <- end chroot"
-
 }
 
 
 ##================================================================
-make_04_copyfiles() {
+make_03_copyfiles() {
 
-echo "-> Copy files =============================================="
+echo "==> Copy files =============================================="
 
 rsync -av --chown=root:root $LIVE_BOOT/../liverootfs/ $LIVE_BOOT/chroot
 
@@ -271,7 +286,7 @@ cat << HEREDOC > $LIVE_BOOT/chroot/etc/issue
 
 Debian GNU/Linux 11 \n \l
 
-\e[97m        Czo Rescue Debian $ISO_VERSION ($ISO_DATE)\e[m
+\e[97m        Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)\e[m
 
 \e[32m===== https://gitlab.com/czo/czo-rescue-debian =====\e[m
 
@@ -282,32 +297,41 @@ Type \e[97mmount -o remount,size=1G /run/live/overlay\e[m to change overlay
 HEREDOC
 
 mkdir -p $LIVE_BOOT/{staging/{EFI/BOOT,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live},tmp}
+cp -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian $LIVE_BOOT/staging/pkg-czo-rescue-debian
+cp -f $LIVE_BOOT/chroot/tmp/release $LIVE_BOOT/tmp/release
+rm -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian
+rm -f $LIVE_BOOT/chroot/tmp/release
+rm -f $LIVE_BOOT/chroot/tmp/packages
 
 }
 
 ##================================================================
-make_05_squashfs() {
+make_04_squashfs() {
 
-echo "-> Squashfs ==============================================="
+echo "==> Squashfs ================================================"
 
 rm -f $LIVE_BOOT/staging/live/filesystem.squashfs
 
 # faster:
 #mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp zstd -e boot
 mksquashfs $LIVE_BOOT/chroot $LIVE_BOOT/staging/live/filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k -e boot
+(
+cd $LIVE_BOOT/staging/live
+sha512sum filesystem.squashfs > filesystem.squashfs.sha512
+)
 
 }
 
 ##================================================================
-make_06_bootloader() {
+make_05_bootloader() {
 
-echo "-> Prepare Boot Loader Menus ==============================="
+echo "==> Prepare Boot Loader Menus ==============================="
 
 
 ##================================================================
 echo " -> isolinux.cfg"
 
-cat <<EOF > $LIVE_BOOT/staging/isolinux/isolinux.cfg
+cat <<HEREDOC > $LIVE_BOOT/staging/isolinux/isolinux.cfg
 # Filename: isolinux.cfg
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
@@ -318,7 +342,7 @@ timeout 3000
 menu default
 prompt 0
 
-menu title Czo Rescue Debian $ISO_VERSION ($ISO_DATE)
+menu title Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)
 
 # https://www.syslinux.org/wiki/index.php?title=Comboot/menu.c32
 # 25 for text mode, 28 for VESA graphics mode.
@@ -338,28 +362,28 @@ menu cmdlinerow 16
 #menu color sel    1;37;44
 #menu color unsel  36;44
 
-label Boot Czo Rescue Debian, zfs/toram/startx         (root/toor)
+label Czo-Rescue-Debian, zfs/toram/startx              (root/toor)
     menu default
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs dostartx
 
-label Boot Czo Rescue Debian, zfs/toram/console/SERIAL (root/toor)
+label Czo-Rescue-Debian, zfs/toram/console/SERIAL      (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs console=ttyS0,115200n8
 
-label Boot Czo Rescue Debian, zfs/startx               (root/toor)
+label Czo-Rescue-Debian, zfs/startx                    (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live dostartx
 
-label Boot Czo Rescue Debian, zfs/console/SERIAL       (root/toor)
+label Czo-Rescue-Debian, zfs/console/SERIAL            (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live console=ttyS0,115200n8
 
-label Boot Czo Rescue Debian, failsafe
+label Czo-Rescue-Debian, failsafe
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
 
-# label TEST ISO Czo Rescue Debian
+# label TEST ISO Czo-Rescue-Debian
 #     kernel /boot/memdisk iso
 #     append initrd=/boot/images/czo-rescue-debian-11.6.iso
 
@@ -376,12 +400,12 @@ label Reboot
 label Power Off
     com32 poweroff.c32
 
-EOF
+HEREDOC
 
 ##================================================================
 echo " -> grub.cfg"
 
-cat <<EOF > $LIVE_BOOT/staging/boot/grub/grub.cfg
+cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/grub.cfg
 # Filename: grub.cfg
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
@@ -390,6 +414,7 @@ insmod part_gpt
 insmod part_msdos
 insmod fat
 insmod iso9660
+insmod chain
 
 # Global options
 set timeout=300
@@ -406,55 +431,55 @@ terminal_input serial console
 insmod efi_gop
 insmod efi_uga
 
-menuentry "                Czo Rescue Debian $ISO_VERSION ($ISO_DATE)" { czo }
+menuentry "                Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)" { czo }
 
 menuentry "" { czo }
 
-menuentry "Czo Rescue Debian, zfs/toram/startx           (root/toor)" {
-    echo "Czo Rescue Debian launch in progress, please stand by..."
+menuentry "Czo-Rescue-Debian, zfs/toram/startx           (root/toor)" {
+    echo "Czo-Rescue-Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs dostartx
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, zfs/toram/console/SERIAL   (root/toor)" {
-    echo "Czo Rescue Debian launch in progress, please stand by..."
+menuentry "Czo-Rescue-Debian, zfs/toram/console/SERIAL   (root/toor)" {
+    echo "Czo-Rescue-Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs console=ttyS0,115200n8
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, zfs/startx                 (root/toor)" {
-    echo "Czo Rescue Debian launch in progress, please stand by..."
+menuentry "Czo-Rescue-Debian, zfs/startx                 (root/toor)" {
+    echo "Czo-Rescue-Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live dostartx
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, zfs/console/SERIAL         (root/toor)" {
-    echo "Czo Rescue Debian launch in progress, please stand by..."
+menuentry "Czo-Rescue-Debian, zfs/console/SERIAL         (root/toor)" {
+    echo "Czo-Rescue-Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live console=ttyS0,115200n8
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo Rescue Debian, failsafe" {
-    echo "Czo Rescue Debian launch in progress, please stand by..."
+menuentry "Czo-Rescue-Debian, failsafe" {
+    echo "Czo-Rescue-Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
     initrd (\$root)/live/initrd
 }
 
-#menuentry "TEST ISO Czo Rescue Debian" {
-#    echo "ISO Czo Rescue Debian launch in progress, please stand by..."
+#menuentry "TEST ISO Czo-Rescue-Debian" {
+#    echo "ISO Czo-Rescue-Debian launch in progress, please stand by..."
 #    set root='hd0,msdos1'
 #    #search --no-floppy --set=root --label RESCUE
 #    linux16 (\$root)/isolinux/memdisk iso
 #    initrd16 (\$root)/boot/images/czo-rescue-debian-11.6.iso
 #}
 
-#menuentry "TEST ISO Czo Rescue Debian, kernel and initrd" {
-#    echo "ISO Czo Rescue Debian launch in progress, please stand by..."
+#menuentry "TEST ISO Czo-Rescue-Debian, kernel and initrd" {
+#    echo "ISO Czo-Rescue-Debian launch in progress, please stand by..."
 #    set isoname="/boot/images/czo-rescue-debian-11.6.iso"
 #    loopback loop (hd0,msdos1)"\${isoname}"
 #    linux (loop)/live/vmlinuz boot=live findiso="\${isoname}" toram=filesystem.squashfs
@@ -465,6 +490,12 @@ menuentry "Run Memtest86+" {
     echo "Memtest86+ launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/memtest.efi keyboard=both
+}
+
+menuentry "Start EFI Shell" {
+    terminal_output console
+    search --no-floppy --set=root --label RESCUE
+    chainloader (\$root)/EFI/shell.efi
 }
 
 menuentry "EFI Firmware setup" {
@@ -479,12 +510,12 @@ menuentry "Power Off" {
     halt
 }
 
-EOF
+HEREDOC
 
 ##================================================================
 cp $LIVE_BOOT/staging/boot/grub/grub.cfg $LIVE_BOOT/staging/EFI/BOOT/
 
-cat <<'EOF' > $LIVE_BOOT/tmp/grub-embed.cfg
+cat <<'HEREDOC' > $LIVE_BOOT/tmp/grub-embed.cfg
 if ! [ -d "$cmdpath" ]; then
     # On some firmware, GRUB has a wrong cmdpath when booted from an optical disc.
     # https://gitlab.archlinux.org/archlinux/archiso/-/issues/183
@@ -493,13 +524,15 @@ if ! [ -d "$cmdpath" ]; then
     fi
 fi
 configfile "${cmdpath}/grub.cfg"
-EOF
+HEREDOC
 
 ##================================================================
 echo " -> Prepare Boot Loader Files"
 
+cp -f $SCRIPT_PATH/mkiso $LIVE_BOOT/staging/mkiso
+
 cat << HEREDOC > $LIVE_BOOT/staging/czo-rescue-debian
-Czo Rescue Debian $ISO_VERSION ($ISO_DATE)
+Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)
 
 --
 https://gitlab.com/czo/czo-rescue-debian
@@ -514,20 +547,22 @@ else
     cp -f $LIVE_BOOT/chroot/boot/initrd.img-*-pae $LIVE_BOOT/staging/live/initrd
 fi
 
-cp -f $LIVE_BOOT/chroot/root/pkg_version_rescue.txt $LIVE_BOOT/staging/live/pkg_version_rescue.txt
-
 cp -f $LIVE_BOOT/chroot/boot/memtest.bin $LIVE_BOOT/staging/live/memtest.bin
 cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/live/memtest.efi
 
 #hdt
+RELEASE="$(<$LIVE_BOOT/tmp/release)"
 gzip -c -9 $LIVE_BOOT/chroot/usr/share/misc/pci.ids > $LIVE_BOOT/staging/isolinux/hdt/pciids.gz
-gzip -c -9 $LIVE_BOOT/chroot/usr/lib/modules/$(uname -r)/modules.alias > $LIVE_BOOT/staging/isolinux/hdt/modalias.gz
+gzip -c -9 $LIVE_BOOT/chroot/usr/lib/modules/$RELEASE/modules.alias > $LIVE_BOOT/staging/isolinux/hdt/modalias.gz
 
-cp /usr/lib/ISOLINUX/isolinux.bin $LIVE_BOOT/staging/isolinux/
-cp /usr/lib/syslinux/modules/bios/* $LIVE_BOOT/staging/isolinux/
+cp -f /usr/lib/ISOLINUX/isolinux.bin $LIVE_BOOT/staging/isolinux/isolinux.bin
+cp -f /usr/lib/ISOLINUX/isohdpfx.bin $LIVE_BOOT/staging/isolinux/isohdpfx.bin
+cp -f /usr/lib/syslinux/modules/bios/* $LIVE_BOOT/staging/isolinux/
 
 cp -r /usr/lib/grub/x86_64-efi/* $LIVE_BOOT/staging/boot/grub/x86_64-efi/
 rm -fr $LIVE_BOOT/staging/boot/grub/x86_64-efi/monolithic
+
+cp -f $LIVE_BOOT/chroot/boot/shell.efi $LIVE_BOOT/staging/EFI
 
 grub-mkstandalone --compress xz -O i386-efi \
     --modules="part_gpt part_msdos fat iso9660" \
@@ -554,11 +589,13 @@ mcopy -vi $LIVE_BOOT/staging/EFI/debianiso/efiboot.img \
 
 
 ##================================================================
-make_07_iso() {
+make_06_iso() {
 
-echo "-> Create Bootable ISO ====================================="
+echo "==> Create Bootable ISO ====================================="
 
 rm -f $LIVE_BOOT/$ISO_NAME
+(
+cd $LIVE_BOOT/staging
 xorriso \
     -as mkisofs \
     -iso-level 3 \
@@ -566,49 +603,52 @@ xorriso \
     -volid RESCUE \
     -publisher "$ISO_PUBLISHER" \
     -appid "$ISO_APPLICATION" \
-    --mbr-force-bootable -partition_offset 16 \
-    -joliet -joliet-long \
-    -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
+    -isohybrid-mbr isolinux/isohdpfx.bin \
     -eltorito-boot isolinux/isolinux.bin \
         -no-emul-boot \
         -boot-load-size 4 \
         -boot-info-table \
-        -eltorito-catalog isolinux/isolinux.cat \
+        -eltorito-catalog isolinux/boot.cat \
     -eltorito-alt-boot \
         -e EFI/debianiso/efiboot.img \
         -no-emul-boot \
         -isohybrid-gpt-basdat \
-    $LIVE_BOOT/staging \
-    -o $LIVE_BOOT/$ISO_NAME
+    -o $LIVE_BOOT/$ISO_NAME .
+)
+
+    # ?? --mbr-force-bootable -partition_offset 16 \
+    # -joliet -joliet-long \
 
     # -e --interval:appended_partition_2:all:: \
     # -append_partition 2 C12A7328-F81F-11D2-BA4B-00A0C93EC93B $LIVE_BOOT/staging/EFI/debianiso/efiboot.img \
 
     # -rational-rock: dir and file are not r/w...
 
-    (
-        cd $LIVE_BOOT
-        implantisomd5 $ISO_NAME
-        sha512sum $ISO_NAME > $ISO_NAME.sha512
-        echo
-        ls -alh $ISO_NAME
-    )
+(
+    cd $LIVE_BOOT
+    implantisomd5 $ISO_NAME
+    sha512sum $ISO_NAME > $ISO_NAME.sha512
+    echo
+    ls -alh $ISO_NAME
+)
+
 
 }
 
 # no log
-run_once make_01_prepare
+run_once make_00_prepare
 
 (
-run_once make_02_debootstrap
-run_once make_03_chroot
-run_once make_04_copyfiles
-run_once make_05_squashfs
-run_once make_06_bootloader
-run_once make_07_iso
+run_once make_01_debootstrap
+run_once make_02_chroot
+run_once make_03_copyfiles
+run_once make_04_squashfs
+run_once make_05_bootloader
+run_once make_06_iso
 ) 2>&1 | tee -a $LOG
 
+echo
+if [ -n "$RTMStart" ] ; then RTMStop=$(date +%s); perl -e '$sec=$ARGV[0]-$ARGV[1]; print "Execution time: " . int($sec/60) ."min ". $sec%60 ."sec\n"' $RTMStop $RTMStart; RTMStart=$RTMStop ; fi
 
-exit
 #== END ==================================================
 
