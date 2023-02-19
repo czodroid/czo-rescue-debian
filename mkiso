@@ -38,6 +38,6 @@ xorriso \
 
 ## change live (must be run as root)
 # ( mkdir czo-rescue-debian-11.6 && cd czo-rescue-debian-11.6 && bsdtar -xf ../czo-rescue-debian-11.6.iso && cd .. && unsquashfs czo-rescue-debian-11.6/live/filesystem.squashfs )
-## make changes: remove my dotconfigs (ok, there too much aliases ;-), configure .ssh/authorized_keys and so on... then:
+## make changes: remove my dotconfigs (ok, there too much aliases ;-), configure .ssh/authorized_keys, configure grub.cfg/isolinux.cfg and so on... then:
 # ( cd czo-rescue-debian-11.6/live && rm filesystem.squashfs; mksquashfs ../../squashfs-root filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k && sha512sum filesystem.squashfs > filesystem.squashfs.sha512 && cd .. && ./mkiso )
 

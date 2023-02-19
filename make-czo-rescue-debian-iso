@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 12 February 2023, 18:38
+# Last Modified: Tuesday 14 February 2023, 20:40
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 132:15:17
+# Edit Time: 132:35:26
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -53,6 +53,8 @@ export LANG=en_US.UTF-8
 # Execution time
 export RTMStart=$(date +%s)
 
+echo "==> export LIVE_BOOT=$LIVE_BOOT"
+echo
 
 ##================================================================
 run_once() {
@@ -65,7 +67,7 @@ run_once() {
 }
 
 ##================================================================
-make_01_prepare() {
+make_00_prepare() {
 
 echo "==> Prepare ================================================="
 
@@ -76,11 +78,9 @@ mkdir -p $LIVE_BOOT
 }
 
 ##================================================================
-make_02_debootstrap() {
+make_01_debootstrap() {
 
 echo "==> Debootstrap ============================================="
-echo " -> export LIVE_BOOT=$LIVE_BOOT"
-echo
 
 # --arch=i386
 # --arch=amd64
@@ -96,7 +96,7 @@ fi
 }
 
 ##================================================================
-make_03_chroot() {
+make_02_chroot() {
 
 echo "==> Chroot =================================================="
 
@@ -276,7 +276,7 @@ sleep 1
 
 
 ##================================================================
-make_04_copyfiles() {
+make_03_copyfiles() {
 
 echo "==> Copy files =============================================="
 
@@ -306,7 +306,7 @@ rm -f $LIVE_BOOT/chroot/tmp/packages
 }
 
 ##================================================================
-make_05_squashfs() {
+make_04_squashfs() {
 
 echo "==> Squashfs ================================================"
 
@@ -323,7 +323,7 @@ sha512sum filesystem.squashfs > filesystem.squashfs.sha512
 }
 
 ##================================================================
-make_06_bootloader() {
+make_05_bootloader() {
 
 echo "==> Prepare Boot Loader Menus ==============================="
 
@@ -362,24 +362,24 @@ menu cmdlinerow 16
 #menu color sel    1;37;44
 #menu color unsel  36;44
 
-label Boot Czo-Rescue-Debian, zfs/toram/startx         (root/toor)
+label Czo-Rescue-Debian, zfs/toram/startx              (root/toor)
     menu default
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs dostartx
 
-label Boot Czo-Rescue-Debian, zfs/toram/console/SERIAL (root/toor)
+label Czo-Rescue-Debian, zfs/toram/console/SERIAL      (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs console=ttyS0,115200n8
 
-label Boot Czo-Rescue-Debian, zfs/startx               (root/toor)
+label Czo-Rescue-Debian, zfs/startx                    (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live dostartx
 
-label Boot Czo-Rescue-Debian, zfs/console/SERIAL       (root/toor)
+label Czo-Rescue-Debian, zfs/console/SERIAL            (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live console=ttyS0,115200n8
 
-label Boot Czo-Rescue-Debian, failsafe
+label Czo-Rescue-Debian, failsafe
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
 
@@ -589,7 +589,7 @@ mcopy -vi $LIVE_BOOT/staging/EFI/debianiso/efiboot.img \
 
 
 ##================================================================
-make_07_iso() {
+make_06_iso() {
 
 echo "==> Create Bootable ISO ====================================="
 
@@ -636,18 +636,19 @@ xorriso \
 }
 
 # no log
-run_once make_01_prepare
+run_once make_00_prepare
 
 (
-run_once make_02_debootstrap
-run_once make_03_chroot
-run_once make_04_copyfiles
-run_once make_05_squashfs
-run_once make_06_bootloader
-run_once make_07_iso
+run_once make_01_debootstrap
+run_once make_02_chroot
+run_once make_03_copyfiles
+run_once make_04_squashfs
+run_once make_05_bootloader
+run_once make_06_iso
 ) 2>&1 | tee -a $LOG
 
-if [ -n "$RTMStart" ] ; then echo -n "Execution Time: "; RTMStop=$(date +%s); echo " $((($RTMStop-$RTMStart)/60))min"; RTMStart=$RTMStop ; fi
+echo
+if [ -n "$RTMStart" ] ; then RTMStop=$(date +%s); perl -e '$sec=$ARGV[0]-$ARGV[1]; print "Execution time: " . int($sec/60) ."min ". $sec%60 ."sec\n"' $RTMStop $RTMStart; RTMStart=$RTMStop ; fi
 
 #== END ==================================================
 
