@@ -11,5 +11,3 @@ Version 11.6 contains kernel/5.10.0-21-amd64 and zfs/2.0.3-9
 * Source code: https://gitlab.com/czo/czo-rescue-debian
 * ISO files: https://sourceforge.net/projects/czo-rescue-debian
 
-<!-- ![Img Screeshot](store/czo-rescue-debian.jpg) -->
-
