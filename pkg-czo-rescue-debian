@@ -1119,6 +1119,7 @@ nmap-common 7.91+dfsg1+really7.80+dfsg1-2
 notification-daemon 3.20.0-4
 ntfs-3g 1:2017.3.23AR.3-4+deb11u3
 ntpdate 1:4.2.8p15+dfsg-1
+nullmailer 1:2.2-3
 numactl 2.0.12-1+b1
 nvme-cli 1.12-5
 nwipe 0.30-1+b2
@@ -1166,7 +1167,6 @@ plymouth-label 0.9.5-3
 policykit-1 0.105-31+deb11u1
 policykit-1-gnome 0.105-7
 poppler-data 0.4.10-1
-postfix 3.5.17-0+deb11u1
 powermgmt-base 1.36
 ppp 2.4.9-1+1
 pppoe 3.12-1.2
@@ -1286,7 +1286,6 @@ squashfs-tools 1:4.4-2+deb11u2
 squashfs-tools-ng 1.0.4-1
 ssh 1:8.4p1-5+deb11u1
 ssh-askpass 1:1.2.4.1-10+b1
-ssl-cert 1.1.0+nmu1
 stoken 0.92-1
 strace 5.10-1
 stress 1.0.4-7
