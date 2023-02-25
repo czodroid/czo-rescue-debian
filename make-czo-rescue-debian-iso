@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Tuesday 14 February 2023, 20:40
+# Last Modified: Saturday 25 February 2023, 20:04
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 132:35:26
+# Edit Time: 133:50:09
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -108,7 +108,7 @@ echo " -> Chroot"
 # echo
 # echo "export LIVE_BOOT=$LIVE_BOOT"
 # echo 'cp -f ~/.bashrc $LIVE_BOOT/chroot/root'
-# echo 'rm $LIVE_BOOT/build.make_0{3,4,5,6}*'
+# echo 'rm $LIVE_BOOT/build.make_0{2,3,4,5,6}*'
 # echo 'umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc} ; sleep 1 && rsync_full $LIVE_BOOT/../savebuild/ $LIVE_BOOT && for p in proc sys dev dev/pts run; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done && chroot $LIVE_BOOT/chroot /bin/bash ; umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}'
 # exit
 
@@ -162,6 +162,7 @@ echo "==> CHROOT: $RELEASE ($ARCH) ========================="
 
 echo "--> install packages"
 grep -v '^\s*#' /tmp/packages | xargs apt-get $QUIET install
+rm -f /tmp/packages
 
 #find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
 #find /usr/lib/modules/$RELEASE -type f -name "*.ko" -exec strip --strip-unneeded {} \;
@@ -290,7 +291,7 @@ Debian GNU/Linux 11 \n \l
 
 \e[32m===== https://gitlab.com/czo/czo-rescue-debian =====\e[m
 
-Type \e[97msetkmap\e[m to choose the keyboard layout
+Type \e[97msetckbmap\e[m to choose the keyboard layout
 Type \e[97mstartx\e[m to run the graphical environment
 Type \e[97mmount -o remount,size=1G /run/live/overlay\e[m to change overlay
 
@@ -298,10 +299,12 @@ HEREDOC
 
 mkdir -p $LIVE_BOOT/{staging/{EFI/BOOT,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live},tmp}
 cp -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian $LIVE_BOOT/staging/pkg-czo-rescue-debian
-cp -f $LIVE_BOOT/chroot/tmp/release $LIVE_BOOT/tmp/release
-rm -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian
-rm -f $LIVE_BOOT/chroot/tmp/release
-rm -f $LIVE_BOOT/chroot/tmp/packages
+# rm -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian
+
+rm -f $LIVE_BOOT/chroot/vmlinuz.old
+rm -f $LIVE_BOOT/chroot/initrd.img.old
+rm -f $LIVE_BOOT/chroot/vmlinuz
+rm -f $LIVE_BOOT/chroot/initrd.img
 
 }
 
@@ -353,15 +356,6 @@ menu rows       10
 menu tabmsgrow  16
 menu cmdlinerow 16
 
-# menu rows       12
-# menu tabmsgrow  18
-# menu cmdlinerow 18
-
-# debian
-#menu color border 36;44
-#menu color sel    1;37;44
-#menu color unsel  36;44
-
 label Czo-Rescue-Debian, zfs/toram/startx              (root/toor)
     menu default
     kernel /live/vmlinuz
@@ -379,13 +373,23 @@ label Czo-Rescue-Debian, zfs/console/SERIAL            (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live console=ttyS0,115200n8
 
+label Czo-Rescue-Debian, zfs/console                   (root/toor)
+    kernel /live/vmlinuz
+    append initrd=/live/initrd boot=live
+
 label Czo-Rescue-Debian, failsafe
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
 
+## bsdtar -xf ../czo-rescue-debian-11.6-3.iso on pxe server, then:
+# label TEST PXE Czo-Rescue-Debian, zfs/startx           (root/toor)
+#   kernel /boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/vmlinuz
+#   append initrd=/boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/initrd boot=live fetch=http://192.168.11.10/boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/filesystem.squashfs dostartx
+#   ipappend 3
+
 # label TEST ISO Czo-Rescue-Debian
 #     kernel /boot/memdisk iso
-#     append initrd=/boot/images/czo-rescue-debian-11.6.iso
+#     append initrd=/boot/images/czo-rescue-debian-11.6-3.iso
 
 label Hardware Detection Tool
     com32  hdt.c32
@@ -463,12 +467,26 @@ menuentry "Czo-Rescue-Debian, zfs/console/SERIAL         (root/toor)" {
     initrd (\$root)/live/initrd
 }
 
+menuentry "Czo-Rescue-Debian, zfs/console                (root/toor)" {
+    echo "Czo-Rescue-Debian launch in progress, please stand by..."
+    search --no-floppy --set=root --label RESCUE
+    linux (\$root)/live/vmlinuz boot=live
+    initrd (\$root)/live/initrd
+}
+
 menuentry "Czo-Rescue-Debian, failsafe" {
     echo "Czo-Rescue-Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
     initrd (\$root)/live/initrd
 }
+
+## Poorly tested...
+# menuentry "PXE Czo-Rescue-Debian, zfs/startx" {
+#     echo "Czo-Rescue-Debian launch in progress, please stand by..."
+#     linux /boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/vmlinuz boot=live fetch=http://192.168.11.10/boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/filesystem.squashfs dostartx
+#     initrd /boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/initrd
+# }
 
 #menuentry "TEST ISO Czo-Rescue-Debian" {
 #    echo "ISO Czo-Rescue-Debian launch in progress, please stand by..."
@@ -551,7 +569,7 @@ cp -f $LIVE_BOOT/chroot/boot/memtest.bin $LIVE_BOOT/staging/live/memtest.bin
 cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/live/memtest.efi
 
 #hdt
-RELEASE="$(<$LIVE_BOOT/tmp/release)"
+RELEASE="$(<$LIVE_BOOT/chroot/tmp/release)"
 gzip -c -9 $LIVE_BOOT/chroot/usr/share/misc/pci.ids > $LIVE_BOOT/staging/isolinux/hdt/pciids.gz
 gzip -c -9 $LIVE_BOOT/chroot/usr/lib/modules/$RELEASE/modules.alias > $LIVE_BOOT/staging/isolinux/hdt/modalias.gz
 

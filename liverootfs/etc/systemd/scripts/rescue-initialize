@@ -5,12 +5,6 @@ errcnt=0
 # Process options passed on the boot command line
 for curopt in $(</proc/cmdline); do
     case "${curopt}" in
-    # Configure keyboard layout if requested in the boot command line
-    # czo: debian live
-    # setkmap=*)
-    #     echo "Found option '${curopt}' on the boot command line"
-    #     localectl set-keymap ${curopt#*=}
-    #     ;;
 
     # Configure root login shell if requested in the boot command line
     rootshell=*)
