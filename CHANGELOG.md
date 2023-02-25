@@ -3,8 +3,8 @@ Filename: CHANGELOG.md
 Author: Olivier Sirol <czo@free.fr>
 License: GPL-2.0 (http://www.gnu.org/copyleft)
 File Created: 30 December 2022
-Last Modified: Thursday 23 February 2023, 14:29
-Edit Time: 0:08:26
+Last Modified: Saturday 25 February 2023, 11:24
+Edit Time: 0:38:33
 Description:
 
 Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
@@ -12,11 +12,15 @@ Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
 
 # Czo-Rescue-Debian ChangeLog
 
+## 11.6-3 (2023-02-26):
+- First public release
+
 ## 11.6-beta (2023-01-22):
+- First beta release
 - This seems looking for a good one!
 
 ## 11.5-0 (2022-11-28):
-- Rescue is based on Debian and built using debootstrap
+- Czo-Rescue-Debian is based on Debian and built using debootstrap
 
 Kernel:
 
@@ -25,6 +29,7 @@ Kernel:
 Console packages:
 
     2to3 acpi aptitude apt-utils argon2 at atm-tools atop autofs avahi-utils bash bash-completion bc bind9 bind9-dnsutils bind9-host broadcom-sta-dkms bzip2 cabextract ca-certificates chntpw cifs-utils clonezilla cloud-guest-utils cloud-image-utils colordiff command-not-found cpio cron cryptsetup curl cvs dbus debconf-i18n debconf-utils debootstrap discount dislocker dmraid dnsmasq-utils dnsutils dosfstools dstat dump dwarves ecryptfs-utils efitools elinks ethtool ext4magic extrace exuberant-ctags fatresize fdisk fido2-tools file foremost fsarchiver gddrescue gdisk gettext-base git gnutls-bin gocryptfs gpart groff-base grub-efi-amd64-bin grub-efi-ia32-bin grub-pc-bin hardlink hashalot hdparm hexcurse htop hwinfo hwloc-nox icu-devtools ideviceinstaller idevicerestore iftop ifupdown info init ioping iotop iperf iperf3 ipmitool iproute2 iptraf iputils-arping iputils-clockdiff iputils-ping isc-dhcp-client isc-dhcp-common isolinux isomd5sum jfsutils jq kmod kpartx lame ldnsutils less lftp libarchive-tools libcap-ng-utils libguestfs-tools libimobiledevice-utils liblockfile-bin libncurses5 libnet-xmpp-perl libnfs-utils libnl-utils libnss3-tools libnss-systemd libpam-mount libpam-systemd libplist-utils libqcow-utils libsecret-tools libteam-utils libterm-readline-gnu-perl libusb-dev libusbmuxd-tools lm-sensors logrotate lrzip lsb-release lshw lsof lz4 m4 man-db manpages mc media-types memtester mime-support minicom mlocate moreutils mtools mtr multipath-tools nano nbd-client nbd-server ncat ncdu ncurses-term ndisc6 netcat netcat-traditional netdiag nettle-bin net-tools network-manager network-manager-openvpn network-manager-vpnc nfs-client nfs-kernel-server nftables nmap ntpdate numactl nvme-cli nwipe oathtool openconnect openssh-client p7zip-full paperkey par2 partclone parted partimage-server pciutils perltidy picocom pppoe procps pv qemu-guest-agent qrencode rar rclone rcs rdiff rdiff-backup rdiff-backup-fs readline-common recode reiser4progs reiserfsprogs rename reportbug rsync rsyslog sasl2-bin screen scrounge-ntfs sdparm sensible-utils smbclient socat sqlite3 squashfs-tools squashfs-tools-ng ssh stoken strace stress sysfsutils syslinux-efi syslinux-utils sysstat systemd systemd-sysv systemd-timesyncd tasksel tcpdump telnet testdisk tidy tmate tmux traceroute tree tzdata ucf udev udftools vim-common vim-tiny vlock vmfs6-tools wamerican wget whiptail whois wimtools wipe wireless-tools wodim xfsprogs xorriso xtrace xz-utils zfs-initramfs zsh zstd
+
 X11/Wayland:
 
     xinit xfce4 xfce4-power-manager-plugins xfce4-screenshooter xfce4-systemload-plugin xfce4-taskmanager xfce4-terminal xfce4-whiskermenu-plugin xfce4-xkb-plugin avahi-discover avahi-ui-utils firefox-esr fonts-dejavu fonts-noto-color-emoji fonts-wqy-microhei galculator geany ghex gnome-themes-extra gparted grsync gsmartcontrol hardinfo lshw-gtk network-manager-gnome rdesktop remmina ristretto vim-gtk webext-ublock-origin-firefox x11vnc xarchiver xauth xclip xdotool xfburn xsel xterm

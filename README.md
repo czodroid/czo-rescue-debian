@@ -3,8 +3,8 @@ Filename: README.md
 Author: Olivier Sirol <czo@free.fr>
 License: GPL-2.0 (http://www.gnu.org/copyleft)
 File Created: 30 December 2022
-Last Modified: Monday 20 February 2023, 17:03
-Edit Time: 0:26:47
+Last Modified: Saturday 25 February 2023, 10:59
+Edit Time: 0:34:52
 Description:
 
 Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
@@ -18,7 +18,7 @@ It's has zfs binaries + 3ware raid + my configuration files (.bashrc/.vimrc/.tmu
 
 Xfce has its whisker menu and its xfce4-xkb plugin. There is also firefox-esr and firefox-ublock-origin.
 
-Version 11.6 contains kernel/5.10.0-21-amd64 and zfs/2.0.3-9
+Version 11.6-3 contains kernel/5.10.0-21-amd64 and zfs/2.0.3-9
 
 ## Project
 
@@ -44,11 +44,11 @@ if all goes well.
 
 If you don't want to build the Czo-Rescue-Debian, you can change the live CD. This must be done as root.
 
-    ( mkdir czo-rescue-debian-11.6 && cd czo-rescue-debian-11.6 && bsdtar -xf ../czo-rescue-debian-11.6.iso && cd .. && unsquashfs czo-rescue-debian-11.6/live/filesystem.squashfs )
+    ( mkdir czo-rescue-debian-11.6-3 && bsdtar -C czo-rescue-debian-11.6-3 -xf czo-rescue-debian-11.6-3.iso && unsquashfs czo-rescue-debian-11.6-3/live/filesystem.squashfs )
 
 Then make the changes: delete my dotconfigs (ok, there are too many aliases ;-), configure .ssh/authorized_keys, configure grub.cfg/isolinux.cfg and so on... and then:
 
-    ( cd czo-rescue-debian-11.6/live && rm filesystem.squashfs; mksquashfs ../../squashfs-root filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k && sha512sum filesystem.squashfs > filesystem.squashfs.sha512 && cd .. && ./mkiso )
+    ( cd czo-rescue-debian-11.6-3/live && rm filesystem.squashfs; mksquashfs ../../squashfs-root filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k && sha512sum filesystem.squashfs > filesystem.squashfs.sha512 && cd .. && ./mkiso )
 
 
 ## ScreenShot
