@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 25 February 2023, 10:56
+# Last Modified: Saturday 25 February 2023, 19:05
 # $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 132:58:24
+# Edit Time: 133:49:25
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
@@ -356,15 +356,6 @@ menu rows       10
 menu tabmsgrow  16
 menu cmdlinerow 16
 
-# menu rows       12
-# menu tabmsgrow  18
-# menu cmdlinerow 18
-
-# debian
-#menu color border 36;44
-#menu color sel    1;37;44
-#menu color unsel  36;44
-
 label Czo-Rescue-Debian, zfs/toram/startx              (root/toor)
     menu default
     kernel /live/vmlinuz
@@ -382,13 +373,23 @@ label Czo-Rescue-Debian, zfs/console/SERIAL            (root/toor)
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live console=ttyS0,115200n8
 
+label Czo-Rescue-Debian, zfs/console                   (root/toor)
+    kernel /live/vmlinuz
+    append initrd=/live/initrd boot=live
+
 label Czo-Rescue-Debian, failsafe
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
 
+## bsdtar -xf ../czo-rescue-debian-11.6-3.iso on pxe server, then:
+# label TEST PXE Czo-Rescue-Debian, zfs/startx           (root/toor)
+#   kernel /boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/vmlinuz
+#   append initrd=/boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/initrd boot=live fetch=http://192.168.11.10/boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/filesystem.squashfs dostartx
+#   ipappend 3
+
 # label TEST ISO Czo-Rescue-Debian
 #     kernel /boot/memdisk iso
-#     append initrd=/boot/images/czo-rescue-debian-11.6.iso
+#     append initrd=/boot/images/czo-rescue-debian-11.6-3.iso
 
 label Hardware Detection Tool
     com32  hdt.c32
@@ -466,12 +467,26 @@ menuentry "Czo-Rescue-Debian, zfs/console/SERIAL         (root/toor)" {
     initrd (\$root)/live/initrd
 }
 
+menuentry "Czo-Rescue-Debian, zfs/console                (root/toor)" {
+    echo "Czo-Rescue-Debian launch in progress, please stand by..."
+    search --no-floppy --set=root --label RESCUE
+    linux (\$root)/live/vmlinuz boot=live
+    initrd (\$root)/live/initrd
+}
+
 menuentry "Czo-Rescue-Debian, failsafe" {
     echo "Czo-Rescue-Debian launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux (\$root)/live/vmlinuz boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
     initrd (\$root)/live/initrd
 }
+
+## Poorly tested...
+# menuentry "PXE Czo-Rescue-Debian, zfs/startx" {
+#     echo "Czo-Rescue-Debian launch in progress, please stand by..."
+#     linux /boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/vmlinuz boot=live fetch=http://192.168.11.10/boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/filesystem.squashfs dostartx
+#     initrd /boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/initrd
+# }
 
 #menuentry "TEST ISO Czo-Rescue-Debian" {
 #    echo "ISO Czo-Rescue-Debian launch in progress, please stand by..."
