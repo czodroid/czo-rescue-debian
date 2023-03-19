@@ -2,7 +2,7 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Saturday 25 February 2023, 11:22
+# Last Modified: Friday 10 March 2023, 18:18
 # Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
 
 # Description:
@@ -31,6 +31,7 @@ bc
 bind9
 bind9-dnsutils
 bind9-host
+bridge-utils
 broadcom-sta-dkms
 bzip2
 cabextract
@@ -95,6 +96,7 @@ hwloc-nox
 icu-devtools
 ideviceinstaller
 idevicerestore
+ifenslave
 iftop
 ifupdown
 info
