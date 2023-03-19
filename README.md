@@ -3,8 +3,8 @@ Filename: README.md
 Author: Olivier Sirol <czo@free.fr>
 License: GPL-2.0 (http://www.gnu.org/copyleft)
 File Created: 30 December 2022
-Last Modified: Sunday 19 March 2023, 17:22
-Edit Time: 1:01:00
+Last Modified: Sunday 19 March 2023, 17:42
+Edit Time: 1:01:40
 Description:
 
         Readme for Czo Rescue Debian
@@ -14,7 +14,7 @@ Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
 
 # Czo Rescue Debian
 
-A live [Linux Debian Rescue](https://gitlab.com/czo/czo-rescue-debian), which started from my own Linux Arch [SystemRescue fork](https://gitlab.com/czo/czo-system-rescue), but is based on Debian. It is a Debian-based Linux distribution designed for administrating and repairing computer systems and rescuing data.
+A live [Linux Debian Rescue](https://gitlab.com/czo/czo-rescue-debian), which started from my own Linux Arch [SystemRescue fork](https://gitlab.com/czo/czo-system-rescue). It is a Debian-based Linux distribution designed for administrating and repairing computer systems and rescuing data.
 
 It's has zfs binaries + 3ware raid + my configuration files (.bashrc/.vimrc/.tmux.conf).
 
