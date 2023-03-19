@@ -4,14 +4,14 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 25 February 2023, 20:04
-# $Id: make-czo-rescue-debian-iso,v 1.84 2023/01/22 07:39:07 czo Exp $
-# Edit Time: 133:50:09
+# Last Modified: Sunday 19 March 2023, 15:20
+# $Id: make-czo-rescue-debian-iso,v 1.92 2023/03/19 16:27:47 czo Exp $
+# Edit Time: 134:15:25
 # Description:
 #       Live Linux Debian Rescue, like Linux Arch SystemRescue
 #       script to make a czo-rescue-debian ISO
 #       to run on your host:
-#           > apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin debootstrap squashfs-tools xorriso isomd5sum isolinux mtools dosfstools bash coreutils
+#           > apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin isolinux mtools dosfstools bash coreutils debootstrap squashfs-tools libarchive-tools xorriso isomd5sum
 #       References:
 #           https://www.willhaley.com/blog/custom-debian-live-environment
 #           https://gitlab.com/systemrescue/systemrescue-sources
@@ -163,6 +163,8 @@ echo "==> CHROOT: $RELEASE ($ARCH) ========================="
 echo "--> install packages"
 grep -v '^\s*#' /tmp/packages | xargs apt-get $QUIET install
 rm -f /tmp/packages
+
+echo 'bonding' >> /etc/modules
 
 #find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
 #find /usr/lib/modules/$RELEASE -type f -name "*.ko" -exec strip --strip-unneeded {} \;
@@ -381,15 +383,15 @@ label Czo-Rescue-Debian, failsafe
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
 
-## bsdtar -xf ../czo-rescue-debian-11.6-3.iso on pxe server, then:
+## bsdtar -xf ../czo-rescue-debian-$ISO_VERSION.iso on pxe server, then:
 # label TEST PXE Czo-Rescue-Debian, zfs/startx           (root/toor)
-#   kernel /boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/vmlinuz
-#   append initrd=/boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/initrd boot=live fetch=http://192.168.11.10/boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/filesystem.squashfs dostartx
+#   kernel /boot/czo-rescue-debian/czo-rescue-debian-$ISO_VERSION/live/vmlinuz
+#   append initrd=/boot/czo-rescue-debian/czo-rescue-debian-$ISO_VERSION/live/initrd boot=live fetch=http://192.168.11.10/boot/czo-rescue-debian/czo-rescue-debian-$ISO_VERSION/live/filesystem.squashfs dostartx
 #   ipappend 3
 
 # label TEST ISO Czo-Rescue-Debian
 #     kernel /boot/memdisk iso
-#     append initrd=/boot/images/czo-rescue-debian-11.6-3.iso
+#     append initrd=/boot/images/czo-rescue-debian-$ISO_VERSION.iso
 
 label Hardware Detection Tool
     com32  hdt.c32
@@ -484,8 +486,8 @@ menuentry "Czo-Rescue-Debian, failsafe" {
 ## Poorly tested...
 # menuentry "PXE Czo-Rescue-Debian, zfs/startx" {
 #     echo "Czo-Rescue-Debian launch in progress, please stand by..."
-#     linux /boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/vmlinuz boot=live fetch=http://192.168.11.10/boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/filesystem.squashfs dostartx
-#     initrd /boot/czo-rescue-debian/czo-rescue-debian-11.6-3/live/initrd
+#     linux /boot/czo-rescue-debian/czo-rescue-debian-$ISO_VERSION/live/vmlinuz boot=live fetch=http://192.168.11.10/boot/czo-rescue-debian/czo-rescue-debian-$ISO_VERSION/live/filesystem.squashfs dostartx
+#     initrd /boot/czo-rescue-debian/czo-rescue-debian-$ISO_VERSION/live/initrd
 # }
 
 #menuentry "TEST ISO Czo-Rescue-Debian" {
@@ -493,12 +495,12 @@ menuentry "Czo-Rescue-Debian, failsafe" {
 #    set root='hd0,msdos1'
 #    #search --no-floppy --set=root --label RESCUE
 #    linux16 (\$root)/isolinux/memdisk iso
-#    initrd16 (\$root)/boot/images/czo-rescue-debian-11.6.iso
+#    initrd16 (\$root)/boot/images/czo-rescue-debian-$ISO_VERSION.iso
 #}
 
 #menuentry "TEST ISO Czo-Rescue-Debian, kernel and initrd" {
 #    echo "ISO Czo-Rescue-Debian launch in progress, please stand by..."
-#    set isoname="/boot/images/czo-rescue-debian-11.6.iso"
+#    set isoname="/boot/images/czo-rescue-debian-$ISO_VERSION.iso"
 #    loopback loop (hd0,msdos1)"\${isoname}"
 #    linux (loop)/live/vmlinuz boot=live findiso="\${isoname}" toram=filesystem.squashfs
 #    initrd (loop)/live/initrd
@@ -547,6 +549,7 @@ HEREDOC
 ##================================================================
 echo " -> Prepare Boot Loader Files"
 
+cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/staging/README.md
 cp -f $SCRIPT_PATH/mkiso $LIVE_BOOT/staging/mkiso
 
 cat << HEREDOC > $LIVE_BOOT/staging/czo-rescue-debian

@@ -3,8 +3,8 @@ Filename: CHANGELOG.md
 Author: Olivier Sirol <czo@free.fr>
 License: GPL-2.0 (http://www.gnu.org/copyleft)
 File Created: 30 December 2022
-Last Modified: Saturday 25 February 2023, 11:24
-Edit Time: 0:38:33
+Last Modified: Sunday 19 March 2023, 18:32
+Edit Time: 0:50:43
 Description:
 
 Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
@@ -12,12 +12,19 @@ Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
 
 # Czo-Rescue-Debian ChangeLog
 
+## 11.6-4 (2023-03-19):
+- network additions: ifenslave and bridge-utils
+- ISO sha512:
+```
+4c6b86af79aaf97e35514fa72bd1228d48ed6f7809a97342a4616c6ebfbc7d1f86a39a5e3450de881c322029bac5cb0f64ff0fd3df5f1d58ef4ed61018a8de30  czo-rescue-debian-11.6-4.iso
+```
+
 ## 11.6-3 (2023-02-26):
 - First public release
-
-## 11.6-beta (2023-01-22):
-- First beta release
-- This seems looking for a good one!
+- ISO sha512:
+```
+4f4369af7490a44e901088edd82e51e56065b3ca74ac2433b9dbc742dfbb03d4950e8c7652993b313e87a013476d70ad68010466a8e4d7ca094cf3891bc692c1  czo-rescue-debian-11.6-3.iso
+```
 
 ## 11.5-0 (2022-11-28):
 - Czo-Rescue-Debian is based on Debian and built using debootstrap
