@@ -3,8 +3,8 @@ Filename: CHANGELOG.md
 Author: Olivier Sirol <czo@free.fr>
 License: GPL-2.0 (http://www.gnu.org/copyleft)
 File Created: 30 December 2022
-Last Modified: Sunday 19 March 2023, 17:28
-Edit Time: 0:50:29
+Last Modified: Sunday 19 March 2023, 18:32
+Edit Time: 0:50:43
 Description:
 
 Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
@@ -16,6 +16,7 @@ Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
 - network additions: ifenslave and bridge-utils
 - ISO sha512:
 ```
+4c6b86af79aaf97e35514fa72bd1228d48ed6f7809a97342a4616c6ebfbc7d1f86a39a5e3450de881c322029bac5cb0f64ff0fd3df5f1d58ef4ed61018a8de30  czo-rescue-debian-11.6-4.iso
 ```
 
 ## 11.6-3 (2023-02-26):
