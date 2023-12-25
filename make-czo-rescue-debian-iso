@@ -4,14 +4,27 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 19 March 2023, 15:20
+# Last Modified: Monday 25 December 2023, 18:10
 # $Id: make-czo-rescue-debian-iso,v 1.92 2023/03/19 16:27:47 czo Exp $
-# Edit Time: 134:15:25
+# Edit Time: 136:40:31
 # Description:
-#       Live Linux Debian Rescue, like Linux Arch SystemRescue
-#       script to make a czo-rescue-debian ISO
+#
+#       This script creates a czo-rescue-debian ISO
+#
+#       It's a live Linux Debian Rescue
+#
 #       to run on your host:
-#           > apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin isolinux mtools dosfstools bash coreutils debootstrap squashfs-tools libarchive-tools xorriso isomd5sum
+#           apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin isolinux mtools dosfstools bash coreutils debootstrap squashfs-tools libarchive-tools xorriso isomd5sum make
+#
+#       Debug in chroot:
+#           export LIVE_BOOT=$LIVE_BOOT
+#           cp -f ~/.bashrc $LIVE_BOOT/chroot/root
+#           rm $LIVE_BOOT/build.make_0{2,3,4,5,6}*
+#           chroot $LIVE_BOOT/chroot /bin/bash
+#           exit
+#
+#           umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc} ; sleep 1 && rsync_full $LIVE_BOOT/../savebuild/ $LIVE_BOOT && for p in proc sys dev dev/pts run; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done && chroot $LIVE_BOOT/chroot /bin/bash ; umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}
+#
 #       References:
 #           https://www.willhaley.com/blog/custom-debian-live-environment
 #           https://gitlab.com/systemrescue/systemrescue-sources
@@ -24,6 +37,10 @@ if [ `id -u` -ne 0 ]; then
     echo "ERROR: this script must be run as root"
     exit 42
 fi
+
+# Release
+export RESCUE_RELEASE="buster"
+export RESCUE_ID="10"
 
 SCRIPT_PATH=$(readlink -f ${0%/*})
 export ISO_VERSION="$(<${SCRIPT_PATH}/version)"
@@ -48,18 +65,19 @@ fi
 
 # Execute lang
 unset LANGUAGE LC_ALL LC_MONETARY LC_PAPER LC_MEASUREMENT LC_TIME LC_NUMERIC LANG
-export LANG=en_US.UTF-8
+#export LANG=en_US.UTF-8
 
 # Execution time
 export RTMStart=$(date +%s)
 
 echo "==> export LIVE_BOOT=$LIVE_BOOT"
-echo
 
 ##================================================================
 run_once() {
 
-    echo "<==== $LIVE_BOOT/build.$1 $(date "+(%Y-%m-%d %H:%M:%S)") ============================"
+    echo
+    echo "##==== $1 $(date "+(%Y-%m-%d %H:%M:%S)") =================================================##"
+    echo
     if [ ! -e $LIVE_BOOT/build.$1 ]; then
         $1
         touch $LIVE_BOOT/build.$1
@@ -67,9 +85,9 @@ run_once() {
 }
 
 ##================================================================
-make_00_prepare() {
+## Prepare
 
-echo "==> Prepare ================================================="
+make_00_prepare() {
 
 echo ' -> rm old build $LIVE_BOOT'
 rm -fr $LIVE_BOOT
@@ -78,39 +96,36 @@ mkdir -p $LIVE_BOOT
 }
 
 ##================================================================
+## Debootstrap
+
 make_01_debootstrap() {
 
-echo "==> Debootstrap ============================================="
+echo "==> export LIVE_BOOT=$LIVE_BOOT"
+echo
 
 # --arch=i386
 # --arch=amd64
 # --variant=minbase
 # --print-debs
+# --components=main,contrib,non-free for deb < 12
 
 if [ $ARCH = "amd64" ]; then
-    debootstrap --arch=amd64 --merged-usr --components=main,contrib,non-free --force-check-gpg bullseye $LIVE_BOOT/chroot http://deb.debian.org/debian/
+    debootstrap --arch=amd64 --merged-usr --components=main,contrib,non-free,non-free-firmware --force-check-gpg ${RESCUE_RELEASE} $LIVE_BOOT/chroot http://deb.debian.org/debian/
 else
-    debootstrap --arch=i386 --merged-usr --components=main,contrib,non-free --force-check-gpg bullseye $LIVE_BOOT/chroot http://deb.debian.org/debian/
+    debootstrap --arch=i386  --merged-usr --components=main,contrib,non-free,non-free-firmware --force-check-gpg ${RESCUE_RELEASE} $LIVE_BOOT/chroot http://deb.debian.org/debian/
 fi
 
 }
 
 ##================================================================
-make_02_chroot() {
+## Chroot
 
-echo "==> Chroot =================================================="
+make_02_chroot() {
 
 echo " -> Copy packages"
 cp $SCRIPT_PATH/packages $LIVE_BOOT/chroot/tmp
 
 echo " -> Chroot"
-## test
-# echo
-# echo "export LIVE_BOOT=$LIVE_BOOT"
-# echo 'cp -f ~/.bashrc $LIVE_BOOT/chroot/root'
-# echo 'rm $LIVE_BOOT/build.make_0{2,3,4,5,6}*'
-# echo 'umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc} ; sleep 1 && rsync_full $LIVE_BOOT/../savebuild/ $LIVE_BOOT && for p in proc sys dev dev/pts run; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done && chroot $LIVE_BOOT/chroot /bin/bash ; umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}'
-# exit
 
 for p in proc sys dev dev/pts run ; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done
 
@@ -123,7 +138,7 @@ export DEBIAN_FRONTEND=noninteractive
 #export DEBIAN_PRIORITY=critical
 
 unset LANGUAGE LC_ALL LC_MONETARY LC_PAPER LC_MEASUREMENT LC_TIME LC_NUMERIC LANG
-export LANG=en_US.UTF-8
+# export LANG=en_US.UTF-8
 
 echo $(date +%Y-%m-%d) > /etc/lsb-czo-installdate
 echo $(date +%Y-%m-%d) > /etc/lsb-czo-updatedate
@@ -132,11 +147,11 @@ echo "czo-rescue-debian" > /etc/hostname
 echo "czo-rescue-debian" > /etc/mailname
 echo "LANG=en_US.UTF-8" > /etc/default/locale
 
-echo "--> apt update"
-cat << 'HEREDOC' > /etc/apt/sources.list
-deb http://deb.debian.org/debian/ bullseye main contrib non-free
-deb http://security.debian.org/ bullseye-security main contrib non-free
-deb http://deb.debian.org/debian/ bullseye-updates main contrib non-free
+echo "--> apt update, $RESCUE_RELEASE"
+cat << HEREDOC > /etc/apt/sources.list
+deb http://deb.debian.org/debian ${RESCUE_RELEASE} main contrib non-free
+deb http://security.debian.org/debian-security ${RESCUE_RELEASE}/updates main contrib non-free
+deb http://deb.debian.org/debian ${RESCUE_RELEASE}-updates main contrib non-free
 HEREDOC
 
 apt-get $QUIET update
@@ -169,9 +184,13 @@ echo 'bonding' >> /etc/modules
 #find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
 #find /usr/lib/modules/$RELEASE -type f -name "*.ko" -exec strip --strip-unneeded {} \;
 
+# EOF
+# exit
+
 echo "==> mkinitramfs =================="
-#mkinitramfs -c xz -o /boot/initrd.img-$RELEASE
-perl -i -pe 's,^COMPRESS=gzip,COMPRESS=xz,' /etc/initramfs-tools/initramfs.conf
+#mkinitramfs -c xz -l 9 -o initrd.img--$RELEASE
+perl -i -pe 's,^COMPRESS=.*,COMPRESS=xz,' /etc/initramfs-tools/initramfs.conf
+perl -i -pe 's,^#?\s*COMPRESSLEVEL=.*,COMPRESSLEVEL=6,' /etc/initramfs-tools/initramfs.conf
 update-initramfs -c -k $RELEASE
 
 ##==================================================##
@@ -183,6 +202,7 @@ perl -i -pe 's,# en_US.UTF-8 UTF-8,en_US.UTF-8 UTF-8,' /etc/locale.gen
 perl -i -pe 's,# fr_FR.UTF-8 UTF-8,fr_FR.UTF-8 UTF-8,' /etc/locale.gen
 locale-gen
 update-locale LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # dpkg-reconfigure tzdata
 #ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
@@ -214,6 +234,9 @@ perl -i -pe 's/#(HandleLidSwitch=)suspend/$1ignore/' /etc/systemd/logind.conf
 # autofs
 perl -i -pe 's,^#/net\s*-hosts.*,/net    -hosts,' /etc/auto.master
 systemctl restart autofs
+
+# ipmi
+systemctl disable openipmi.service
 
 # my dot config
 cd /root
@@ -247,9 +270,11 @@ rm -rf /usr/share/help
 echo -e "MANDELETE\nDONTBOTHERNEWLOCALE\nSHOWFREEDSPACE\nen\nen_US\nen_US.UTF-8" > /etc/locale.nopurge
 localepurge
 
+#dpkg-query -Wf '${Installed-Size}\t${Package}\t${version}\n' | LANG=C sort -rn > /root/pkg_size_rescue.txt
 dpkg-query -Wf '${Package}\n'| LANG=C sort > /root/pkg_list_rescue.txt
-dpkg-query -Wf '${Installed-Size}\t${Package}\t${version}\n' | LANG=C sort -rn > /root/pkg_size_rescue.txt
-dpkg-query -Wf '${Package} ${version}\n' | LANG=C sort > /tmp/pkg-czo-rescue-debian
+dpkg-query -Wf '${Installed-Size} ${Package}\n' | LANG=C sort -rn > /root/pkg_size_rescue.txt
+dpkg-query -Wf '${Package} ${version}\n' | LANG=C sort > /root/pkg_version_rescue.txt
+cp -f /root/pkg_list_rescue.txt /root/pkg_size_rescue.txt /root/pkg_version_rescue.txt /tmp
 
 apt-get $QUIET clean
 
@@ -279,15 +304,15 @@ sleep 1
 
 
 ##================================================================
-make_03_copyfiles() {
+## Copy files
 
-echo "==> Copy files =============================================="
+make_03_copyfiles() {
 
 rsync -av --chown=root:root $LIVE_BOOT/../liverootfs/ $LIVE_BOOT/chroot
 
 cat << HEREDOC > $LIVE_BOOT/chroot/etc/issue
 
-Debian GNU/Linux 11 \n \l
+Debian GNU/Linux $RESCUE_ID \n \l
 
 \e[97m        Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)\e[m
 
@@ -300,8 +325,8 @@ Type \e[97mmount -o remount,size=1G /run/live/overlay\e[m to change overlay
 HEREDOC
 
 mkdir -p $LIVE_BOOT/{staging/{EFI/BOOT,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live},tmp}
-cp -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian $LIVE_BOOT/staging/pkg-czo-rescue-debian
-# rm -f $LIVE_BOOT/chroot/tmp/pkg-czo-rescue-debian
+cp -f $LIVE_BOOT/chroot/tmp/pkg_list_rescue.txt $LIVE_BOOT/chroot/tmp/pkg_size_rescue.txt $LIVE_BOOT/chroot/tmp/pkg_version_rescue.txt $LIVE_BOOT/staging
+cp -f $LIVE_BOOT/chroot/tmp/pkg_list_rescue.txt $LIVE_BOOT/chroot/tmp/pkg_size_rescue.txt $LIVE_BOOT/chroot/tmp/pkg_version_rescue.txt $LIVE_BOOT/..
 
 rm -f $LIVE_BOOT/chroot/vmlinuz.old
 rm -f $LIVE_BOOT/chroot/initrd.img.old
@@ -311,9 +336,9 @@ rm -f $LIVE_BOOT/chroot/initrd.img
 }
 
 ##================================================================
-make_04_squashfs() {
+## Squashfs
 
-echo "==> Squashfs ================================================"
+make_04_squashfs() {
 
 rm -f $LIVE_BOOT/staging/live/filesystem.squashfs
 
@@ -328,10 +353,9 @@ sha512sum filesystem.squashfs > filesystem.squashfs.sha512
 }
 
 ##================================================================
+## Prepare Boot Loader Menus
+
 make_05_bootloader() {
-
-echo "==> Prepare Boot Loader Menus ==============================="
-
 
 ##================================================================
 echo " -> isolinux.cfg"
@@ -610,9 +634,9 @@ mcopy -vi $LIVE_BOOT/staging/EFI/debianiso/efiboot.img \
 
 
 ##================================================================
-make_06_iso() {
+## Create Bootable ISO
 
-echo "==> Create Bootable ISO ====================================="
+make_06_iso() {
 
 rm -f $LIVE_BOOT/$ISO_NAME
 (
@@ -655,6 +679,9 @@ xorriso \
 
 
 }
+
+##================================================================
+## main
 
 # no log
 run_once make_00_prepare
