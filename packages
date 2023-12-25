@@ -2,7 +2,7 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Sunday 24 December 2023, 18:13
+# Last Modified: Friday 10 March 2023, 18:18
 # Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
 
 # Description:
@@ -12,7 +12,7 @@
 # The kernel is installed with 'apt-get --no-install-recommends install':
 #     linux-image-amd64 linux-headers-amd64 intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
 #
-# That leaves the others, with this file, which does 'apt-get install' which also installs the recommendations.
+# Remain the others, with this file, which does 'apt-get install' which also installs recommends.
 
 ## Console packages
 2to3
@@ -29,7 +29,7 @@ bash
 bash-completion
 bc
 bind9
-bind9utils
+bind9-dnsutils
 bind9-host
 bridge-utils
 broadcom-sta-dkms
@@ -43,7 +43,6 @@ cloud-guest-utils
 cloud-image-utils
 colordiff
 command-not-found
-console-setup
 cpio
 cron
 cryptsetup
@@ -62,6 +61,7 @@ dosfstools
 dstat
 dump
 dwarves
+ecryptfs-utils
 efitools
 elinks
 ethtool
@@ -71,6 +71,7 @@ exuberant-ctags
 fatresize
 fdisk
 # ffmpeg # 100 MB
+fido2-tools
 file
 foremost
 fsarchiver
@@ -94,6 +95,7 @@ hwinfo
 hwloc-nox
 icu-devtools
 ideviceinstaller
+idevicerestore
 ifenslave
 iftop
 ifupdown
@@ -154,6 +156,7 @@ m4
 man-db
 manpages
 mc
+media-types
 memtester
 mime-support
 minicom
@@ -169,6 +172,7 @@ ncat
 ncdu
 ncurses-term
 ndisc6
+netcat
 netcat-traditional
 netdiag
 nettle-bin
@@ -192,6 +196,7 @@ paperkey
 par2
 partclone
 parted
+partimage-server
 pciutils
 perltidy
 picocom
@@ -223,6 +228,7 @@ smbclient
 socat
 sqlite3
 squashfs-tools
+squashfs-tools-ng
 ssh
 stoken
 strace
@@ -233,6 +239,7 @@ syslinux-utils
 sysstat
 systemd
 systemd-sysv
+systemd-timesyncd
 tasksel
 tcpdump
 telnet
@@ -249,7 +256,7 @@ udftools
 vim-common
 vim-tiny
 vlock
-vmfs-tools
+vmfs6-tools
 wamerican
 wget
 whiptail
@@ -320,7 +327,7 @@ network-manager-gnome
 rdesktop
 remmina
 ristretto
-vim-gtk3
+vim-gtk
 webext-ublock-origin-firefox
 x11vnc
 xarchiver
