@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 27 December 2023, 22:12
+# Last Modified: Monday 25 December 2023, 15:28
 # $Id: make-czo-rescue-debian-iso,v 1.92 2023/03/19 16:27:47 czo Exp $
-# Edit Time: 137:43:16
+# Edit Time: 136:38:39
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO
@@ -39,10 +39,10 @@ if [ `id -u` -ne 0 ]; then
 fi
 
 # Release
-export RESCUE_RELEASE="bullseye"
-export RESCUE_ID="11"
+export RESCUE_RELEASE="bookworm"
+export RESCUE_ID="12"
 
-export SCRIPT_PATH=$(readlink -f ${0%/*})
+SCRIPT_PATH=$(readlink -f ${0%/*})
 export ISO_VERSION="$(<${SCRIPT_PATH}/version)"
 export ISO_DATE="$(date +%Y-%m-%d)"
 export ISO_PUBLISHER="Czo-Rescue-Debian <https://gitlab.com/czo/czo-rescue-debian>"
@@ -73,23 +73,11 @@ export RTMStart=$(date +%s)
 echo "==> export LIVE_BOOT=$LIVE_BOOT"
 
 ##================================================================
-variable() {
-    echo
-    for v in ARCH ISO_NAME ISO_VERSION LIVE_BOOT SCRIPT_PATH RESCUE_ID RESCUE_RELEASE
-    do
-        echo "$v: ${!v}"
-    done
-    echo
-}
-
-##================================================================
 run_once() {
 
     echo
     echo "##==== $1 $(date "+(%Y-%m-%d %H:%M:%S)") =================================================##"
     echo
-    variable
-
     if [ ! -e $LIVE_BOOT/build.$1 ]; then
         $1
         touch $LIVE_BOOT/build.$1
@@ -122,9 +110,9 @@ echo
 # --components=main,contrib,non-free for deb < 12
 
 if [ $ARCH = "amd64" ]; then
-    debootstrap --arch=amd64 --merged-usr --components=main,contrib,non-free --force-check-gpg ${RESCUE_RELEASE} $LIVE_BOOT/chroot http://deb.debian.org/debian/
+    debootstrap --arch=amd64 --merged-usr --components=main,contrib,non-free,non-free-firmware --force-check-gpg ${RESCUE_RELEASE} $LIVE_BOOT/chroot http://deb.debian.org/debian/
 else
-    debootstrap --arch=i386  --merged-usr --components=main,contrib,non-free --force-check-gpg ${RESCUE_RELEASE} $LIVE_BOOT/chroot http://deb.debian.org/debian/
+    debootstrap --arch=i386  --merged-usr --components=main,contrib,non-free,non-free-firmware --force-check-gpg ${RESCUE_RELEASE} $LIVE_BOOT/chroot http://deb.debian.org/debian/
 fi
 
 }
@@ -145,13 +133,6 @@ chroot $LIVE_BOOT/chroot /bin/bash <<'EOF'
 
 set -e -u
 
-    echo
-    for v in ARCH ISO_NAME ISO_VERSION LIVE_BOOT RESCUE_ID RESCUE_RELEASE SCRIPT_PATH
-    do
-        echo "$v: ${!v}"
-    done
-    echo
-
 export QUIET="-q -y"
 export DEBIAN_FRONTEND=noninteractive
 #export DEBIAN_PRIORITY=critical
@@ -168,9 +149,9 @@ echo "LANG=en_US.UTF-8" > /etc/default/locale
 
 echo "--> apt update, $RESCUE_RELEASE"
 cat << HEREDOC > /etc/apt/sources.list
-deb http://deb.debian.org/debian ${RESCUE_RELEASE} main contrib non-free
-deb http://security.debian.org/debian-security ${RESCUE_RELEASE}-security main contrib non-free
-deb http://deb.debian.org/debian ${RESCUE_RELEASE}-updates main contrib non-free
+deb http://deb.debian.org/debian ${RESCUE_RELEASE} main contrib non-free non-free-firmware
+deb http://security.debian.org/debian-security ${RESCUE_RELEASE}-security main contrib non-free non-free-firmware
+deb http://deb.debian.org/debian ${RESCUE_RELEASE}-updates main contrib non-free non-free-firmware
 HEREDOC
 
 apt-get $QUIET update
@@ -190,7 +171,7 @@ fi
 #EOF
 #exit
 
-export RELEASE=$(dpkg-query -W -f='${binary:Package}\n' linux-image-* | head -n 1 | sed 's/linux-image-//')
+RELEASE=$(dpkg-query -W -f='${binary:Package}\n' linux-image-* | head -n 1 | sed 's/linux-image-//')
 echo $RELEASE > /tmp/release
 echo "==> CHROOT: $RELEASE ($ARCH) ========================="
 
@@ -344,11 +325,8 @@ Type \e[97mmount -o remount,size=1G /run/live/overlay\e[m to change overlay
 HEREDOC
 
 mkdir -p $LIVE_BOOT/{staging/{EFI/BOOT,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live},tmp}
-cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/chroot/root/README.md
-cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/staging/README.md
-cp -f $SCRIPT_PATH/mkiso $LIVE_BOOT/staging/mkiso
 cp -f $LIVE_BOOT/chroot/tmp/pkg_list_rescue.txt $LIVE_BOOT/chroot/tmp/pkg_size_rescue.txt $LIVE_BOOT/chroot/tmp/pkg_version_rescue.txt $LIVE_BOOT/staging
-cp -f $LIVE_BOOT/chroot/tmp/pkg_list_rescue.txt $LIVE_BOOT/chroot/tmp/pkg_size_rescue.txt $LIVE_BOOT/chroot/tmp/pkg_version_rescue.txt $SCRIPT_PATH
+cp -f $LIVE_BOOT/chroot/tmp/pkg_list_rescue.txt $LIVE_BOOT/chroot/tmp/pkg_size_rescue.txt $LIVE_BOOT/chroot/tmp/pkg_version_rescue.txt $LIVE_BOOT/..
 
 rm -f $LIVE_BOOT/chroot/vmlinuz.old
 rm -f $LIVE_BOOT/chroot/initrd.img.old
@@ -595,6 +573,9 @@ HEREDOC
 ##================================================================
 echo " -> Prepare Boot Loader Files"
 
+cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/staging/README.md
+cp -f $SCRIPT_PATH/mkiso $LIVE_BOOT/staging/mkiso
+
 cat << HEREDOC > $LIVE_BOOT/staging/czo-rescue-debian
 Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)
 
@@ -615,7 +596,7 @@ cp -f $LIVE_BOOT/chroot/boot/memtest.bin $LIVE_BOOT/staging/live/memtest.bin
 cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/live/memtest.efi
 
 #hdt
-export RELEASE="$(<$LIVE_BOOT/chroot/tmp/release)"
+RELEASE="$(<$LIVE_BOOT/chroot/tmp/release)"
 gzip -c -9 $LIVE_BOOT/chroot/usr/share/misc/pci.ids > $LIVE_BOOT/staging/isolinux/hdt/pciids.gz
 gzip -c -9 $LIVE_BOOT/chroot/usr/lib/modules/$RELEASE/modules.alias > $LIVE_BOOT/staging/isolinux/hdt/modalias.gz
 

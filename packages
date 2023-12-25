@@ -2,7 +2,7 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Friday 10 March 2023, 18:18
+# Last Modified: Tuesday 28 November 2023, 18:51
 # Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
 
 # Description:
@@ -12,7 +12,7 @@
 # The kernel is installed with 'apt-get --no-install-recommends install':
 #     linux-image-amd64 linux-headers-amd64 intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
 #
-# Remain the others, with this file, which does 'apt-get install' which also installs recommends.
+# That leaves the others, with this file, which does 'apt-get install' which also installs the recommendations.
 
 ## Console packages
 2to3
@@ -43,6 +43,7 @@ cloud-guest-utils
 cloud-image-utils
 colordiff
 command-not-found
+console-setup
 cpio
 cron
 cryptsetup
@@ -172,7 +173,6 @@ ncat
 ncdu
 ncurses-term
 ndisc6
-netcat
 netcat-traditional
 netdiag
 nettle-bin
@@ -327,7 +327,7 @@ network-manager-gnome
 rdesktop
 remmina
 ristretto
-vim-gtk
+vim-gtk3
 webext-ublock-origin-firefox
 x11vnc
 xarchiver
