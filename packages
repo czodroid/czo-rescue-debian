@@ -2,8 +2,8 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Tuesday 28 November 2023, 18:51
-# Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
+# Last Modified: Sunday 21 January 2024, 08:17
+# Copyright: (C) 2022-2024 Olivier Sirol <czo@free.fr>
 
 # Description:
 #
@@ -219,6 +219,7 @@ rename
 reportbug
 rsync
 rsyslog
+sanoid
 sasl2-bin
 screen
 scrounge-ntfs
@@ -268,6 +269,7 @@ wodim
 xfsprogs
 xorriso
 xtrace
+xxd
 xz-utils
 zfs-initramfs
 zsh
@@ -323,6 +325,7 @@ hardinfo
 # keepassxc # 67.6 MB
 lshw-gtk
 # meld # 1.1 MB
+mousepad
 network-manager-gnome
 rdesktop
 remmina
