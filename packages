@@ -2,7 +2,7 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Sunday 21 January 2024, 08:17
+# Last Modified: Sunday 21 January 2024, 08:24
 # Copyright: (C) 2022-2024 Olivier Sirol <czo@free.fr>
 
 # Description:
@@ -315,7 +315,7 @@ fonts-dejavu
 fonts-noto-color-emoji
 fonts-wqy-microhei
 galculator
-geany
+# geany
 ghex
 gnome-themes-extra
 gparted
