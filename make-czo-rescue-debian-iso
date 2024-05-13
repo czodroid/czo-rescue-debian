@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 17 January 2024, 11:56
+# Last Modified: Monday 26 February 2024, 11:46
 # $Id: make-czo-rescue-debian-iso,v 1.92 2023/03/19 16:27:47 czo Exp $
-# Edit Time: 138:46:31
+# Edit Time: 138:47:49
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO
@@ -449,7 +449,7 @@ label Czo-Rescue-Debian, zfs/console                   (root/toor)
 
 label Czo-Rescue-Debian, failsafe                      (root/toor)
     kernel /live/vmlinuz
-    append initrd=/live/initrd boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
+    append initrd=/live/initrd boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash
 
 # label TEST ISO Czo-Rescue-Debian
 #     kernel /boot/memdisk iso
@@ -553,8 +553,9 @@ menuentry "Czo-Rescue-Debian, zfs/console                (root/toor)" {
 
 menuentry "Czo-Rescue-Debian, failsafe                   (root/toor)" {
     echo "Czo-Rescue-Debian launch in progress, please stand by..."
+    set GFXPAYLOAD=keep
     search --no-floppy --set=root --label RESCUE
-    linux  (\$root)/live/vmlinuz boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788
+    linux  (\$root)/live/vmlinuz boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash
     initrd (\$root)/live/initrd
 }
 
