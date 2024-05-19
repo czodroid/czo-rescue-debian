@@ -2,13 +2,13 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 13 November 2011
-# Last Modified: Thursday 13 October 2022, 18:33
-# $Id: terminalrc,v 1.10 2022/10/13 16:34:20 czo Exp $
-# Edit Time: 0:35:23
+# Last Modified: Sunday 19 May 2024, 10:48
+# $Id: terminalrc,v 1.11 2024/05/19 08:49:02 czo Exp $
+# Edit Time: 0:36:09
 # Description:
 #               xfce terminal config
 #
-# Copyright: (C) 2011-2022 Olivier Sirol <czo@free.fr>
+# Copyright: (C) 2011-2024 Olivier Sirol <czo@free.fr>
 
 [Configuration]
 MiscAlwaysShowTabs=FALSE
@@ -58,6 +58,6 @@ ColorSelection=#ebebdbdbb2b2
 FontAllowBold=FALSE
 TitleMode=TERMINAL_TITLE_PREPEND
 ColorSelectionUseDefault=FALSE
-FontName=Source Code Pro for Powerline 13
+FontName=Source Code Pro 13
 #FontName=Monospace 13
 

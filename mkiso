@@ -1,9 +1,15 @@
-#! /usr/bin/env sh
+#! /bin/sh
 #
 # Filename: mkiso
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
-# Description: Build an isofs from a rescue cd
+# File Created: 05 juil. 2015
+# Last Modified: Sunday 19 May 2024, 19:23
+# Description:
+#
+#       Build an isofs from a rescue cd
+#
+# Copyright: (C) 2015-2024 Olivier Sirol <czo@free.fr>
 
 
 DIRNAME="$(dirname $(readlink -f $0))"
@@ -36,8 +42,64 @@ xorriso \
         -isohybrid-gpt-basdat \
     -o ../$NAME.iso .
 
-## change live (must be run as root)
-#    ( mkdir czo-rescue-debian-11.6-3 && bsdtar -C czo-rescue-debian-11.6-3 -xf czo-rescue-debian-11.6-3.iso && unsquashfs czo-rescue-debian-11.6-3/live/filesystem.squashfs )
-# Make the changes: delete my dotconfigs (ok, there are too many aliases ;-), configure .ssh/authorized_keys, configure grub.cfg/isolinux.cfg and so on... and then:
-#    ( cd czo-rescue-debian-11.6-3/live && rm filesystem.squashfs; mksquashfs ../../squashfs-root filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k && sha512sum filesystem.squashfs > filesystem.squashfs.sha512 && cd .. && ./mkiso )
+
+### Change Live (must be run as root)
+
+# ( mkdir czo-rescue-debian-11.6-3 && bsdtar -C czo-rescue-debian-11.6-3 -xf czo-rescue-debian-11.6-3.iso && unsquashfs czo-rescue-debian-11.6-3/live/filesystem.squashfs )
+## Make the changes: delete my dotconfigs (ok, there are too many aliases ;-), configure .ssh/authorized_keys, configure grub.cfg/isolinux.cfg and so on... and then:
+# ( cd czo-rescue-debian-11.6-3/live && rm filesystem.squashfs; mksquashfs ../../squashfs-root filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k && sha512sum filesystem.squashfs > filesystem.squashfs.sha512 && cd .. && ./mkiso )
+
+
+### OLD ONES
+
+# xorriso \
+#     -as mkisofs \
+#     -iso-level 3 \
+#     -full-iso9660-filenames \
+#     -volid RESCUE \
+#     -publisher "$ISO_PUBLISHER" \
+#     -appid "$ISO_APPLICATION" \
+#     -isohybrid-mbr boot/syslinux/isohdpfx.bin \
+#     -eltorito-boot boot/syslinux/isolinux.bin \
+#         -no-emul-boot \
+#         -boot-load-size 4 \
+#         -boot-info-table \
+#         -eltorito-catalog boot/syslinux/boot.cat \
+#     -eltorito-alt-boot \
+#         -e EFI/debianiso/efiboot.img \
+#         -no-emul-boot \
+#         -isohybrid-gpt-basdat \
+#     -o ../$NAME.iso .
+
+
+### SYSRCD
+
+## 811
+# xorriso -as mkisofs -iso-level 3 -full-iso9660-filenames -volid RESCUE811 -publisher "$ISO_PUBLISHER" -appid "$ISO_APPLICATION" -isohybrid-mbr isolinux/isohdpfx.bin -eltorito-boot isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-catalog isolinux/boot.cat -eltorito-alt-boot -e EFI/archiso/efiboot.img -no-emul-boot -isohybrid-gpt-basdat -o ../$NAME.iso .
+
+## 809
+# xorriso -as mkisofs -iso-level 3 -full-iso9660-filenames -volid RESCUE809 -eltorito-boot boot/syslinux/isolinux.bin -eltorito-catalog boot/syslinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -isohybrid-mbr boot/syslinux/isohdpfx.bin -eltorito-alt-boot -e EFI/archiso/efiboot.img -no-emul-boot -isohybrid-gpt-basdat -o ../$NAME.iso .
+
+## 801
+# xorriso -as mkisofs -iso-level 3 -full-iso9660-filenames -volid RESCUE801 -eltorito-boot isolinux/isolinux.bin -eltorito-catalog isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -isohybrid-mbr isolinux/isohdpfx.bin -eltorito-alt-boot -e EFI/archiso/efiboot.img -no-emul-boot -isohybrid-gpt-basdat -o ../$NAME.iso .
+
+## 512
+# xorriso -as mkisofs -joliet -rock -omit-version-number -disable-deep-relocation -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot -volid Sysrcd -o ../$NAME.iso .
+
+## 492
+# xorriso -as mkisofs -joliet -rock -omit-version-number -disable-deep-relocation -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot -volid "sysrcd-4.9.2" -o ../$NAME.iso .
+
+## 241
+# xorriso -as mkisofs -joliet -rock -omit-version-number -disable-deep-relocation -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot -volid "sysrcd-2.4.1" -o ../$NAME.iso .
+
+# unsquashfs czo-sysrcd-492-x86/sysrcd.dat
+#
+# rm sysrcd.dat; mksquashfs ../squashfs-root sysrcd.dat && md5sum sysrcd.dat > sysrcd.md5 && ./mkiso
+# rm sysrcd.dat; mksquashfs ../squashfs-root sysrcd.dat -comp xz -Xbcj x86 -b 512k -Xdict-size 512k && md5sum sysrcd.dat > sysrcd.md5 && ./mkiso
+
+## SLAX
+
+# mkisofs -v -J -R -D -A slax -V slax -input-charset utf-8 -no-emul-boot -boot-info-table -boot-load-size 4 -b slax/boot/isolinux.bin -c slax/boot/isolinux.boot -o ../$NAME.iso .
+# isohybrid.pl ../$NAME.iso
+
 
