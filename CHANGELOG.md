@@ -3,8 +3,8 @@ Filename: CHANGELOG.md
 Author: Olivier Sirol <czo@free.fr>
 License: GPL-2.0 (http://www.gnu.org/copyleft)
 File Created: 30 December 2022
-Last Modified: Sunday 26 May 2024, 17:29
-Edit Time: 0:53:55
+Last Modified: Sunday 26 May 2024, 19:18
+Edit Time: 0:54:28
 Description:
 
 Copyright: (C) 2022-2024 Olivier Sirol <czo@free.fr>
@@ -19,7 +19,7 @@ Copyright: (C) 2022-2024 Olivier Sirol <czo@free.fr>
 - delete geany, netcat, vim-gtk
 - ISO sha512:
 ```
-
+c6084ca2028b6b4edc86fd7f2440843aec53c9cd25142fc47eec84c32f0a1f1d9b95d4bba4be275192d2cf8318b4ec04c6bab1fd6c2033e7f2747384fb3d7f23  czo-rescue-debian-12.5-4.iso
 ```
 
 ## 11.6-4 (2023-03-19):
