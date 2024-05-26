@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Monday 26 February 2024, 11:46
-# $Id: make-czo-rescue-debian-iso,v 1.92 2023/03/19 16:27:47 czo Exp $
-# Edit Time: 138:47:49
+# Last Modified: Sunday 26 May 2024, 17:12
+# $Id: make-czo-rescue-debian-iso,v 1.94 2024/05/26 15:13:01 czo Exp $
+# Edit Time: 138:47:57
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO

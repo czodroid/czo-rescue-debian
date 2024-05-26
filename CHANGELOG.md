@@ -3,16 +3,27 @@ Filename: CHANGELOG.md
 Author: Olivier Sirol <czo@free.fr>
 License: GPL-2.0 (http://www.gnu.org/copyleft)
 File Created: 30 December 2022
-Last Modified: Sunday 19 March 2023, 18:32
-Edit Time: 0:50:43
+Last Modified: Sunday 26 May 2024, 17:29
+Edit Time: 0:53:55
 Description:
 
-Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
+Copyright: (C) 2022-2024 Olivier Sirol <czo@free.fr>
 -->
 
 # Czo-Rescue-Debian ChangeLog
 
+## 12.5-4 (2024-05-26):
+- Version 12.5-4 contains kernel/6.1.0-21-amd64 and zfs/2.1.11-1
+- debian 12
+- add console-setup, mousepad, sanoid, vim-gtk3, xxd
+- delete geany, netcat, vim-gtk
+- ISO sha512:
+```
+
+```
+
 ## 11.6-4 (2023-03-19):
+- Version 11.6-4 contains kernel/5.10.0-21-amd64 and zfs/2.0.3-9
 - network additions: ifenslave and bridge-utils
 - ISO sha512:
 ```
@@ -20,13 +31,15 @@ Copyright: (C) 2022, 2023 Olivier Sirol <czo@free.fr>
 ```
 
 ## 11.6-3 (2023-02-26):
+- Version 11.6-3 contains kernel/5.10.0-21-amd64 and zfs/2.0.3-9
+
 - First public release
 - ISO sha512:
 ```
 4f4369af7490a44e901088edd82e51e56065b3ca74ac2433b9dbc742dfbb03d4950e8c7652993b313e87a013476d70ad68010466a8e4d7ca094cf3891bc692c1  czo-rescue-debian-11.6-3.iso
 ```
 
-## 11.5-0 (2022-11-28):
+## Czo-Rescue-Debian (2022-11-28):
 - Czo-Rescue-Debian is based on Debian and built using debootstrap
 
 Kernel:
