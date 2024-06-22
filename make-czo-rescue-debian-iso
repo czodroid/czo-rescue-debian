@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 26 May 2024, 17:12
+# Last Modified: Saturday 22 June 2024, 13:35
 # $Id: make-czo-rescue-debian-iso,v 1.94 2024/05/26 15:13:01 czo Exp $
-# Edit Time: 138:47:57
+# Edit Time: 138:48:33
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO
@@ -403,7 +403,6 @@ cat <<HEREDOC > $LIVE_BOOT/staging/isolinux/isolinux.cfg
 serial 0 115200
 ui menu.c32
 timeout 3000
-menu default
 prompt 0
 
 menu title Czo-Rescue-Debian $ISO_VERSION ($ISO_DATE)
