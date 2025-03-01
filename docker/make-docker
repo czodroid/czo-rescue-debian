@@ -1,0 +1,33 @@
+#! /usr/bin/env bash
+#
+# Filename: make-docker
+# Author: Olivier Sirol <czo@free.fr>
+# License: GPL-2.0 (http://www.gnu.org/copyleft)
+# File Created: 03 February 2025
+# Last Modified: Saturday 01 March 2025, 18:11
+# $Id:$
+# Edit Time: 0:48:28
+# Description:
+#
+# Copyright: (C) 2025 Olivier Sirol <czo@free.fr>
+
+IMG=czo-rescue-debian
+
+# Determine the path to the git repository
+curdir="$(dirname $(realpath $0))"
+repodir="$(realpath ${curdir}/..)"
+echo "=> curdir=${curdir}"
+echo "=> repodir=${repodir}"
+
+docker build -t $IMG ${repodir}/docker
+
+# docker run -h czo-rescue-debian -it czo-rescue-debian bash
+# exit 42
+
+# Run the build process in the container
+docker run --rm --pids-limit=4096 --user 0:0 --privileged --workdir /workspace --volume=${repodir}:/workspace -h $IMG -it $IMG \
+    /bin/bash
+
+    # /bin/bash /workspace/make-czo-rescue-debian-iso "$@"
+
+
