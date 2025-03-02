@@ -4,17 +4,15 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Saturday 22 June 2024, 13:35
-# $Id: make-czo-rescue-debian-iso,v 1.94 2024/05/26 15:13:01 czo Exp $
-# Edit Time: 138:48:33
+# Last Modified: Sunday 02 March 2025, 11:31
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/03/02 11:31:44 czo Git $
+# Edit Time: 139:00:04
 # Description:
 #
-#       This script creates a czo-rescue-debian ISO
-#
-#       It's a live Linux Debian Rescue
+#       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
 #
 #       to run on your host:
-#           apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin isolinux mtools dosfstools bash coreutils debootstrap squashfs-tools libarchive-tools xorriso isomd5sum make
+#           apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin isolinux mtools dosfstools bash coreutils debootstrap squashfs-tools libarchive-tools xorriso isomd5sum xz-utils make
 #
 #       Debug in chroot:
 #           export LIVE_BOOT=$LIVE_BOOT
@@ -30,7 +28,7 @@
 #           https://www.willhaley.com/blog/custom-debian-live-environment
 #           https://gitlab.com/systemrescue/systemrescue-sources
 #
-# Copyright: (C) 2022-2024 Olivier Sirol <czo@free.fr>
+# Copyright: (C) 2022-2025 Olivier Sirol <czo@free.fr>
 
 set -e -u
 
