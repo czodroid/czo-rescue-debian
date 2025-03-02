@@ -2,11 +2,12 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 16 June 2023
-# Last Modified: Friday 16 June 2023, 16:54
-# $Id:$
-# Edit Time: 0:02:14
+# Last Modified: Sunday 02 March 2025, 11:40
+# $Id: Makefile,v 1.42 2025/03/02 11:40:09 czo Git $
+# Edit Time: 0:19:04
 # Description:
-#               Makefile for this project
+#
+#            Makefile for czo-rescue-debian
 #
 #      $@ Target name
 #      $< Name of the first dependency
@@ -14,11 +15,15 @@
 #      $? List of dependencies newer than the target
 #      $* Target name without suffix
 #
-# Copyright: (C) 2023 Olivier Sirol <czo@free.fr>
+# Copyright: (C) 2023-2025 Olivier Sirol <czo@free.fr>
 
-all:
-	./make-czo-rescue-debian-iso
+docker:
+	./docker/make-docker
 	@echo "<- all done!"
+
+iso:
+	./make-czo-rescue-debian-iso
+	@echo "<- no-docker all done!"
 
 clean:
 	rm -fr build-czo-rescue
@@ -28,7 +33,7 @@ realclean: clean
 
 fclean: realclean
 
-re: realclean all
+re: realclean docker
 
-.PHONY: all clean realclean fclean re
+.PHONY: docker iso clean realclean fclean re
 
