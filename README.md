@@ -3,7 +3,7 @@
 // Author: Olivier Sirol <czo@free.fr>
 // License: GPL-2.0 (http://www.gnu.org/copyleft)
 // File Created: 30 December 2022
-// Last Modified: Tuesday 04 March 2025, 19:05
+// Last Modified: Tuesday 4 March 2025, 20:41
 // Edit Time: 1:09:37
 // Description:
 //
@@ -24,11 +24,11 @@ Version 12.5-4 contains kernel/6.1.0-21-amd64 and zfs/2.1.11-1
 
 ## Project
 
+* License: GPL-2.0 (http://www.gnu.org/copyleft)
+
 * Source code: https://gitlab.com/czo/czo-rescue-debian
 
 * ISO files: https://sourceforge.net/projects/czo-rescue-debian
-
-* License: GPL-2.0 (http://www.gnu.org/copyleft)
 
 ## Building Czo-Rescue-Debian
 
@@ -45,6 +45,14 @@ It will create a large `build-czo-rescue` sub-directory and the ISO file will be
 if all goes well.
 
 You can also do it in docker. Just run `make`.
+
+## Logs file
+
+At the root of the ISO, you can find:
+
+* build-czo-rescue.log: this file is the log of the command `make-czo-rescue-debian-iso`
+
+* build-czo-rescue.packages: this file shows the name, version and size of each package in Czo Rescue Debian.
 
 ## Modifying of the Czo-Rescue-Debian ISO
 
