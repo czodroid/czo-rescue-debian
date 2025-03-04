@@ -4,14 +4,14 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Monday 03 March 2025, 10:20
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/03/03 10:20:47 czo Git $
-# Edit Time: 139:00:30
+# Last Modified: Tuesday 04 March 2025, 19:38
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/03/04 19:38:39 czo Git $
+# Edit Time: 155:07:48
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
 #
-#       to run on your host:
+#       To run on your host, install:
 #           apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin isolinux mtools dosfstools bash coreutils debootstrap squashfs-tools libarchive-tools xorriso isomd5sum xz-utils make
 #
 #       Debug in chroot:
@@ -21,6 +21,7 @@
 #           chroot $LIVE_BOOT/chroot /bin/bash
 #           exit
 #
+#       Notes before the use of docker:
 #           umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc} ; sleep 1 && rsync_full $LIVE_BOOT/../savebuild/ $LIVE_BOOT && for p in proc sys dev dev/pts run; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done && chroot $LIVE_BOOT/chroot /bin/bash ; umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}
 #
 #       References:
@@ -349,17 +350,7 @@ https://gitlab.com/czo/czo-rescue-debian
 
 HEREDOC
 
-mkdir -p $LIVE_BOOT/{staging/{EFI/BOOT,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live},tmp}
 cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/chroot/root/README.md
-cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/staging/README.md
-cp -f $SCRIPT_PATH/mkiso $LIVE_BOOT/staging/mkiso
-
-cp -f $LIVE_BOOT/chroot/root/czo-rescue-debian $LIVE_BOOT/staging
-
-cp -f $LIVE_BOOT/chroot/root/build-czo-rescue.packages $LIVE_BOOT/staging
-cp -f $LIVE_BOOT/chroot/root/build-czo-rescue.packages $SCRIPT_PATH
-
-cp -f $LIVE_BOOT/build-czo-rescue.log $LIVE_BOOT/staging
 
 rm -f $LIVE_BOOT/chroot/vmlinuz.old
 rm -f $LIVE_BOOT/chroot/initrd.img.old
@@ -372,6 +363,8 @@ rm -f $LIVE_BOOT/chroot/initrd.img
 ## Squashfs
 
 make_04_squashfs() {
+
+mkdir -p $LIVE_BOOT/staging/live
 
 rm -f $LIVE_BOOT/staging/live/filesystem.squashfs
 
@@ -389,6 +382,8 @@ sha512sum filesystem.squashfs > filesystem.squashfs.sha512
 ## Prepare Boot Loader Menus
 
 make_05_bootloader() {
+
+mkdir -p $LIVE_BOOT/staging/{EFI/boot,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live}
 
 ##================================================================
 echo " -> isolinux.cfg"
@@ -474,9 +469,15 @@ label Power Off
 HEREDOC
 
 ##================================================================
-echo " -> grub.cfg"
+echo " -> grubcrd.cfg"
 
-cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/grub.cfg
+cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/grubinit.cfg
+search --file --no-floppy --set=root /boot/grub/grubcrd.cfg
+set prefix=/boot/grub
+source (\$root)/boot/grub/grubcrd.cfg
+HEREDOC
+
+cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/grubcrd.cfg
 # Filename: grub.cfg
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
@@ -556,13 +557,13 @@ menuentry "Czo-Rescue-Debian, failsafe                   (root/toor)" {
     initrd (\$root)/live/initrd
 }
 
-menuentry "Grml ISO Czo-Rescue-Debian, zfs/toram/startx RAM>3GB" {
+menuentry "Grml ISO Czo-Rescue-Debian, zfs/toram/startx  (RAM>3GB)" {
         echo "ISO Czo-Rescue-Debian launch in progress, please stand by..."
 	linux  /live/vmlinuz boot=live findiso=\${iso_path} toram=filesystem.squashfs dostartx
 	initrd /live/initrd
 }
 
-menuentry "Grml ISO Czo-Rescue-Debian, zfs/console RAM>1GB" {
+menuentry "Grml ISO Czo-Rescue-Debian, zfs/console       (RAM>1GB)" {
         echo "ISO Czo-Rescue-Debian launch in progress, please stand by..."
 	linux  /live/vmlinuz boot=live findiso=\${iso_path}
 	initrd /live/initrd
@@ -600,7 +601,7 @@ menuentry "Grml ISO Czo-Rescue-Debian, zfs/console RAM>1GB" {
 menuentry "Run Memtest86+" {
     echo "Memtest86+ launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
-    linux (\$root)/live/memtest.efi keyboard=both
+    linux (\$root)/EFI/memtest.efi keyboard=both
 }
 
 menuentry "Start EFI Shell" {
@@ -627,14 +628,22 @@ HEREDOC
 echo " -> loopback.cfg"
 
 cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/loopback.cfg
-source /boot/grub/grub.cfg
+source /boot/grub/grubcrd.cfg
 HEREDOC
+
+##================================================================
+echo " -> link and copy"
+
+ln -s grubcrd.cfg $LIVE_BOOT/staging/boot/grub/grub.cfg
+cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/staging
+cp -f $SCRIPT_PATH/mkiso $LIVE_BOOT/staging
+cp -f $LIVE_BOOT/chroot/root/czo-rescue-debian $LIVE_BOOT/staging
+cp -f $LIVE_BOOT/chroot/root/build-czo-rescue.packages $LIVE_BOOT/staging
+cp -f $LIVE_BOOT/build-czo-rescue.log $LIVE_BOOT/staging
 
 
 ##================================================================
-echo " -> Prepare Boot Loader Files"
-
-cp $LIVE_BOOT/staging/boot/grub/grub.cfg $LIVE_BOOT/staging/EFI/BOOT/
+echo " -> prepare boot loader files"
 
 if [ $ARCH = "amd64" ]; then
     cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-amd64 $LIVE_BOOT/staging/live/vmlinuz
@@ -645,7 +654,7 @@ else
 fi
 
 cp -f $LIVE_BOOT/chroot/boot/memtest.bin $LIVE_BOOT/staging/live/memtest.bin
-cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/live/memtest.efi
+cp -f $LIVE_BOOT/chroot/boot/memtest.efi $LIVE_BOOT/staging/EFI/memtest.efi
 
 #hdt
 RELEASE="$(<$LIVE_BOOT/chroot/tmp/release)"
@@ -661,37 +670,19 @@ rm -fr $LIVE_BOOT/staging/boot/grub/x86_64-efi/monolithic
 
 cp -f $LIVE_BOOT/chroot/boot/shell.efi $LIVE_BOOT/staging/EFI
 
-cat <<'HEREDOC' > $LIVE_BOOT/tmp/grub-embed.cfg
-if ! [ -d "$cmdpath" ]; then
-    # On some firmware, GRUB has a wrong cmdpath when booted from an optical disc.
-    # https://gitlab.archlinux.org/archlinux/archiso/-/issues/183
-    if regexp --set=1:isodevice '^(\([^)]+\))\/?[Ee][Ff][Ii]\/[Bb][Oo][Oo][Tt]\/?$' "$cmdpath"; then
-        cmdpath="${isodevice}/EFI/BOOT"
-    fi
-fi
-configfile "${cmdpath}/grub.cfg"
-HEREDOC
-
-grub-mkstandalone --compress xz -O i386-efi \
-    --modules="part_gpt part_msdos fat iso9660" \
-    --locales="" --themes="" --fonts="" \
-    --output="$LIVE_BOOT/staging/EFI/BOOT/BOOTIA32.EFI" \
-    "boot/grub/grub.cfg=$LIVE_BOOT/tmp/grub-embed.cfg"
-
+rm -f $LIVE_BOOT/staging/EFI/boot/bootx64.efi
 grub-mkstandalone --compress xz -O x86_64-efi \
     --modules="part_gpt part_msdos fat iso9660" \
     --locales="" --themes="" --fonts="" \
-    --output="$LIVE_BOOT/staging/EFI/BOOT/BOOTx64.EFI" \
-    "boot/grub/grub.cfg=$LIVE_BOOT/tmp/grub-embed.cfg"
+    --output="$LIVE_BOOT/staging/EFI/boot/bootx64.efi" \
+    "boot/grub/grub.cfg=$LIVE_BOOT/staging/boot/grub/grubinit.cfg"
 
 rm -f $LIVE_BOOT/staging/EFI/debianiso/efiboot.img
-mkfs.fat -C $LIVE_BOOT/staging/EFI/debianiso/efiboot.img 2880
-mmd -i $LIVE_BOOT/staging/EFI/debianiso/efiboot.img ::/EFI ::/EFI/BOOT
+mkfs.fat -C $LIVE_BOOT/staging/EFI/debianiso/efiboot.img 1440
+mmd -i $LIVE_BOOT/staging/EFI/debianiso/efiboot.img ::/efi ::/efi/boot
 mcopy -vi $LIVE_BOOT/staging/EFI/debianiso/efiboot.img \
-    $LIVE_BOOT/staging/EFI/BOOT/BOOTIA32.EFI \
-    $LIVE_BOOT/staging/EFI/BOOT/BOOTx64.EFI \
-    $LIVE_BOOT/staging/boot/grub/grub.cfg \
-    ::/EFI/BOOT/
+    $LIVE_BOOT/staging/EFI/boot/bootx64.efi \
+    ::/efi/boot/
 
 }
 
@@ -740,6 +731,7 @@ xorriso \
     ls -alh $ISO_NAME
 )
 
+cp -f $LIVE_BOOT/chroot/root/build-czo-rescue.packages $SCRIPT_PATH
 cp -f $LIVE_BOOT/build-czo-rescue.log $SCRIPT_PATH
 
 }

@@ -1,15 +1,15 @@
 <!--
-Filename: README.md
-Author: Olivier Sirol <czo@free.fr>
-License: GPL-2.0 (http://www.gnu.org/copyleft)
-File Created: 30 December 2022
-Last Modified: Sunday 26 May 2024, 17:15
-Edit Time: 1:01:50
-Description:
-
-        Readme for Czo Rescue Debian
-
-Copyright: (C) 2022-2024 Olivier Sirol <czo@free.fr>
+// Filename: README.md
+// Author: Olivier Sirol <czo@free.fr>
+// License: GPL-2.0 (http://www.gnu.org/copyleft)
+// File Created: 30 December 2022
+// Last Modified: Tuesday 04 March 2025, 19:05
+// Edit Time: 1:09:37
+// Description:
+//
+//          Readme for Czo Rescue Debian
+//
+// Copyright: (C) 2022-2025 Olivier Sirol <czo@free.fr>
 -->
 
 # Czo Rescue Debian
@@ -28,9 +28,11 @@ Version 12.5-4 contains kernel/6.1.0-21-amd64 and zfs/2.1.11-1
 
 * ISO files: https://sourceforge.net/projects/czo-rescue-debian
 
+* License: GPL-2.0 (http://www.gnu.org/copyleft)
+
 ## Building Czo-Rescue-Debian
 
-Czo-Rescue-Debian can be built for x86_64 or i686 architectures. It must be built
+Czo-Rescue-Debian can be built for x86\_64 or i686 architectures. It must be built
 on a debian12/amd64 if you want to build a 64bit edition, or a debian12/686
 if you want to create a 32bit edition.
 
@@ -41,6 +43,8 @@ The following packages must be installed on the build system:
 The build process can be started by running the `make-czo-rescue-debian-iso` script.
 It will create a large `build-czo-rescue` sub-directory and the ISO file will be there
 if all goes well.
+
+You can also do it in docker. Just run `make`.
 
 ## Modifying of the Czo-Rescue-Debian ISO
 

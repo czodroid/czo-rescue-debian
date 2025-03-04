@@ -2,17 +2,17 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Sunday 26 May 2024, 17:22
-# Copyright: (C) 2022-2024 Olivier Sirol <czo@free.fr>
-
+# Last Modified: Tuesday 04 March 2025, 19:09
 # Description:
 #
-# Czo-Rescue-Debian is installed with 'debootstrap' and then with a script in 'chroot'.
+#   Czo-Rescue-Debian is installed with 'debootstrap' and then with a script in 'chroot'.
 #
-# The kernel is installed with 'apt-get --no-install-recommends install':
+#   The kernel is installed with 'apt-get --no-install-recommends install':
 #     linux-image-amd64 linux-headers-amd64 intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
 #
-# That leaves the others, which also installs the recommendations:
+#   This leaves all the others, which also installs the recommendations:
+#
+# Copyright: (C) 2022-2025 Olivier Sirol <czo@free.fr>
 
 ## Console packages
 2to3
@@ -33,6 +33,7 @@ bind9-dnsutils
 bind9-host
 bridge-utils
 broadcom-sta-dkms
+btop
 bzip2
 cabextract
 ca-certificates
@@ -306,6 +307,8 @@ xfce4-taskmanager
 xfce4-terminal
 xfce4-whiskermenu-plugin
 xfce4-xkb-plugin
+gvfs-backends
+gvfs-fuse
 
 ## X11/Wayland packages
 avahi-discover
