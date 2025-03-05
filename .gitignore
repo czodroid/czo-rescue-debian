@@ -1,5 +1,5 @@
-build-czo-rescue/
-build-czo-rescue.log
-build-czo-rescue.packages
-savebuild/
 .*.sw?
+/build-czo-rescue/
+/build-czo-rescue.log
+/build-czo-rescue.packages
+/savebuild/
