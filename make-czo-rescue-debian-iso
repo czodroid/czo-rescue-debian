@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Tuesday 04 March 2025, 19:38
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/03/04 19:38:39 czo Git $
-# Edit Time: 155:07:48
+# Last Modified: Tuesday 04 March 2025, 21:54
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/03/04 21:54:56 czo Git $
+# Edit Time: 155:08:20
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -676,6 +676,8 @@ grub-mkstandalone --compress xz -O x86_64-efi \
     --locales="" --themes="" --fonts="" \
     --output="$LIVE_BOOT/staging/EFI/boot/bootx64.efi" \
     "boot/grub/grub.cfg=$LIVE_BOOT/staging/boot/grub/grubinit.cfg"
+
+# search iso9660 configfile normal memdisk tar ${PARTITIONLIST} fat
 
 rm -f $LIVE_BOOT/staging/EFI/debianiso/efiboot.img
 mkfs.fat -C $LIVE_BOOT/staging/EFI/debianiso/efiboot.img 1440
