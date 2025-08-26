@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Tuesday 04 March 2025, 21:54
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/03/04 21:54:56 czo Git $
-# Edit Time: 155:08:20
+# Last Modified: Tuesday 26 August 2025, 18:24
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/08/26 18:24:57 czo Git $
+# Edit Time: 155:15:46
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -21,7 +21,7 @@
 #           chroot $LIVE_BOOT/chroot /bin/bash
 #           exit
 #
-#       Notes before the use of docker:
+#       Notes:
 #           umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc} ; sleep 1 && rsync_full $LIVE_BOOT/../savebuild/ $LIVE_BOOT && for p in proc sys dev dev/pts run; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done && chroot $LIVE_BOOT/chroot /bin/bash ; umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}
 #
 #       References:
@@ -39,8 +39,8 @@ if [ `id -u` -ne 0 ]; then
 fi
 
 # Release
-export RESCUE_RELEASE="bookworm"
-export RESCUE_ID="12"
+export RESCUE_RELEASE="trixie"
+export RESCUE_ID="13"
 
 export SCRIPT_PATH=$(readlink -f ${0%/*})
 export ISO_VERSION="$(<${SCRIPT_PATH}/version)"
@@ -176,7 +176,7 @@ echo "--> install kernel ($ARCH)"
 #--no-install-recommends
 
 if [ $ARCH = "amd64" ]; then
-    apt-get $QUIET --no-install-recommends install linux-image-amd64 linux-headers-amd64 intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
+    apt-get $QUIET --no-install-recommends install linux-image-amd64 linux-headers-amd64 intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211 zstd
 else
     apt-get $QUIET --no-install-recommends install linux-image-686 linux-headers-686 linux-image-686-pae linux-headers-686-pae intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
 fi
@@ -634,7 +634,7 @@ HEREDOC
 ##================================================================
 echo " -> link and copy"
 
-ln -s grubcrd.cfg $LIVE_BOOT/staging/boot/grub/grub.cfg
+ln -fs grubcrd.cfg $LIVE_BOOT/staging/boot/grub/grub.cfg
 cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/staging
 cp -f $SCRIPT_PATH/mkiso $LIVE_BOOT/staging
 cp -f $LIVE_BOOT/chroot/root/czo-rescue-debian $LIVE_BOOT/staging

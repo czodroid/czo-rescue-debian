@@ -2,7 +2,7 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Sunday 27 July 2025, 20:12
+# Last Modified: Wednesday 13 August 2025, 17:46
 # Description:
 #
 #   Czo-Rescue-Debian is installed with 'debootstrap' and then with a script in 'chroot'.
@@ -15,7 +15,7 @@
 # Copyright: (C) 2022-2025 Olivier Sirol <czo@free.fr>
 
 ## Console packages
-2to3
+#13 2to3
 acpi
 aptitude
 apt-utils
@@ -27,7 +27,7 @@ autofs
 avahi-utils
 bash
 bash-completion
-batcat
+#13 batcat
 bc
 bind9
 bind9-dnsutils
@@ -57,7 +57,7 @@ debconf-utils
 debootstrap
 discount
 dislocker
-dmraid
+#13 dmraid
 dnsmasq-utils
 dnsutils
 dosfstools
@@ -133,7 +133,7 @@ libcap-ng-utils
 libguestfs-tools
 libimobiledevice-utils
 liblockfile-bin
-libncurses5
+#13 libncurses5
 libnet-xmpp-perl
 libnfs-utils
 libnl-utils
@@ -161,9 +161,9 @@ manpages
 mc
 media-types
 memtester
-mime-support
+#13 mime-support
 minicom
-mlocate
+plocate
 moreutils
 mtools
 mtr
@@ -176,7 +176,7 @@ ncdu
 ncurses-term
 ndisc6
 netcat-traditional
-netdiag
+#13 netdiag
 nettle-bin
 net-tools
 network-manager
@@ -186,7 +186,7 @@ nfs-client
 nfs-kernel-server
 nftables
 nmap
-ntpdate
+#13 ntpdate
 numactl
 nvme-cli
 nwipe
@@ -215,7 +215,7 @@ rdiff-backup
 rdiff-backup-fs
 readline-common
 recode
-reiser4progs
+#13 reiser4progs
 reiserfsprogs
 rename
 reportbug

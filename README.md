@@ -3,8 +3,8 @@
 // Author: Olivier Sirol <czo@free.fr>
 // License: GPL-2.0 (http://www.gnu.org/copyleft)
 // File Created: 30 December 2022
-// Last Modified: Tuesday 4 March 2025, 20:41
-// Edit Time: 1:09:37
+// Last Modified: Tuesday 26 August 2025, 18:50
+// Edit Time: 1:13:22
 // Description:
 //
 //          Readme for Czo Rescue Debian
@@ -60,11 +60,26 @@ If you don't want to build the Czo-Rescue-Debian, you can change the live CD. Th
 
     ( mkdir czo-rescue-debian-12.5-4 && bsdtar -C czo-rescue-debian-12.5-4 -xf czo-rescue-debian-12.5-4.iso && unsquashfs czo-rescue-debian-12.5-4/live/filesystem.squashfs )
 
-Then make the changes: delete my dotconfigs (ok, there are too many aliases ;-), configure .ssh/authorized_keys, configure grub.cfg/isolinux.cfg and so on... and then:
+Then make the changes: delete my dotconfigs (ok, there are too many aliases ;-), configure .ssh/authorized\_keys, configure grub.cfg/isolinux.cfg and so on... and then:
 
     ( cd czo-rescue-debian-12.5-4/live && rm filesystem.squashfs; mksquashfs ../../squashfs-root filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k && sha512sum filesystem.squashfs > filesystem.squashfs.sha512 && cd .. && ./mkiso )
 
 
 ## ScreenShot
 
+czo-rescue-debian-console:
+
+![Img Screenshot](store/czo-rescue-debian-console.png)
+
+czo-rescue-debian-firefox:
+
+![Img Screenshot](store/czo-rescue-debian-firefox.png)
+
+czo-rescue-debian-terminal:
+
 ![Img Screenshot](store/czo-rescue-debian-terminal.png)
+
+czo-rescue-debian:
+
+![Img Screenshot](store/czo-rescue-debian.png)
+
