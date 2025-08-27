@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.1" encoding="UTF-8"?>
 
 <channel name="xfce4-panel" version="1.0">
   <property name="configver" type="int" value="2"/>
@@ -16,20 +16,21 @@
         <value type="int" value="21"/>
         <value type="int" value="1"/>
         <value type="int" value="20"/>
+        <value type="int" value="9"/>
+        <value type="int" value="24"/>
         <value type="int" value="2"/>
         <value type="int" value="3"/>
         <value type="int" value="17"/>
         <value type="int" value="18"/>
         <value type="int" value="4"/>
         <value type="int" value="14"/>
-        <value type="int" value="9"/>
         <value type="int" value="6"/>
         <value type="int" value="8"/>
         <value type="int" value="19"/>
         <value type="int" value="15"/>
         <value type="int" value="10"/>
         <value type="int" value="12"/>
-        <value type="int" value="13"/>
+        <value type="int" value="23"/>
       </property>
       <property name="enter-opacity" type="uint" value="90"/>
       <property name="leave-opacity" type="uint" value="90"/>
@@ -37,7 +38,16 @@
   </property>
   <property name="plugins" type="empty">
     <property name="plugin-2" type="string" value="tasklist">
-      <property name="grouping" type="uint" value="1"/>
+      <property name="grouping" type="bool" value="false"/>
+      <property name="show-tooltips" type="bool" value="true"/>
+      <property name="switch-workspace-on-unminimize" type="bool" value="true"/>
+      <property name="show-wireframes" type="bool" value="false"/>
+      <property name="show-handle" type="bool" value="false"/>
+      <property name="show-only-minimized" type="bool" value="false"/>
+      <property name="include-all-monitors" type="bool" value="true"/>
+      <property name="sort-order" type="uint" value="4"/>
+      <property name="show-labels" type="bool" value="true"/>
+      <property name="flat-buttons" type="bool" value="false"/>
     </property>
     <property name="plugin-3" type="string" value="separator">
       <property name="expand" type="bool" value="true"/>
@@ -49,6 +59,7 @@
     <property name="plugin-6" type="string" value="systray">
       <property name="square-icons" type="bool" value="true"/>
       <property name="known-legacy-items" type="array">
+        <value type="string" value="ethernet network connection “wired connection 1” active"/>
         <value type="string" value="networkmanager applet"/>
       </property>
     </property>
@@ -66,10 +77,40 @@
       <property name="digital-layout" type="uint" value="3"/>
       <property name="digital-time-font" type="string" value="Sans 10"/>
     </property>
-    <property name="plugin-13" type="string" value="separator">
-      <property name="style" type="uint" value="0"/>
+    <property name="plugin-7" type="string" value="whiskermenu">
+      <property name="launcher-icon-size" type="int" value="3"/>
+      <property name="view-mode" type="int" value="0"/>
+      <property name="favorites-in-recent" type="bool" value="true"/>
+      <property name="position-search-alternate" type="bool" value="false"/>
+      <property name="position-categories-alternate" type="bool" value="true"/>
+      <property name="show-command-lockscreen" type="bool" value="false"/>
+      <property name="show-command-logoutuser" type="bool" value="true"/>
+      <property name="show-command-restart" type="bool" value="true"/>
+      <property name="show-command-shutdown" type="bool" value="true"/>
+      <property name="show-command-logout" type="bool" value="false"/>
+      <property name="show-command-profile" type="bool" value="false"/>
+      <property name="favorites" type="array">
+        <value type="string" value="xfce4-file-manager.desktop"/>
+        <value type="string" value="firefox-esr.desktop"/>
+        <value type="string" value="xfce4-terminal-emulator.desktop"/>
+        <value type="string" value="org.remmina.Remmina.desktop"/>
+        <value type="string" value="gparted.desktop"/>
+        <value type="string" value="gsmartcontrol.desktop"/>
+        <value type="string" value="xfce4-screenshooter.desktop"/>
+        <value type="string" value="xfce-display-settings.desktop"/>
+      </property>
+      <property name="recent" type="array">
+        <value type="string" value="xfce-display-settings.desktop"/>
+        <value type="string" value="xfce4-screenshooter.desktop"/>
+        <value type="string" value="xfce4-terminal-emulator.desktop"/>
+        <value type="string" value="org.remmina.Remmina.desktop"/>
+        <value type="string" value="xfce-settings-manager.desktop"/>
+        <value type="string" value="xfce4-file-manager.desktop"/>
+      </property>
+      <property name="position-profile-alternate" type="bool" value="true"/>
+      <property name="position-commands-alternate" type="bool" value="false"/>
+      <property name="launcher-show-tooltip" type="bool" value="false"/>
     </property>
-    <property name="plugin-7" type="string" value="whiskermenu"/>
     <property name="plugin-9" type="string" value="showdesktop"/>
     <property name="plugin-14" type="string" value="systemload">
       <property name="cpu" type="empty">
@@ -115,5 +156,11 @@
       </property>
     </property>
     <property name="plugin-15" type="string" value="power-manager-plugin"/>
+    <property name="plugin-23" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-24" type="string" value="separator">
+      <property name="style" type="uint" value="3"/>
+    </property>
   </property>
 </channel>
