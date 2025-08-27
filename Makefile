@@ -2,9 +2,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 16 June 2023
-# Last Modified: Wednesday 27 August 2025, 09:59
-# $Id: Makefile,v 1.42 2025/08/27 09:59:22 czo Git $
-# Edit Time: 0:42:55
+# Last Modified: Wednesday 27 August 2025, 14:53
+# $Id: Makefile,v 1.42 2025/08/27 14:53:15 czo Git $
+# Edit Time: 0:43:12
 # Description:
 #
 # 	     Makefile for Docker to create a
@@ -20,7 +20,6 @@
 
 docker:
 	./docker/make-docker
-	@echo "<- all done!"
 
 debug:
 	./docker/make-docker debug
@@ -30,7 +29,6 @@ iso:
 
 clean:
 	sudo rm -fr build-czo-rescue
-	@echo "<- clean done!"
 
 realclean: clean
 

@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 27 August 2025, 13:41
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/08/27 13:41:38 czo Git $
-# Edit Time: 158:41:41
+# Last Modified: Wednesday 27 August 2025, 14:46
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/08/27 14:46:57 czo Git $
+# Edit Time: 158:47:05
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -169,14 +169,8 @@ HEREDOC
 apt-get $QUIET update
 apt-get $QUIET upgrade
 
-##==================================================##
-#EOF
-#exit
-
 ## now in package
 # echo "---> install kernel ($ARCH) ----------------------------------------------"
-#--no-install-recommends
-
 # if [ $ARCH = "amd64" ]; then
 #     apt-get $QUIET --no-install-recommends install linux-image-amd64 linux-headers-amd64
 # else
@@ -186,8 +180,6 @@ apt-get $QUIET upgrade
 echo "---> install packages ----------------------------------------------"
 grep -v '^\s*#' /tmp/packages | xargs apt-get $QUIET install
 rm -f /tmp/packages
-
-echo 'bonding' >> /etc/modules
 
 RELEASE=$(dpkg-query -W -f='${binary:Package}\n' linux-image-* | head -n 1 | sed 's/linux-image-//')
 echo $RELEASE > /tmp/release
@@ -246,6 +238,8 @@ systemctl restart autofs
 # disable ipmi and nbd-server
 systemctl disable openipmi.service
 systemctl disable nbd-server.service
+
+echo 'bonding' >> /etc/modules
 
 # my dot config
 cd /root

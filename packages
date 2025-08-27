@@ -2,7 +2,7 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Wednesday 27 August 2025, 13:26
+# Last Modified: Wednesday 27 August 2025, 14:16
 # Description:
 #
 #   Czo-Rescue-Debian is installed with 'debootstrap' then
@@ -121,6 +121,7 @@ fsarchiver
 gddrescue
 gdisk
 gettext-base
+ghostscript
 git
 gnutls-bin
 gocryptfs
@@ -322,17 +323,17 @@ nullmailer
 live-boot localepurge
 
 ## Do not install
-fonts-droid-fallback-
 fonts-font-awesome-
 fonts-lato-
-fonts-noto-mono-
-fonts-urw-base35-
-lightdm-
+# fonts-droid-fallback-
+# fonts-noto-mono-
+# fonts-urw-base35-
 # ghostscript-
 libpocketsphinx3-
 live-boot-doc-
 pocketsphinx-en-us-
 yelp-
+lightdm-
 
 ## X11/Wayland server
 xinit
@@ -355,7 +356,7 @@ fonts-dejavu
 fonts-noto-color-emoji
 fonts-wqy-microhei
 galculator
-geany
+# geany
 ghex
 gnome-themes-extra
 gparted
