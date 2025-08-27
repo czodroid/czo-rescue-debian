@@ -4,36 +4,26 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 27 August 2025, 12:23
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/08/27 12:23:57 czo Git $
-# Edit Time: 158:34:11
+# Last Modified: Wednesday 27 August 2025, 13:41
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/08/27 13:41:38 czo Git $
+# Edit Time: 158:41:41
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
+#       designed for administrating and repairing computer systems and rescuing data.
 #
 #       To run on your host, install:
 #           apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin isolinux mtools dosfstools bash coreutils debootstrap squashfs-tools libarchive-tools xorriso isomd5sum xz-utils make
 #
-#        Debug in chroot:
-#          export LIVE_BOOT=./build-czo-rescue
-#          cp -f ~/.bashrc $LIVE_BOOT/chroot/root
-#          rsync_full $LIVE_BOOT/ $LIVE_BOOT/../savebuild
+#       Debug notes:
+#           export LIVE_BOOT=./build-czo-rescue
+#           cp -f ~/.bashrc $LIVE_BOOT/chroot/root
+#           rsync_full $LIVE_BOOT/ $LIVE_BOOT/../savebuild
+#           export LIVE_BOOT=/workspace/build-czo-rescue ; for p in proc sys dev dev/pts run; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done ; chroot $LIVE_BOOT/chroot /bin/bash
+#           umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}
+#           rsync_full $LIVE_BOOT/../savebuild/ $LIVE_BOOT
+#           rm $LIVE_BOOT/build.make_0{2,3,4,5,6}*
 #
-# export LIVE_BOOT=/workspace/build-czo-rescue ; for p in proc sys dev dev/pts run; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done ; chroot $LIVE_BOOT/chroot /bin/bash
-
-# find /usr/lib/modules/6.12.41+deb13-amd64 -type f -name "*.ko.xz" -exec xz -d {} \;
-# depmod --all --basedir=/usr${work_dir}/${arch}/airootfs/usr ${kernelver}
-# depmod --all 6.12.41+deb13-amd64
-
-#find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
-#find ${work_dir}/${arch}/airootfs/usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
-#find ${work_dir}/${arch}/airootfs/usr/lib/modules/${kernelver} -type f -name "*.ko.zst" -exec zstd -q -d --rm {} \;
-
-#       umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}
-
-#          rsync_full $LIVE_BOOT/../savebuild/ $LIVE_BOOT
-#          rm $LIVE_BOOT/build.make_0{2,3,4,5,6}*
-##
 #       References:
 #           https://manpages.debian.org/testing/live-boot-doc/live-boot.7.en.html
 #           https://www.willhaley.com/blog/custom-debian-live-environment
@@ -202,11 +192,9 @@ echo 'bonding' >> /etc/modules
 RELEASE=$(dpkg-query -W -f='${binary:Package}\n' linux-image-* | head -n 1 | sed 's/linux-image-//')
 echo $RELEASE > /tmp/release
 
+##==================================================##
 # EOF
 # exit
-
-# find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
-# find /usr/lib/modules/$RELEASE -type f -name "*.ko" -exec strip --strip-unneeded {} \;
 
 echo "---> mkinitramfs ($RELEASE) ----------------------------------------------"
 perl -i -pe 's,^COMPRESS=.*,COMPRESS=xz,' /etc/initramfs-tools/initramfs.conf

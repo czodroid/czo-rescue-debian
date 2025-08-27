@@ -2,15 +2,11 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Wednesday 27 August 2025, 00:43
+# Last Modified: Wednesday 27 August 2025, 13:26
 # Description:
 #
-#   Czo-Rescue-Debian is installed with 'debootstrap' and then with a script in 'chroot'.
-#
-#   The kernel is installed with 'apt-get --no-install-recommends install':
-#     linux-image-amd64 linux-headers-amd64 intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
-#
-#   This leaves all the others, which also installs the recommendations:
+#   Czo-Rescue-Debian is installed with 'debootstrap' then
+#   with this file in a 'chroot' with apt-get install
 #
 # Copyright: (C) 2022-2025 Olivier Sirol <czo@free.fr>
 
@@ -70,7 +66,7 @@ autofs
 avahi-utils
 bash
 bash-completion
-#13 batcat
+bat
 bc
 bind9
 bind9-dnsutils
@@ -148,7 +144,7 @@ iftop
 ifupdown
 info
 init
-# inxi # 2.2 MB
+inxi
 ioping
 iotop
 iperf
@@ -177,7 +173,6 @@ libcap-ng-utils
 libguestfs-tools
 libimobiledevice-utils
 liblockfile-bin
-#13 libncurses5
 libnet-xmpp-perl
 libnfs-utils
 libnl-utils
@@ -205,7 +200,6 @@ manpages
 mc
 media-types
 memtester
-#13 mime-support
 minicom
 plocate
 moreutils
@@ -259,7 +253,6 @@ rdiff-backup
 rdiff-backup-fs
 readline-common
 recode
-#13 reiser4progs
 reiserfsprogs
 rename
 reportbug
@@ -335,7 +328,7 @@ fonts-lato-
 fonts-noto-mono-
 fonts-urw-base35-
 lightdm-
-ghostscript-
+# ghostscript-
 libpocketsphinx3-
 live-boot-doc-
 pocketsphinx-en-us-
@@ -343,7 +336,6 @@ yelp-
 
 ## X11/Wayland server
 xinit
-# xserver-xorg-input-synaptics # cant use: bug ???
 xfce4
 xfce4-power-manager-plugins
 xfce4-screenshooter
@@ -363,7 +355,7 @@ fonts-dejavu
 fonts-noto-color-emoji
 fonts-wqy-microhei
 galculator
-# geany
+geany
 ghex
 gnome-themes-extra
 gparted

@@ -3,8 +3,8 @@
 // Author: Olivier Sirol <czo@free.fr>
 // License: GPL-2.0 (http://www.gnu.org/copyleft)
 // File Created: 30 December 2022
-// Last Modified: Tuesday 26 August 2025, 18:50
-// Edit Time: 1:13:22
+// Last Modified: Wednesday 27 August 2025, 13:37
+// Edit Time: 1:14:22
 // Description:
 //
 //          Readme for Czo Rescue Debian
@@ -14,7 +14,7 @@
 
 # Czo Rescue Debian
 
-A live [Linux Debian Rescue](https://gitlab.com/czo/czo-rescue-debian), which started from my own Linux Arch [SystemRescue fork](https://gitlab.com/czo/czo-system-rescue). It is a Debian-based Linux distribution designed for administrating and repairing computer systems and rescuing data.
+A live [Linux Debian Rescue](https://gitlab.com/czo/czo-rescue-debian), which started from my own [Linux Arch SystemRescue](https://gitlab.com/czo/czo-system-rescue) fork. It is a Debian-based Linux distribution designed for administrating and repairing computer systems and rescuing data.
 
 It's has zfs binaries + 3ware raid + my configuration files (.bashrc/.vimrc/.tmux.conf).
 
