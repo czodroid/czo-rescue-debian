@@ -17,7 +17,6 @@
         <value type="int" value="1"/>
         <value type="int" value="20"/>
         <value type="int" value="9"/>
-        <value type="int" value="24"/>
         <value type="int" value="2"/>
         <value type="int" value="3"/>
         <value type="int" value="17"/>
@@ -42,7 +41,7 @@
       <property name="show-tooltips" type="bool" value="true"/>
       <property name="switch-workspace-on-unminimize" type="bool" value="true"/>
       <property name="show-wireframes" type="bool" value="false"/>
-      <property name="show-handle" type="bool" value="false"/>
+      <property name="show-handle" type="bool" value="true"/>
       <property name="show-only-minimized" type="bool" value="false"/>
       <property name="include-all-monitors" type="bool" value="true"/>
       <property name="sort-order" type="uint" value="4"/>
@@ -100,8 +99,6 @@
         <value type="string" value="xfce-display-settings.desktop"/>
       </property>
       <property name="recent" type="array">
-        <value type="string" value="xfce-display-settings.desktop"/>
-        <value type="string" value="xfce4-screenshooter.desktop"/>
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
         <value type="string" value="org.remmina.Remmina.desktop"/>
         <value type="string" value="xfce-settings-manager.desktop"/>
@@ -110,6 +107,7 @@
       <property name="position-profile-alternate" type="bool" value="true"/>
       <property name="position-commands-alternate" type="bool" value="false"/>
       <property name="launcher-show-tooltip" type="bool" value="false"/>
+      <property name="position-categories-horizontal" type="bool" value="false"/>
     </property>
     <property name="plugin-9" type="string" value="showdesktop"/>
     <property name="plugin-14" type="string" value="systemload">
@@ -158,9 +156,6 @@
     <property name="plugin-15" type="string" value="power-manager-plugin"/>
     <property name="plugin-23" type="string" value="separator">
       <property name="style" type="uint" value="0"/>
-    </property>
-    <property name="plugin-24" type="string" value="separator">
-      <property name="style" type="uint" value="3"/>
     </property>
   </property>
 </channel>
