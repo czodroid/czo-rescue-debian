@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 27 August 2025, 12:05
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/08/27 12:05:49 czo Git $
-# Edit Time: 158:19:04
+# Last Modified: Wednesday 27 August 2025, 12:23
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/08/27 12:23:57 czo Git $
+# Edit Time: 158:34:11
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -169,7 +169,7 @@ echo "czo-rescue-debian" > /etc/hostname
 echo "czo-rescue-debian" > /etc/mailname
 echo "LANG=en_US.UTF-8" > /etc/default/locale
 
-echo "--> apt update, $RESCUE_RELEASE"
+echo "---> apt update ($RESCUE_RELEASE) ----------------------------------------------"
 cat << HEREDOC > /etc/apt/sources.list
 deb http://deb.debian.org/debian ${RESCUE_RELEASE} main contrib non-free non-free-firmware
 deb http://security.debian.org/debian-security ${RESCUE_RELEASE}-security main contrib non-free non-free-firmware
@@ -180,8 +180,11 @@ apt-get $QUIET update
 apt-get $QUIET upgrade
 
 ##==================================================##
+#EOF
+#exit
 
-# echo "--> install kernel ($ARCH)"
+## now in package
+# echo "---> install kernel ($ARCH) ----------------------------------------------"
 #--no-install-recommends
 
 # if [ $ARCH = "amd64" ]; then
@@ -190,10 +193,7 @@ apt-get $QUIET upgrade
 #     apt-get $QUIET --no-install-recommends install linux-image-686 linux-headers-686 linux-image-686-pae linux-headers-686-pae
 # fi
 
-#EOF
-#exit
-
-echo "--> install packages"
+echo "---> install packages ----------------------------------------------"
 grep -v '^\s*#' /tmp/packages | xargs apt-get $QUIET install
 rm -f /tmp/packages
 
@@ -208,14 +208,14 @@ echo $RELEASE > /tmp/release
 # find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
 # find /usr/lib/modules/$RELEASE -type f -name "*.ko" -exec strip --strip-unneeded {} \;
 
-echo "--> mkinitramfs ($RELEASE)"
+echo "---> mkinitramfs ($RELEASE) ----------------------------------------------"
 perl -i -pe 's,^COMPRESS=.*,COMPRESS=xz,' /etc/initramfs-tools/initramfs.conf
 perl -i -pe 's,^#?\s*COMPRESSLEVEL=.*,COMPRESSLEVEL=6,' /etc/initramfs-tools/initramfs.conf
 update-initramfs -c -k $RELEASE
 
 ##==================================================##
 
-echo "--> configuration"
+echo "---> configuration ----------------------------------------------"
 
 # dpkg-reconfigure locales
 perl -i -pe 's,# en_US.UTF-8 UTF-8,en_US.UTF-8 UTF-8,' /etc/locale.gen
@@ -276,7 +276,7 @@ mkdir -p /mnt/sda2
 mkdir -p /mnt/sdb1
 mkdir -p /mnt/sdb2
 
-echo "--> cleanup"
+echo "---> cleanup ----------------------------------------------"
 
 apt-get $QUIET purge 'linux-headers-*'
 #apt-get $QUIET purge  build-essential gcc gcc-10  g++ g++-10 gcc-10-base gcc-9-base
@@ -358,7 +358,12 @@ https://gitlab.com/czo/czo-rescue-debian
 
 HEREDOC
 
-cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/chroot/root/README.md
+cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/chroot/root
+cp -f $SCRIPT_PATH/LICENSE $LIVE_BOOT/chroot/root
+cp -f $SCRIPT_PATH/LICENSE.edk2-shell $LIVE_BOOT/chroot/root
+cp -f $SCRIPT_PATH/LICENSE.linux $LIVE_BOOT/chroot/root
+cp -f $SCRIPT_PATH/LICENSE.memtest $LIVE_BOOT/chroot/root
+cp -f $SCRIPT_PATH/LICENSE.zfs $LIVE_BOOT/chroot/root
 
 rm -f $LIVE_BOOT/chroot/vmlinuz.old
 rm -f $LIVE_BOOT/chroot/initrd.img.old
@@ -644,6 +649,11 @@ echo "--> link and copy"
 
 ln -fs grubcrd.cfg $LIVE_BOOT/staging/boot/grub/grub.cfg
 cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/staging
+cp -f $SCRIPT_PATH/LICENSE $LIVE_BOOT/staging
+cp -f $SCRIPT_PATH/LICENSE.edk2-shell $LIVE_BOOT/staging
+cp -f $SCRIPT_PATH/LICENSE.linux $LIVE_BOOT/staging
+cp -f $SCRIPT_PATH/LICENSE.memtest $LIVE_BOOT/staging
+cp -f $SCRIPT_PATH/LICENSE.zfs $LIVE_BOOT/staging
 cp -f $SCRIPT_PATH/mkiso $LIVE_BOOT/staging
 cp -f $LIVE_BOOT/chroot/root/czo-rescue-debian $LIVE_BOOT/staging
 cp -f $LIVE_BOOT/chroot/root/build-czo-rescue.packages $LIVE_BOOT/staging
