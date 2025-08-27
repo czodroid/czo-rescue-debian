@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Tuesday 26 August 2025, 18:24
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/08/26 18:24:57 czo Git $
-# Edit Time: 155:15:46
+# Last Modified: Wednesday 27 August 2025, 12:05
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/08/27 12:05:49 czo Git $
+# Edit Time: 158:19:04
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -14,16 +14,26 @@
 #       To run on your host, install:
 #           apt install syslinux-efi grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin isolinux mtools dosfstools bash coreutils debootstrap squashfs-tools libarchive-tools xorriso isomd5sum xz-utils make
 #
-#       Debug in chroot:
-#           export LIVE_BOOT=$LIVE_BOOT
-#           cp -f ~/.bashrc $LIVE_BOOT/chroot/root
-#           rm $LIVE_BOOT/build.make_0{2,3,4,5,6}*
-#           chroot $LIVE_BOOT/chroot /bin/bash
-#           exit
+#        Debug in chroot:
+#          export LIVE_BOOT=./build-czo-rescue
+#          cp -f ~/.bashrc $LIVE_BOOT/chroot/root
+#          rsync_full $LIVE_BOOT/ $LIVE_BOOT/../savebuild
 #
-#       Notes:
-#           umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc} ; sleep 1 && rsync_full $LIVE_BOOT/../savebuild/ $LIVE_BOOT && for p in proc sys dev dev/pts run; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done && chroot $LIVE_BOOT/chroot /bin/bash ; umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}
-#
+# export LIVE_BOOT=/workspace/build-czo-rescue ; for p in proc sys dev dev/pts run; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done ; chroot $LIVE_BOOT/chroot /bin/bash
+
+# find /usr/lib/modules/6.12.41+deb13-amd64 -type f -name "*.ko.xz" -exec xz -d {} \;
+# depmod --all --basedir=/usr${work_dir}/${arch}/airootfs/usr ${kernelver}
+# depmod --all 6.12.41+deb13-amd64
+
+#find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
+#find ${work_dir}/${arch}/airootfs/usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
+#find ${work_dir}/${arch}/airootfs/usr/lib/modules/${kernelver} -type f -name "*.ko.zst" -exec zstd -q -d --rm {} \;
+
+#       umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}
+
+#          rsync_full $LIVE_BOOT/../savebuild/ $LIVE_BOOT
+#          rm $LIVE_BOOT/build.make_0{2,3,4,5,6}*
+##
 #       References:
 #           https://manpages.debian.org/testing/live-boot-doc/live-boot.7.en.html
 #           https://www.willhaley.com/blog/custom-debian-live-environment
@@ -99,7 +109,7 @@ run_once() {
 
 make_00_prepare() {
 
-echo ' -> rm old build $LIVE_BOOT'
+echo '--> rm old build $LIVE_BOOT'
 rm -fr $LIVE_BOOT
 mkdir -p $LIVE_BOOT
 
@@ -113,7 +123,7 @@ make_01_debootstrap() {
 echo "# This file is the log of the script make-czo-rescue-debian-iso"
 echo "# executed on $(date)"
 echo
-echo "==> export LIVE_BOOT=$LIVE_BOOT"
+echo "--> export LIVE_BOOT=$LIVE_BOOT"
 echo
 
 # --arch=i386
@@ -135,20 +145,19 @@ fi
 
 make_02_chroot() {
 
-echo " -> Copy packages"
+echo "--> copy packages"
 cp $SCRIPT_PATH/packages $LIVE_BOOT/chroot/tmp
-
-echo " -> Chroot"
 
 for p in proc sys dev dev/pts run ; do mount --make-rslave --rbind /$p $LIVE_BOOT/chroot/$p ; done
 
+echo "--> chroot"
 chroot $LIVE_BOOT/chroot /bin/bash <<'EOF'
 
 set -e -u
 
 export QUIET="-q -y"
 export DEBIAN_FRONTEND=noninteractive
-#export DEBIAN_PRIORITY=critical
+# export DEBIAN_PRIORITY=critical
 
 unset LANGUAGE LC_ALL LC_MONETARY LC_PAPER LC_MEASUREMENT LC_TIME LC_NUMERIC LANG
 # export LANG=en_US.UTF-8
@@ -172,21 +181,17 @@ apt-get $QUIET upgrade
 
 ##==================================================##
 
-echo "--> install kernel ($ARCH)"
+# echo "--> install kernel ($ARCH)"
 #--no-install-recommends
 
-if [ $ARCH = "amd64" ]; then
-    apt-get $QUIET --no-install-recommends install linux-image-amd64 linux-headers-amd64 intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211 zstd
-else
-    apt-get $QUIET --no-install-recommends install linux-image-686 linux-headers-686 linux-image-686-pae linux-headers-686-pae intel-microcode amd64-microcode firmware-linux-free firmware-linux-nonfree firmware-misc-nonfree firmware-ath9k-htc firmware-atheros firmware-b43-installer firmware-b43legacy-installer firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-cavium firmware-iwlwifi firmware-libertas firmware-realtek firmware-zd1211
-fi
+# if [ $ARCH = "amd64" ]; then
+#     apt-get $QUIET --no-install-recommends install linux-image-amd64 linux-headers-amd64
+# else
+#     apt-get $QUIET --no-install-recommends install linux-image-686 linux-headers-686 linux-image-686-pae linux-headers-686-pae
+# fi
 
 #EOF
 #exit
-
-RELEASE=$(dpkg-query -W -f='${binary:Package}\n' linux-image-* | head -n 1 | sed 's/linux-image-//')
-echo $RELEASE > /tmp/release
-echo "==> CHROOT: $RELEASE ($ARCH) ========================="
 
 echo "--> install packages"
 grep -v '^\s*#' /tmp/packages | xargs apt-get $QUIET install
@@ -194,14 +199,16 @@ rm -f /tmp/packages
 
 echo 'bonding' >> /etc/modules
 
-#find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
-#find /usr/lib/modules/$RELEASE -type f -name "*.ko" -exec strip --strip-unneeded {} \;
+RELEASE=$(dpkg-query -W -f='${binary:Package}\n' linux-image-* | head -n 1 | sed 's/linux-image-//')
+echo $RELEASE > /tmp/release
 
 # EOF
 # exit
 
-echo "==> mkinitramfs =================="
-#mkinitramfs -c xz -l 9 -o initrd.img--$RELEASE
+# find /usr/lib -type f -name "lib*.so.*" -exec strip --strip-all {} \;
+# find /usr/lib/modules/$RELEASE -type f -name "*.ko" -exec strip --strip-unneeded {} \;
+
+echo "--> mkinitramfs ($RELEASE)"
 perl -i -pe 's,^COMPRESS=.*,COMPRESS=xz,' /etc/initramfs-tools/initramfs.conf
 perl -i -pe 's,^#?\s*COMPRESSLEVEL=.*,COMPRESSLEVEL=6,' /etc/initramfs-tools/initramfs.conf
 update-initramfs -c -k $RELEASE
@@ -248,8 +255,9 @@ perl -i -pe 's/#(HandleLidSwitch=)suspend/$1ignore/' /etc/systemd/logind.conf
 perl -i -pe 's,^#/net\s*-hosts.*,/net    -hosts,' /etc/auto.master
 systemctl restart autofs
 
-# ipmi
+# disable ipmi and nbd-server
 systemctl disable openipmi.service
+systemctl disable nbd-server.service
 
 # my dot config
 cd /root
@@ -386,7 +394,7 @@ make_05_bootloader() {
 mkdir -p $LIVE_BOOT/staging/{EFI/boot,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live}
 
 ##================================================================
-echo " -> isolinux.cfg"
+echo "--> isolinux.cfg"
 
 cat <<HEREDOC > $LIVE_BOOT/staging/isolinux/isolinux.cfg
 # Filename: isolinux.cfg
@@ -469,7 +477,7 @@ label Power Off
 HEREDOC
 
 ##================================================================
-echo " -> grubcrd.cfg"
+echo "--> grubcrd.cfg"
 
 cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/grubinit.cfg
 search --file --no-floppy --set=root /boot/grub/grubcrd.cfg
@@ -625,14 +633,14 @@ menuentry "Power Off" {
 HEREDOC
 
 ##================================================================
-echo " -> loopback.cfg"
+echo "--> loopback.cfg"
 
 cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/loopback.cfg
 source /boot/grub/grubcrd.cfg
 HEREDOC
 
 ##================================================================
-echo " -> link and copy"
+echo "--> link and copy"
 
 ln -fs grubcrd.cfg $LIVE_BOOT/staging/boot/grub/grub.cfg
 cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/staging
@@ -643,7 +651,7 @@ cp -f $LIVE_BOOT/build-czo-rescue.log $LIVE_BOOT/staging
 
 
 ##================================================================
-echo " -> prepare boot loader files"
+echo "--> prepare boot loader files"
 
 if [ $ARCH = "amd64" ]; then
     cp -f $LIVE_BOOT/chroot/boot/vmlinuz-*-amd64 $LIVE_BOOT/staging/live/vmlinuz
