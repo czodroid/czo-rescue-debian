@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 28 September 2025, 17:17
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/09/28 17:17:25 czo Git $
-# Edit Time: 159:49:06
+# Last Modified: Sunday 28 September 2025, 20:04
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/09/28 20:04:45 czo Git $
+# Edit Time: 159:58:04
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -409,44 +409,34 @@ menu color unsel       37;40
 menu color sel       7;37;40
 menu color scrollbar   37;40
 
-label Czo-Rescue-Debian $ISO_VERSION, zfs/toram/startx                       (root/toor)
+label Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/toram/startx
     menu default
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs dostartx
 
-label Czo-Rescue-Debian $ISO_VERSION, zfs/toram/console                      (root/toor)
+label Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/toram/console
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs
 
-label Czo-Rescue-Debian $ISO_VERSION, zfs/toram/console/serial               (root/toor)
+label Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/toram/console/serial
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live toram=filesystem.squashfs console=ttyS0,115200n8
 
-label Czo-Rescue-Debian $ISO_VERSION, zfs/startx                             (root/toor)
+label Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/startx
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live dostartx
 
-label Czo-Rescue-Debian $ISO_VERSION, zfs/console                            (root/toor)
+label Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/console
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live
 
-label Czo-Rescue-Debian $ISO_VERSION, zfs/console/serial                     (root/toor)
+label Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/console/serial
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live console=ttyS0,115200n8
 
-label Czo-Rescue-Debian $ISO_VERSION, failsafe                               (root/toor)
+label Czo-Rescue-Debian $ISO_VERSION [root/toor] failsafe
     kernel /live/vmlinuz
     append initrd=/live/initrd boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash
-
-# label TEST ISO Czo-Rescue-Debian $ISO_VERSION
-#     kernel /boot/memdisk iso
-#     append initrd=/boot/images/czo-rescue-debian-$ISO_VERSION.iso
-
-## bsdtar -xf ../czo-rescue-debian-$ISO_VERSION.iso on pxe server, then:
-# label TEST PXE Czo-Rescue-Debian $ISO_VERSION, zfs/startx
-#   kernel /boot/czo-rescue-debian/czo-rescue-debian-$ISO_VERSION/live/vmlinuz
-#   append initrd=/boot/czo-rescue-debian/czo-rescue-debian-$ISO_VERSION/live/initrd boot=live fetch=http://192.168.11.10/boot/czo-rescue-debian/czo-rescue-debian-$ISO_VERSION/live/filesystem.squashfs dostartx
-#   ipappend 3
 
 label Hardware Detection Tool
     com32  hdt.c32
@@ -498,53 +488,53 @@ terminal_input serial console
 insmod efi_gop
 insmod efi_uga
 
-menuentry "                     Czo Rescue Debian $ISO_VERSION ($ISO_DATE)" { czo }
+menuentry "            Czo Rescue Debian $ISO_VERSION ($ISO_DATE)" { czo }
 
 menuentry "" { czo }
 
-menuentry "Czo-Rescue-Debian $ISO_VERSION, zfs/toram/startx                       (root/toor)" {
+menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/toram/startx" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux  (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs dostartx
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo-Rescue-Debian $ISO_VERSION, zfs/toram/console                      (root/toor)" {
+menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/toram/console" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux  (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo-Rescue-Debian $ISO_VERSION, zfs/toram/console/serial               (root/toor)" {
+menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/toram/console/serial" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux  (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs console=ttyS0,115200n8
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo-Rescue-Debian $ISO_VERSION, zfs/startx                             (root/toor)" {
+menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/startx" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux  (\$root)/live/vmlinuz boot=live dostartx
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo-Rescue-Debian $ISO_VERSION, zfs/console                            (root/toor)" {
+menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/console" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux  (\$root)/live/vmlinuz boot=live
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo-Rescue-Debian $ISO_VERSION, zfs/console/serial                     (root/toor)" {
+menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/console/serial" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     search --no-floppy --set=root --label RESCUE
     linux  (\$root)/live/vmlinuz boot=live console=ttyS0,115200n8
     initrd (\$root)/live/initrd
 }
 
-menuentry "Czo-Rescue-Debian $ISO_VERSION, failsafe                               (root/toor)" {
+menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] failsafe" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     set GFXPAYLOAD=keep
     search --no-floppy --set=root --label RESCUE
@@ -552,46 +542,17 @@ menuentry "Czo-Rescue-Debian $ISO_VERSION, failsafe                             
     initrd (\$root)/live/initrd
 }
 
-menuentry "Grml ISO Czo-Rescue-Debian $ISO_VERSION, zfs/toram/startx              (RAM > 3GB)" {
+menuentry "Grml ISO Czo-Rescue-Debian $ISO_VERSION zfs/toram/startx RAM > 3GB" {
     echo "ISO Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     linux  /live/vmlinuz boot=live findiso=\${iso_path} toram=filesystem.squashfs dostartx
     initrd /live/initrd
 }
 
-menuentry "Grml ISO Czo-Rescue-Debian $ISO_VERSION, zfs/console                   (RAM > 1GB)" {
+menuentry "Grml ISO Czo-Rescue-Debian $ISO_VERSION zfs/console      RAM > 1GB" {
     echo "ISO Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     linux  /live/vmlinuz boot=live findiso=\${iso_path}
     initrd /live/initrd
 }
-
-# menuentry "ISO Czo-Rescue-Debian $ISO_VERSION" {
-#     echo "-> ISO Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
-#     set iso_path="/boot/grml/czo-rescue-debian-$ISO_VERSION.iso"
-#     search --no-floppy --set=root --file "\${iso_path}"
-#     # support booting recent GRUB versions on UEFI systems
-#     rmmod tpm
-#     loopback loop "\${iso_path}"
-#     linux (loop)/live/vmlinuz boot=live findiso="\${iso_path}" toram=filesystem.squashfs dostartx
-#     initrd (loop)/live/initrd
-# }
-
-# menuentry "ISO Czo-Rescue-Debian $ISO_VERSION loopback" {
-#     echo "-> ISO Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
-#     set iso_path="/boot/grml/czo-rescue-debian-$ISO_VERSION.iso"
-#     export iso_path
-#     search --no-floppy --set=root --file "\${iso_path}"
-#     # support booting recent GRUB versions on UEFI systems
-#     rmmod tpm
-#     loopback loop "\${iso_path}"
-#     set root=(loop)
-#     configfile /boot/grub/loopback.cfg
-# }
-
-# menuentry "PXE Czo-Rescue-Debian $ISO_VERSION, zfs/startx" {
-#     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
-#     linux /boot/czo-rescue-debian/czo-rescue-debian-$ISO_VERSION/live/vmlinuz boot=live fetch=http://192.168.11.10/boot/czo-rescue-debian/czo-rescue-debian-$ISO_VERSION/live/filesystem.squashfs dostartx
-#     initrd /boot/czo-rescue-debian/czo-rescue-debian-$ISO_VERSION/live/initrd
-# }
 
 menuentry "Run Memtest86+" {
     echo "Memtest86+ launch in progress, please stand by..."
