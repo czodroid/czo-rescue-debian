@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 28 September 2025, 23:23
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/09/28 23:23:36 czo Git $
-# Edit Time: 160:06:11
+# Last Modified: Sunday 28 September 2025, 23:34
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/09/28 23:34:13 czo Git $
+# Edit Time: 160:06:49
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -633,11 +633,11 @@ rm -fr $LIVE_BOOT/staging/boot/grub/x86_64-efi/monolithic
 
 cp -f $LIVE_BOOT/chroot/boot/shell.efi $LIVE_BOOT/staging/EFI
 
-rm -f $LIVE_BOOT/staging/EFI/BOOT/BOOTX64.EFI
+rm -f $LIVE_BOOT/staging/EFI/BOOT/BOOTx64.EFI
 grub-mkstandalone --compress xz -O x86_64-efi \
     --modules="part_gpt part_msdos fat iso9660" \
     --locales="" --themes="" --fonts="" \
-    --output="$LIVE_BOOT/staging/EFI/BOOT/BOOTX64.EFI" \
+    --output="$LIVE_BOOT/staging/EFI/BOOT/BOOTx64.EFI" \
     "boot/grub/grub.cfg=$LIVE_BOOT/staging/boot/grub/grubinit.cfg"
 
 # search iso9660 configfile normal memdisk tar ${PARTITIONLIST} fat
@@ -646,7 +646,7 @@ rm -f $LIVE_BOOT/staging/EFI/debianiso/efiboot.img
 mkfs.fat -C $LIVE_BOOT/staging/EFI/debianiso/efiboot.img 1440
 mmd -i $LIVE_BOOT/staging/EFI/debianiso/efiboot.img ::/EFI ::/EFI/BOOT
 mcopy -vi $LIVE_BOOT/staging/EFI/debianiso/efiboot.img \
-    $LIVE_BOOT/staging/EFI/BOOT/BOOTX64.EFI \
+    $LIVE_BOOT/staging/EFI/BOOT/BOOTx64.EFI \
     ::/EFI/BOOT/
 
 }
