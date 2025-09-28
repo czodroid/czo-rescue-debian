@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 28 September 2025, 20:04
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/09/28 20:04:45 czo Git $
-# Edit Time: 159:58:04
+# Last Modified: Sunday 28 September 2025, 23:05
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/09/28 23:05:02 czo Git $
+# Edit Time: 160:05:22
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -378,7 +378,7 @@ sha512sum filesystem.squashfs > filesystem.squashfs.sha512
 
 make_05_bootloader() {
 
-mkdir -p $LIVE_BOOT/staging/{EFI/boot,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live}
+mkdir -p $LIVE_BOOT/staging/{EFI/BOOT,EFI/debianiso,boot/grub/x86_64-efi,isolinux/hdt,live}
 
 ##================================================================
 echo "--> isolinux.cfg"
@@ -631,21 +631,21 @@ rm -fr $LIVE_BOOT/staging/boot/grub/x86_64-efi/monolithic
 
 cp -f $LIVE_BOOT/chroot/boot/shell.efi $LIVE_BOOT/staging/EFI
 
-rm -f $LIVE_BOOT/staging/EFI/boot/bootx64.efi
+rm -f $LIVE_BOOT/staging/EFI/BOOT/BOOTX64.EFI
 grub-mkstandalone --compress xz -O x86_64-efi \
     --modules="part_gpt part_msdos fat iso9660" \
     --locales="" --themes="" --fonts="" \
-    --output="$LIVE_BOOT/staging/EFI/boot/bootx64.efi" \
+    --output="$LIVE_BOOT/staging/EFI/BOOT/BOOTX64.EFI" \
     "boot/grub/grub.cfg=$LIVE_BOOT/staging/boot/grub/grubinit.cfg"
 
 # search iso9660 configfile normal memdisk tar ${PARTITIONLIST} fat
 
 rm -f $LIVE_BOOT/staging/EFI/debianiso/efiboot.img
 mkfs.fat -C $LIVE_BOOT/staging/EFI/debianiso/efiboot.img 1440
-mmd -i $LIVE_BOOT/staging/EFI/debianiso/efiboot.img ::/efi ::/efi/boot
+mmd -i $LIVE_BOOT/staging/EFI/debianiso/efiboot.img ::/EFI ::/EFI/BOOT
 mcopy -vi $LIVE_BOOT/staging/EFI/debianiso/efiboot.img \
-    $LIVE_BOOT/staging/EFI/boot/bootx64.efi \
-    ::/efi/boot/
+    $LIVE_BOOT/staging/EFI/BOOT/BOOTX64.EFI \
+    ::/EFI/BOOT/
 
 }
 
