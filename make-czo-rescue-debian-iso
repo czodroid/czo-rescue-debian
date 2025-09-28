@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 28 September 2025, 23:05
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/09/28 23:05:02 czo Git $
-# Edit Time: 160:05:22
+# Last Modified: Sunday 28 September 2025, 23:19
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/09/28 23:19:54 czo Git $
+# Edit Time: 160:06:04
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -408,6 +408,8 @@ menu color title     1;37;40
 menu color unsel       37;40
 menu color sel       7;37;40
 menu color scrollbar   37;40
+menu color disabled	 1;30;40
+menu color hotkey	 1;37;40
 
 label Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/toram/startx
     menu default
