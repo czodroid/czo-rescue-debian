@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 28 September 2025, 23:34
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/09/28 23:34:13 czo Git $
-# Edit Time: 160:06:49
+# Last Modified: Wednesday 24 December 2025, 16:44
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/12/24 16:44:25 czo Git $
+# Edit Time: 160:28:44
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -214,7 +214,7 @@ dpkg-reconfigure -f noninteractive tzdata
 perl -i -pe 's,^#?PermitRootLogin.*,PermitRootLogin yes,' /etc/ssh/sshd_config
 #arch linux
 perl -i -pe 's,^#?X11Forwarding.*,X11Forwarding yes,' /etc/ssh/sshd_config
-#systemctl restart sshd
+# systemctl restart sshd
 ln -fs /etc/systemd/system/ssh-keygen-host.service /etc/systemd/system/multi-user.target.wants/ssh-keygen-host.service
 
 # rescue-initialize
@@ -233,7 +233,7 @@ perl -i -pe 's/#(HandleLidSwitch=)suspend/$1ignore/' /etc/systemd/logind.conf
 
 # autofs
 perl -i -pe 's,^#/net\s*-hosts.*,/net    -hosts,' /etc/auto.master
-systemctl restart autofs
+# systemctl restart autofs
 
 # disable ipmi and nbd-server
 systemctl disable openipmi.service
@@ -250,6 +250,9 @@ rm -fr /root/.ssh_fast_*
 
 # passwd
 echo 'root:toor' | chpasswd
+
+# test
+# systemctl restart ldconfig
 
 # mnt
 mkdir -p /mnt/rootfs
@@ -489,6 +492,11 @@ terminal_input serial console
 
 insmod efi_gop
 insmod efi_uga
+
+set color_normal=light-gray/black
+set color_highlight=black/light-gray
+set menu_color_normal=light-gray/black
+set menu_color_highlight=black/light-gray
 
 menuentry "            Czo Rescue Debian $ISO_VERSION ($ISO_DATE)" { czo }
 
