@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Wednesday 24 December 2025, 16:44
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/12/24 16:44:25 czo Git $
-# Edit Time: 160:28:44
+# Last Modified: Monday 29 December 2025, 18:12
+# $Id: make-czo-rescue-debian-iso,v 1.42 2025/12/29 18:12:14 czo Git $
+# Edit Time: 160:29:26
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -251,7 +251,7 @@ rm -fr /root/.ssh_fast_*
 # passwd
 echo 'root:toor' | chpasswd
 
-# test
+## test
 # systemctl restart ldconfig
 
 # mnt

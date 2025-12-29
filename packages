@@ -2,7 +2,7 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Wednesday 27 August 2025, 14:16
+# Last Modified: Monday 29 December 2025, 18:11
 # Description:
 #
 #   Czo-Rescue-Debian is installed with 'debootstrap' then
@@ -364,6 +364,7 @@ grsync
 gsmartcontrol
 hardinfo
 # keepassxc # 67.6 MB
+libnotify-bin
 lshw-gtk
 # meld # 1.1 MB
 mousepad
