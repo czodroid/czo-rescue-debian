@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Monday 29 December 2025, 18:12
-# $Id: make-czo-rescue-debian-iso,v 1.42 2025/12/29 18:12:14 czo Git $
-# Edit Time: 160:29:26
+# Last Modified: Thursday 01 January 2026, 12:17
+# $Id: make-czo-rescue-debian-iso,v 1.42 2026/01/01 12:17:15 czo Git $
+# Edit Time: 160:52:42
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -29,7 +29,7 @@
 #           https://www.willhaley.com/blog/custom-debian-live-environment
 #           https://gitlab.com/systemrescue/systemrescue-sources
 #
-# Copyright: (C) 2022-2025 Olivier Sirol <czo@free.fr>
+# Copyright: (C) 2022-2026 Olivier Sirol <czo@free.fr>
 
 set -e -u
 
@@ -459,13 +459,23 @@ label Power Off
 HEREDOC
 
 ##================================================================
-echo "--> grubcrd.cfg"
+echo "--> grubinit.cfg"
 
 cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/grubinit.cfg
 search --file --no-floppy --set=root /boot/grub/grubcrd.cfg
 set prefix=/boot/grub
 source (\$root)/boot/grub/grubcrd.cfg
 HEREDOC
+
+##================================================================
+echo "--> loopback.cfg"
+
+cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/loopback.cfg
+source /boot/grub/grubcrd.cfg
+HEREDOC
+
+##================================================================
+echo "--> grubcrd.cfg"
 
 cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/grubcrd.cfg
 # Filename: grub.cfg
@@ -588,13 +598,6 @@ menuentry "Power Off" {
     halt
 }
 
-HEREDOC
-
-##================================================================
-echo "--> loopback.cfg"
-
-cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/loopback.cfg
-source /boot/grub/grubcrd.cfg
 HEREDOC
 
 ##================================================================
