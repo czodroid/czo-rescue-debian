@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Thursday 01 January 2026, 12:32
-# $Id: make-czo-rescue-debian-iso,v 1.42 2026/01/01 12:32:06 czo Git $
-# Edit Time: 161:05:32
+# Last Modified: Thursday 01 January 2026, 13:04
+# $Id: make-czo-rescue-debian-iso,v 1.42 2026/01/01 13:04:40 czo Git $
+# Edit Time: 161:31:58
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -23,6 +23,7 @@
 #           umount -lf $LIVE_BOOT/chroot/{run,dev/pts,dev,sys,proc}
 #           rsync_full $LIVE_BOOT/../savebuild/ $LIVE_BOOT
 #           rm $LIVE_BOOT/build.make_0{2,3,4,5,6}*
+#           rm build-czo-rescue/build.make_0{5,6}*
 #
 #       References:
 #           https://manpages.debian.org/testing/live-boot-doc/live-boot.7.en.html
@@ -464,13 +465,13 @@ echo "--> grubinit.cfg"
 cat <<'HEREDOC' > $LIVE_BOOT/staging/boot/grub/grubinit.cfg
 search --file --no-floppy --set=root /boot/grub/grubcrd.cfg
 set prefix=/boot/grub
-source ($root)/boot/grub/grubcrd.cfg
+source /boot/grub/grubcrd.cfg
 HEREDOC
 
 ##================================================================
 echo "--> loopback.cfg"
 
-cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/loopback.cfg
+cat <<'HEREDOC' > $LIVE_BOOT/staging/boot/grub/loopback.cfg
 source /boot/grub/grubcrd.cfg
 HEREDOC
 
@@ -508,58 +509,53 @@ set color_highlight=black/light-gray
 set menu_color_normal=light-gray/black
 set menu_color_highlight=black/light-gray
 
+search --no-floppy --set=root --label RESCUE
+
 menuentry "            Czo Rescue Debian $ISO_VERSION ($ISO_DATE)" { czo }
 
 menuentry "" { czo }
 
 menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/toram/startx" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
-    search --no-floppy --set=root --label RESCUE
-    linux  (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs dostartx
-    initrd (\$root)/live/initrd
+    linux  /live/vmlinuz boot=live toram=filesystem.squashfs dostartx
+    initrd /live/initrd
 }
 
 menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/toram/console" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
-    search --no-floppy --set=root --label RESCUE
-    linux  (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs
-    initrd (\$root)/live/initrd
+    linux  /live/vmlinuz boot=live toram=filesystem.squashfs
+    initrd /live/initrd
 }
 
 menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/toram/console/serial" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
-    search --no-floppy --set=root --label RESCUE
-    linux  (\$root)/live/vmlinuz boot=live toram=filesystem.squashfs console=ttyS0,115200n8
-    initrd (\$root)/live/initrd
+    linux  /live/vmlinuz boot=live toram=filesystem.squashfs console=ttyS0,115200n8
+    initrd /live/initrd
 }
 
 menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/startx" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
-    search --no-floppy --set=root --label RESCUE
-    linux  (\$root)/live/vmlinuz boot=live dostartx
-    initrd (\$root)/live/initrd
+    linux  /live/vmlinuz boot=live dostartx
+    initrd /live/initrd
 }
 
 menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/console" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
-    search --no-floppy --set=root --label RESCUE
-    linux  (\$root)/live/vmlinuz boot=live
-    initrd (\$root)/live/initrd
+    linux  /live/vmlinuz boot=live
+    initrd /live/initrd
 }
 
 menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] zfs/console/serial" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
-    search --no-floppy --set=root --label RESCUE
-    linux  (\$root)/live/vmlinuz boot=live console=ttyS0,115200n8
-    initrd (\$root)/live/initrd
+    linux  /live/vmlinuz boot=live console=ttyS0,115200n8
+    initrd /live/initrd
 }
 
 menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] failsafe" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     set GFXPAYLOAD=keep
-    search --no-floppy --set=root --label RESCUE
-    linux  (\$root)/live/vmlinuz boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash
-    initrd (\$root)/live/initrd
+    linux  /live/vmlinuz boot=live memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash
+    initrd /live/initrd
 }
 
 menuentry "Grml ISO Czo-Rescue-Debian $ISO_VERSION zfs/toram/startx RAM > 3GB" {
@@ -576,14 +572,12 @@ menuentry "Grml ISO Czo-Rescue-Debian $ISO_VERSION zfs/console      RAM > 1GB" {
 
 menuentry "Run Memtest86+" {
     echo "Memtest86+ launch in progress, please stand by..."
-    search --no-floppy --set=root --label RESCUE
-    linux (\$root)/EFI/memtest.efi keyboard=both
+    linux /EFI/memtest.efi keyboard=both
 }
 
 menuentry "Start EFI Shell" {
     terminal_output console
-    search --no-floppy --set=root --label RESCUE
-    chainloader (\$root)/EFI/shell.efi
+    chainloader /EFI/shell.efi
 }
 
 menuentry "EFI Firmware setup" {
