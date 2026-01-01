@@ -1,8 +1,8 @@
 
-##==== make_01_debootstrap (2025-12-30 02:55:53) =================================================##
+##==== make_01_debootstrap (2026-01-01 20:21:58) =================================================##
 
 # This file is the log of the script make-czo-rescue-debian-iso
-# executed on Tue Dec 30 02:55:53 UTC 2025
+# executed on Thu Jan  1 20:21:58 UTC 2026
 
 --> export LIVE_BOOT=/workspace/build-czo-rescue
 
@@ -667,25 +667,25 @@ I: Configuring ifupdown...
 I: Configuring libc-bin...
 I: Base system installed successfully.
 
-##==== make_02_chroot (2025-12-30 02:57:33) =================================================##
+##==== make_02_chroot (2026-01-01 20:24:15) =================================================##
 
 --> copy packages
 --> chroot
 ---> apt update (trixie) ----------------------------------------------
-Hit:1 http://deb.debian.org/debian trixie InRelease
-Get:2 http://security.debian.org/debian-security trixie-security InRelease [43.4 kB]
-Get:3 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
-Get:4 http://deb.debian.org/debian trixie/main Translation-en [6484 kB]
-Get:5 http://security.debian.org/debian-security trixie-security/main amd64 Packages [93.7 kB]
-Get:6 http://security.debian.org/debian-security trixie-security/main Translation-en [58.6 kB]
-Get:7 http://security.debian.org/debian-security trixie-security/non-free-firmware amd64 Packages [544 B]
-Get:8 http://security.debian.org/debian-security trixie-security/non-free-firmware Translation-en [352 B]
+Get:1 http://security.debian.org/debian-security trixie-security InRelease [43.4 kB]
+Get:2 http://security.debian.org/debian-security trixie-security/main amd64 Packages [93.7 kB]
+Get:3 http://security.debian.org/debian-security trixie-security/main Translation-en [58.6 kB]
+Get:4 http://security.debian.org/debian-security trixie-security/non-free-firmware amd64 Packages [544 B]
+Get:5 http://security.debian.org/debian-security trixie-security/non-free-firmware Translation-en [352 B]
+Hit:6 http://deb.debian.org/debian trixie InRelease
+Get:7 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+Get:8 http://deb.debian.org/debian trixie/main Translation-en [6484 kB]
 Get:9 http://deb.debian.org/debian trixie/contrib Translation-en [49.6 kB]
 Get:10 http://deb.debian.org/debian trixie/non-free Translation-en [67.1 kB]
 Get:11 http://deb.debian.org/debian trixie/non-free-firmware Translation-en [4704 B]
 Get:12 http://deb.debian.org/debian trixie-updates/main amd64 Packages [5412 B]
 Get:13 http://deb.debian.org/debian trixie-updates/main Translation-en [4096 B]
-Fetched 6859 kB in 1s (8260 kB/s)
+Fetched 6859 kB in 1s (6710 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -1387,14 +1387,14 @@ The following NEW packages will be installed:
 0 upgraded, 1591 newly installed, 0 to remove and 0 not upgraded.
 Need to get 1208 MB of archives.
 After this operation, 4339 MB of additional disk space will be used.
-Get:1 http://deb.debian.org/debian trixie/main amd64 libdbus-1-3 amd64 1.16.2-2 [178 kB]
-Get:2 http://security.debian.org/debian-security trixie-security/main amd64 libpng16-16t64 amd64 1.6.48-1+deb13u1 [283 kB]
+Get:1 http://security.debian.org/debian-security trixie-security/main amd64 libpng16-16t64 amd64 1.6.48-1+deb13u1 [283 kB]
+Get:2 http://deb.debian.org/debian trixie/main amd64 libdbus-1-3 amd64 1.16.2-2 [178 kB]
 Get:3 http://deb.debian.org/debian trixie/main amd64 dbus-bin amd64 1.16.2-2 [80.0 kB]
-Get:4 http://deb.debian.org/debian trixie/main amd64 dbus-session-bus-common all 1.16.2-2 [52.3 kB]
-Get:5 http://deb.debian.org/debian trixie/main amd64 libexpat1 amd64 2.7.1-2 [108 kB]
-Get:6 http://deb.debian.org/debian trixie/main amd64 dbus-daemon amd64 1.16.2-2 [159 kB]
-Get:7 http://deb.debian.org/debian trixie/main amd64 dbus-system-bus-common all 1.16.2-2 [53.5 kB]
-Get:8 http://security.debian.org/debian-security trixie-security/main amd64 firefox-esr amd64 140.6.0esr-1~deb13u1 [71.7 MB]
+Get:4 http://security.debian.org/debian-security trixie-security/main amd64 firefox-esr amd64 140.6.0esr-1~deb13u1 [71.7 MB]
+Get:5 http://deb.debian.org/debian trixie/main amd64 dbus-session-bus-common all 1.16.2-2 [52.3 kB]
+Get:6 http://deb.debian.org/debian trixie/main amd64 libexpat1 amd64 2.7.1-2 [108 kB]
+Get:7 http://deb.debian.org/debian trixie/main amd64 dbus-daemon amd64 1.16.2-2 [159 kB]
+Get:8 http://deb.debian.org/debian trixie/main amd64 dbus-system-bus-common all 1.16.2-2 [53.5 kB]
 Get:9 http://deb.debian.org/debian trixie/main amd64 dbus amd64 1.16.2-2 [71.6 kB]
 Get:10 http://deb.debian.org/debian trixie/main amd64 libatm1t64 amd64 1:2.5.1-7 [68.9 kB]
 Get:11 http://deb.debian.org/debian trixie/main amd64 libfl2 amd64 2.6.4-8.2+b4 [84.3 kB]
@@ -2979,7 +2979,7 @@ Get:1589 http://deb.debian.org/debian trixie/main amd64 zsh-common all 5.9-8 [41
 Get:1590 http://deb.debian.org/debian trixie/main amd64 zsh amd64 5.9-8+b14 [915 kB]
 Get:1591 http://deb.debian.org/debian trixie/main amd64 gnupg-utils amd64 2.4.7-21+b3 [194 kB]
 Preconfiguring packages ...
-Fetched 1208 MB in 52s (23.3 MB/s)
+Fetched 1208 MB in 1min 34s (12.9 MB/s)
 Selecting previously unselected package libdbus-1-3:amd64.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 7796 files and directories currently installed.)
 Preparing to unpack .../00-libdbus-1-3_1.16.2-2_amd64.deb ...
@@ -8631,9 +8631,9 @@ Setting up gpgsm (2.4.7-21+b3) ...
 Setting up partimage-server (0.6.9-11+b1) ...
 Creating certificates for partimage-server
 Can't load /etc/partimaged/partimaged.rand into RNG
-40D7354C5F7F0000:error:12000079:random number generator:RAND_load_file:Cannot open file:../crypto/rand/randfile.c:107:Filename=/etc/partimaged/partimaged.rand
-..+......+...+...+...+..+..........+..+......+.+.........+......+...+++++++++++++++++++++++++++++++++++++++++++++*.+....+......+......+............+......+..+..........+++++++++++++++++++++++++++++++++++++++++++++*...........+............+.+.....+.......+...+......+........+.......+.....+.+...+..+..........+.....+...............+....+......+............+...+....................+....+...+.....................+..............+.+..............+..........+...+...+..+...+.......+...+...........+...+...+......................+...+.....+...+.......+.........+...+........+.......+.....+...+.......+..+.+.........+......+...+.....+...............+..........+..+...+.......+..+...............+.+..............+.+............+..............+.+........+.+........+...+...+.....................+......+.......+....................+.......+......+........+......+...+.+..+....+.....+......+.......+..+....+...........+...+...+....+...+.....+......................+.....+...+......+.+..............+.........+......+......+.+............+......+++++
-...+.+..+.............+..+...+.......+......+..+...+....+.....+...+....+...........+...+.+...+...+...+..+....+...+.....+.+.....+.+...............+.....+.............+..+....+............+.....+....+.....................+........+.........+.......+......+........+......+...+...+....+...+......+..+...+......+.+.........+...........+..........+...+.....+....+..+...+.+.....+.......+.....+...+.+.....+...+.......+++++++++++++++++++++++++++++++++++++++++++++*.+........+.+..+.......+..+......+....+...........+..........+...+.........+..+...+...+...+.......+.....+.........+...+.+............+++++++++++++++++++++++++++++++++++++++++++++*.........+....+..............+......+.+.........+.........+..............+++++
+40074B42537F0000:error:12000079:random number generator:RAND_load_file:Cannot open file:../crypto/rand/randfile.c:107:Filename=/etc/partimaged/partimaged.rand
+.................+.+...+..+.+........+......................+...+..+.......+......+..+...+....+++++++++++++++++++++++++++++++++++++++++++++*........+...+.....+.+......+.....+.......+...+..+...+++++++++++++++++++++++++++++++++++++++++++++*.......+.....+....+.....+..........+.........+...........+...+......+................+.....+...+.............+...+.....+....+...+..+................+..+....+..............+....+..+..........+..............+....+...+....................+.............+.........+........+...+.....................+.........+.+.........+......+......+.....+.......+..+......+.......+.....+...+............+++++
+.......+.....+......+....+...........+....+.....+.+......+++++++++++++++++++++++++++++++++++++++++++++*......+...+..+....+......+.....+.......+...+........+....+...+.........+...........+...+.+++++++++++++++++++++++++++++++++++++++++++++*...+.......+.....+.............+.........+..+....+..+....+........+................+.....+.+...+...+..+..................+...+...............+.+......+...+..+..........+..+...............+..........+...+.....+...+.........+.+.....................+....................+....+..+...+......+..................+.+..............+............+.+..................+.........+.....+................+............+..+...+....+...+..+...+................+......+....................+..................+......+....+..+....+..+...+....+..+....+...............+.....+....+............+...+.....+.+.....+............+..................+.+....................+.........................+......+.........+...+...........+..........+.....+....+..+......+........................+....+......+...............+...+...........................+.........+.....+....+..+.+..+..........+...............+..+......+.............+.....+.........+......+.......+...+.....+......................+..+...+....+...+..+.........+.........+.......+........+.+.....+....+.....+......+.........+......+.......+.....+.......+...+.........+.....+...................+......+...+..+...+......+.......+..+.+............+..............+....+.....+....+...+...........................+...+..................+.....+...............+.+.....+................+..+......+.+...+..+......+.........+....+..............+.+..+.......+........+.......+......+.........+..+................+...+...........+.+.........+.......................+...............+......+.+...........+....+.........+......+.........+.....+............+..................+............+......................+...+..+.+......+.....+..........+.....+.+..+...+.......+.....+.............+...+............+.....+.........+...+...+....+........+...............+......+.+.....+.+.........+...........+..........+..............+.+...+....................+.......+..+.+.....+.+...+..+.........+.......+..+.............+..+............+......+...+.........+.+..+.......+............+......+........+.+.....+.....................+.......+...+..+...+..................+.......+..+.+...........+...+.+............+.........+...+..+...+.+.....+.........+......+.+.....+.+..+......+..........+...........+++++
 -----
 Created symlink '/etc/systemd/system/multi-user.target.wants/partimaged.service' → '/usr/lib/systemd/system/partimaged.service'.
 Setting up wireless-tools (30~pre9-18+b1) ...
@@ -8926,11 +8926,11 @@ update-alternatives: using /usr/bin/mcview to provide /usr/bin/view (view) in au
 Setting up openssh-server (1:10.0p1-7) ...
 Creating config file /etc/ssh/sshd_config with new version
 Creating SSH2 RSA key; this may take some time ...
-3072 SHA256:6iCKY1E0Z6scwt9GdpFyKzjgfwPjIQF7UQJCifj/vm4 root@czo-rescue-debian (RSA)
+3072 SHA256:U/m4eDIzFM7zRmDrSTcrnyDQ8RX+B5aTErsmwrc46go root@czo-rescue-debian (RSA)
 Creating SSH2 ECDSA key; this may take some time ...
-256 SHA256:epDBJk1QXr6diSLWyOCCUUy+xW6PxF95IlY55psL5Nw root@czo-rescue-debian (ECDSA)
+256 SHA256:BwWACvGnYTshPK2M1IpVfazLaiym/7gpJSaaciUalXU root@czo-rescue-debian (ECDSA)
 Creating SSH2 ED25519 key; this may take some time ...
-256 SHA256:JmoyxM43qF4F/E7rgr7vtoH1FOeVj4OwXSXxVMWQyPg root@czo-rescue-debian (ED25519)
+256 SHA256:5QdoTK0Ua0a/vL7/LSisd4ysVkobrgcpEwk5f5LYUbQ root@czo-rescue-debian (ED25519)
 Creating user 'sshd' (sshd user) with UID 989 and GID 65534.
 Running in chroot, ignoring request.
 Created symlink '/etc/systemd/system/sshd.service' → '/usr/lib/systemd/system/ssh.service'.
@@ -9118,8 +9118,8 @@ Sign command: /lib/modules/6.12.57+deb13-amd64/build/scripts/sign-file
 Signing key: /var/lib/dkms/mok.key
 Public certificate (MOK): /var/lib/dkms/mok.pub
 
-Running the pre_build script............... done.
-Building module(s)............... done.
+Running the pre_build script.............. done.
+Building module(s)............. done.
 Signing module /var/lib/dkms/zfs/2.3.2/build/module/zfs.ko
 Signing module /var/lib/dkms/zfs/2.3.2/build/module/spl.ko
 Running the post_build script... done.
@@ -9165,21 +9165,21 @@ No known supported Broadcom 802.11 chips found.
 No supported device found.
 But firmware is installed unconditionally
 Trying to install latest firmware 6.30.163.46 .
---2025-12-30 03:11:28--  https://github.com/minios-linux/b43-firmware/releases/download/b43-firmware/broadcom-wl-6.30.163.46.tar.bz2
-Resolving github.com (github.com)... 140.82.121.4
-Connecting to github.com (github.com)|140.82.121.4|:443... connected.
+--2026-01-01 20:38:33--  https://github.com/minios-linux/b43-firmware/releases/download/b43-firmware/broadcom-wl-6.30.163.46.tar.bz2
+Resolving github.com (github.com)... 140.82.121.3
+Connecting to github.com (github.com)|140.82.121.3|:443... connected.
 HTTP request sent, awaiting response... 302 Found
-Location: https://release-assets.githubusercontent.com/github-production-release-asset/842098966/8bf9e409-4da3-4685-b6d0-6af7a01f08da?sp=r&sv=2018-11-09&sr=b&spr=https&se=2025-12-30T03%3A53%3A25Z&rscd=attachment%3B+filename%3Dbroadcom-wl-6.30.163.46.tar.bz2&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2025-12-30T02%3A53%3A06Z&ske=2025-12-30T03%3A53%3A25Z&sks=b&skv=2018-11-09&sig=63Io4jLpzLWr95ndRVDUY8Eu5yVEuYfVVEMfISwHGM4%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc2NzA2NDQ3NywibmJmIjoxNzY3MDY0MTc3LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.j_2liQb7c0gsIoVEhKBZ_nXhcbbroMzH_R8tikT8Hl8&response-content-disposition=attachment%3B%20filename%3Dbroadcom-wl-6.30.163.46.tar.bz2&response-content-type=application%2Foctet-stream [following]
---2025-12-30 03:11:28--  https://release-assets.githubusercontent.com/github-production-release-asset/842098966/8bf9e409-4da3-4685-b6d0-6af7a01f08da?sp=r&sv=2018-11-09&sr=b&spr=https&se=2025-12-30T03%3A53%3A25Z&rscd=attachment%3B+filename%3Dbroadcom-wl-6.30.163.46.tar.bz2&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2025-12-30T02%3A53%3A06Z&ske=2025-12-30T03%3A53%3A25Z&sks=b&skv=2018-11-09&sig=63Io4jLpzLWr95ndRVDUY8Eu5yVEuYfVVEMfISwHGM4%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc2NzA2NDQ3NywibmJmIjoxNzY3MDY0MTc3LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.j_2liQb7c0gsIoVEhKBZ_nXhcbbroMzH_R8tikT8Hl8&response-content-disposition=attachment%3B%20filename%3Dbroadcom-wl-6.30.163.46.tar.bz2&response-content-type=application%2Foctet-stream
-Resolving release-assets.githubusercontent.com (release-assets.githubusercontent.com)... 185.199.108.133, 185.199.109.133, 185.199.111.133, ...
-Connecting to release-assets.githubusercontent.com (release-assets.githubusercontent.com)|185.199.108.133|:443... connected.
+Location: https://release-assets.githubusercontent.com/github-production-release-asset/842098966/8bf9e409-4da3-4685-b6d0-6af7a01f08da?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-01-01T21%3A30%3A48Z&rscd=attachment%3B+filename%3Dbroadcom-wl-6.30.163.46.tar.bz2&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-01-01T20%3A30%3A02Z&ske=2026-01-01T21%3A30%3A48Z&sks=b&skv=2018-11-09&sig=RxK0Y%2Brl8EadO%2F9f79wNTO6S8G0I7TvZdT4D1ZS9gyA%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc2NzMwMDIxNCwibmJmIjoxNzY3Mjk5OTE0LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.InjnJFA4ICe-147_2vYhsm6BzImc8g5kIOckoeslFmw&response-content-disposition=attachment%3B%20filename%3Dbroadcom-wl-6.30.163.46.tar.bz2&response-content-type=application%2Foctet-stream [following]
+--2026-01-01 20:38:34--  https://release-assets.githubusercontent.com/github-production-release-asset/842098966/8bf9e409-4da3-4685-b6d0-6af7a01f08da?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-01-01T21%3A30%3A48Z&rscd=attachment%3B+filename%3Dbroadcom-wl-6.30.163.46.tar.bz2&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-01-01T20%3A30%3A02Z&ske=2026-01-01T21%3A30%3A48Z&sks=b&skv=2018-11-09&sig=RxK0Y%2Brl8EadO%2F9f79wNTO6S8G0I7TvZdT4D1ZS9gyA%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc2NzMwMDIxNCwibmJmIjoxNzY3Mjk5OTE0LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.InjnJFA4ICe-147_2vYhsm6BzImc8g5kIOckoeslFmw&response-content-disposition=attachment%3B%20filename%3Dbroadcom-wl-6.30.163.46.tar.bz2&response-content-type=application%2Foctet-stream
+Resolving release-assets.githubusercontent.com (release-assets.githubusercontent.com)... 185.199.110.133, 185.199.111.133, 185.199.109.133, ...
+Connecting to release-assets.githubusercontent.com (release-assets.githubusercontent.com)|185.199.110.133|:443... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 7684610 (7.3M) [application/octet-stream]
 Saving to: 'broadcom-wl-6.30.163.46.tar.bz2'
 
-          broadcom-   0%[                    ]       0  --.-KB/s                        broadcom-w  57%[==========>         ]   4.20M  20.9MB/s               broadcom-wl-6.30.16 100%[===================>]   7.33M  21.3MB/s    in 0.3s    
+          broadcom-   0%[                    ]       0  --.-KB/s                        broadcom-w  46%[========>           ]   3.41M  16.9MB/s               broadcom-wl-6.30.16 100%[===================>]   7.33M  20.0MB/s    in 0.4s    
 
-2025-12-30 03:11:29 (21.3 MB/s) - 'broadcom-wl-6.30.163.46.tar.bz2' saved [7684610/7684610]
+2026-01-01 20:38:34 (20.0 MB/s) - 'broadcom-wl-6.30.163.46.tar.bz2' saved [7684610/7684610]
 
 broadcom-wl-6.30.163.46.tar.bz2: OK
 broadcom-wl-6.30.163.46.wl_apsta.o
@@ -9406,21 +9406,21 @@ Setting up libcups2t64:amd64 (2.4.10-3+deb13u2) ...
 Setting up firmware-b43legacy-installer (1:019-14) ...
 A chroot environment has been detected.
 Remember this firmware needs kernel >= 2.6.25.
---2025-12-30 03:11:57--  https://downloads.openwrt.org/sources/wl_apsta-3.130.20.0.o
-Resolving downloads.openwrt.org (downloads.openwrt.org)... 151.101.130.132, 151.101.194.132, 151.101.66.132, ...
-Connecting to downloads.openwrt.org (downloads.openwrt.org)|151.101.130.132|:443... connected.
+--2026-01-01 20:39:01--  https://downloads.openwrt.org/sources/wl_apsta-3.130.20.0.o
+Resolving downloads.openwrt.org (downloads.openwrt.org)... 151.101.2.132, 151.101.66.132, 151.101.130.132, ...
+Connecting to downloads.openwrt.org (downloads.openwrt.org)|151.101.2.132|:443... connected.
 HTTP request sent, awaiting response... 301 Moved Permanently
 Location: https://sources.openwrt.org/wl_apsta-3.130.20.0.o [following]
---2025-12-30 03:11:57--  https://sources.openwrt.org/wl_apsta-3.130.20.0.o
+--2026-01-01 20:39:01--  https://sources.openwrt.org/wl_apsta-3.130.20.0.o
 Resolving sources.openwrt.org (sources.openwrt.org)... 185.163.119.85, 2a03:4000:3b:221::1
 Connecting to sources.openwrt.org (sources.openwrt.org)|185.163.119.85|:443... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 652866 (638K) [application/octet-stream]
 Saving to: 'wl_apsta-3.130.20.0.o'
 
-wl_apsta-3.130.20.0   0%[                    ]       0  --.-KB/s               wl_apsta-3.130.20.0 100%[===================>] 637.56K  --.-KB/s    in 0.1s    
+wl_apsta-3.130.20.0   0%[                    ]       0  --.-KB/s               wl_apsta-3.130.20.0  37%[======>             ] 239.75K   990KB/s               wl_apsta-3.130.20.0  40%[=======>            ] 255.75K   523KB/s               wl_apsta-3.130.20.0  42%[=======>            ] 271.75K   391KB/s               wl_apsta-3.130.20.0  45%[========>           ] 287.75K   311KB/s               wl_apsta-3.130.20.0  55%[==========>         ] 351.75K   300KB/s               wl_apsta-3.130.20.0 100%[===================>] 637.56K   481KB/s    in 1.3s    
 
-2025-12-30 03:11:57 (4.34 MB/s) - 'wl_apsta-3.130.20.0.o' saved [652866/652866]
+2026-01-01 20:39:03 (481 KB/s) - 'wl_apsta-3.130.20.0.o' saved [652866/652866]
 
 wl_apsta-3.130.20.0.o: OK
 This file is recognised as:
@@ -10006,8 +10006,8 @@ Generating locales (this might take a while)...
 Generation complete.
 
 Current default time zone: 'Europe/Paris'
-Local time is now:      Tue Dec 30 04:13:42 CET 2025.
-Universal Time is now:  Tue Dec 30 03:13:42 UTC 2025.
+Local time is now:      Thu Jan  1 21:40:44 CET 2026.
+Universal Time is now:  Thu Jan  1 20:40:44 UTC 2026.
 
 openipmi.service is not a native service, redirecting to systemd-sysv-install.
 Executing: /usr/lib/systemd/systemd-sysv-install disable openipmi
@@ -10041,18 +10041,18 @@ Generating public/private rsa key pair.
 Your identification has been saved in .ssh/id_rsa
 Your public key has been saved in .ssh/id_rsa.pub
 The key fingerprint is:
-SHA256:CJGRWHLKP6ZuWuDk33sHp+QyCSgj1k1RAQyTx+tZNbI root@czo-rescue-debian
+SHA256:L1iKQbF7NSrZ3FUtoABImoHW1kh73qbWC3eob4eFQYs root@czo-rescue-debian
 The key's randomart image is:
 +---[RSA 4096]----+
-|  .=X=oo.        |
-| ..=+* . o       |
-|  o o o + .      |
-|   . + E         |
-|..o B + S        |
-|B+ = = o .       |
-|++o . + +        |
-| oo .+ + .       |
-|.o.. o= .        |
+|o.+o=..   ....   |
+|.=.+.+ o . .. .  |
+|+ ..o.o = .  .   |
+|   .oE.* o       |
+|    =.=oS        |
+|     =+=.o       |
+|    .+o++..      |
+|    . +ooo       |
+|     .oo.        |
 +----[SHA256]-----+
 Old comment: root@czo-rescue-debian
 No change to comment
@@ -10127,7 +10127,7 @@ localepurge: Disk space freed:   4089 KiB in /usr/share/vim/vim91/lang
 Total disk space freed by localepurge: 206113 KiB
 
 
-##==== make_03_copyfiles (2025-12-30 03:13:57) =================================================##
+##==== make_03_copyfiles (2026-01-01 20:41:00) =================================================##
 
 sending incremental file list
 ./
@@ -10226,21 +10226,21 @@ usr/share/images/desktop-base/naptime.jpg -> ../../backgrounds/xfce/xfce-x.svg
 sent 29,161,661 bytes  received 1,145 bytes  58,325,612.00 bytes/sec
 total size is 29,149,710  speedup is 1.00
 
-##==== make_04_squashfs (2025-12-30 03:13:57) =================================================##
+##==== make_04_squashfs (2026-01-01 20:41:00) =================================================##
 
 Parallel mksquashfs: Using 22 processors
 Creating 4.0 filesystem on /workspace/build-czo-rescue/staging/live/filesystem.squashfs, block size 524288.
-[/                                                           ]     0/30943   0%[=\                                                          ]  2000/80390   2%[===================\                                        ] 26000/80390  32%[===================|                                        ] 27000/80390  33%[===================-                                        ] 27200/80390  33%[======================/                                     ] 30800/80390  38%[======================|                                     ] 31200/80390  38%[===========================================================\] 80390/80390 100%
+[/                                                           ]     0/30574   0%[===================-                                        ] 26000/80390  32%[===================|                                        ] 27000/80390  33%[===================/                                        ] 27200/80390  33%[======================\                                     ] 30800/80390  38%[======================-                                     ] 31200/80390  38%[===========================================================|] 80390/80390 100%
 
 Exportable Squashfs 4.0 filesystem, xz compressed, data block size 524288
 	compressed data, compressed metadata, compressed fragments,
 	compressed xattrs, compressed ids
 	duplicates are removed
-Filesystem size 1203423.95 Kbytes (1175.22 Mbytes)
-	31.16% of uncompressed filesystem size (3861869.13 Kbytes)
-Inode table size 798248 bytes (779.54 Kbytes)
+Filesystem size 1203423.82 Kbytes (1175.22 Mbytes)
+	31.16% of uncompressed filesystem size (3861870.62 Kbytes)
+Inode table size 798224 bytes (779.52 Kbytes)
 	22.35% of uncompressed inode table size (3571575 bytes)
-Directory table size 926463 bytes (904.75 Kbytes)
+Directory table size 926471 bytes (904.76 Kbytes)
 	37.31% of uncompressed directory table size (2482871 bytes)
 Xattr table size 98 bytes (0.10 Kbytes)
 	81.67% of uncompressed xattr table size (120 bytes)
@@ -10300,58 +10300,7 @@ Number of gids 28
 	unknown (103)
 	unknown (999)
 
-##==== make_05_bootloader (2025-12-30 03:17:42) =================================================##
-
---> isolinux.cfg
---> grubcrd.cfg
---> loopback.cfg
---> link and copy
---> prepare boot loader files
-mkfs.fat 4.2 (2021-01-31)
-Copying BOOTx64.EFI
-
-##==== make_06_iso (2025-12-30 03:17:44) =================================================##
-
-xorriso 1.5.6 : RockRidge filesystem manipulator, libburnia project.
-
-Drive current: -outdev 'stdio:/workspace/build-czo-rescue/czo-rescue-debian-13.2-1.iso'
-Media current: stdio file, overwriteable
-Media status : is blank
-Media summary: 0 sessions, 0 data blocks, 0 data,  192g free
-Added to ISO image: directory '/'='/workspace/build-czo-rescue/staging'
-xorriso : UPDATE :     378 files added in 1 seconds
-xorriso : UPDATE :     378 files added in 1 seconds
-xorriso : NOTE : Copying to System Area: 432 bytes from file '/workspace/build-czo-rescue/staging/isolinux/isohdpfx.bin'
-libisofs: NOTE : Automatically adjusted MBR geometry to 1014/84/32
-libisofs: NOTE : Aligned image size to cylinder size by 581 blocks
-xorriso : UPDATE :  3.39% done
-xorriso : UPDATE :  65.16% done
-ISO image produced: 681408 sectors
-Written to medium : 681408 sectors at LBA 0
-Writing to 'stdio:/workspace/build-czo-rescue/czo-rescue-debian-13.2-1.iso' completed successfully.
-
-Inserting md5sum into iso image...
-md5 = 68814b012c50d37a5e19436070ff2265
-Inserting fragment md5sums into iso image...
-fragmd5 = 2a62f5afa48af67a39d7ef128ca9ee21e9f533971db96abdf23a6fbca8f3
-frags = 20
-Setting supported flag to 0
-
--rw-r--r-- 1 root root 1.3G Dec 30 03:17 czo-rescue-debian-13.2-1.iso
-
-##==== make_01_debootstrap (2026-01-01 11:48:37) =================================================##
-
-
-##==== make_02_chroot (2026-01-01 11:48:37) =================================================##
-
-
-##==== make_03_copyfiles (2026-01-01 11:48:37) =================================================##
-
-
-##==== make_04_squashfs (2026-01-01 11:48:37) =================================================##
-
-
-##==== make_05_bootloader (2026-01-01 11:48:37) =================================================##
+##==== make_05_bootloader (2026-01-01 20:44:33) =================================================##
 
 --> isolinux.cfg
 --> grubinit.cfg
@@ -10362,139 +10311,32 @@ Setting supported flag to 0
 mkfs.fat 4.2 (2021-01-31)
 Copying BOOTx64.EFI
 
-##==== make_06_iso (2026-01-01 11:48:39) =================================================##
+##==== make_06_iso (2026-01-01 20:44:35) =================================================##
 
 xorriso 1.5.6 : RockRidge filesystem manipulator, libburnia project.
 
 Drive current: -outdev 'stdio:/workspace/build-czo-rescue/czo-rescue-debian-13.2-1.iso'
 Media current: stdio file, overwriteable
 Media status : is blank
-Media summary: 0 sessions, 0 data blocks, 0 data,  170g free
-Added to ISO image: directory '/'='/workspace/build-czo-rescue/staging'
-xorriso : UPDATE :     378 files added in 1 seconds
-xorriso : UPDATE :     378 files added in 1 seconds
-xorriso : NOTE : Copying to System Area: 432 bytes from file '/workspace/build-czo-rescue/staging/isolinux/isohdpfx.bin'
-libisofs: NOTE : Automatically adjusted MBR geometry to 1014/84/32
-libisofs: NOTE : Aligned image size to cylinder size by 580 blocks
-xorriso : UPDATE :  2.50% done
-xorriso : UPDATE :  19.92% done
-xorriso : UPDATE :  54.07% done
-xorriso : UPDATE :  87.17% done
-ISO image produced: 681408 sectors
-Written to medium : 681408 sectors at LBA 0
-Writing to 'stdio:/workspace/build-czo-rescue/czo-rescue-debian-13.2-1.iso' completed successfully.
-
-Inserting md5sum into iso image...
-md5 = df339672dc4fba33c41491584fe15cec
-Inserting fragment md5sums into iso image...
-fragmd5 = 1e246791ed4e778b1d084c9763783eebef89c23af74b5a5319d62c7c243c
-frags = 20
-Setting supported flag to 0
-
--rw-r--r-- 1 root root 1.3G Jan  1 11:48 czo-rescue-debian-13.2-1.iso
-
-##==== make_01_debootstrap (2026-01-01 12:01:27) =================================================##
-
-
-##==== make_02_chroot (2026-01-01 12:01:27) =================================================##
-
-
-##==== make_03_copyfiles (2026-01-01 12:01:27) =================================================##
-
-
-##==== make_04_squashfs (2026-01-01 12:01:27) =================================================##
-
-
-##==== make_05_bootloader (2026-01-01 12:01:27) =================================================##
-
---> isolinux.cfg
---> grubinit.cfg
---> loopback.cfg
---> grubcrd.cfg
---> link and copy
---> prepare boot loader files
-mkfs.fat 4.2 (2021-01-31)
-Copying BOOTx64.EFI
-
-##==== make_06_iso (2026-01-01 12:01:29) =================================================##
-
-xorriso 1.5.6 : RockRidge filesystem manipulator, libburnia project.
-
-Drive current: -outdev 'stdio:/workspace/build-czo-rescue/czo-rescue-debian-13.2-1.iso'
-Media current: stdio file, overwriteable
-Media status : is blank
-Media summary: 0 sessions, 0 data blocks, 0 data,  169g free
+Media summary: 0 sessions, 0 data blocks, 0 data, 81.7g free
 Added to ISO image: directory '/'='/workspace/build-czo-rescue/staging'
 xorriso : UPDATE :     378 files added in 1 seconds
 xorriso : UPDATE :     378 files added in 1 seconds
 xorriso : NOTE : Copying to System Area: 432 bytes from file '/workspace/build-czo-rescue/staging/isolinux/isohdpfx.bin'
 libisofs: NOTE : Automatically adjusted MBR geometry to 1014/84/32
 libisofs: NOTE : Aligned image size to cylinder size by 579 blocks
-xorriso : UPDATE :  2.76% done
-xorriso : UPDATE :  35.30% done
-xorriso : UPDATE :  70.56% done
+xorriso : UPDATE :  3.25% done
+xorriso : UPDATE :  35.40% done
+xorriso : UPDATE :  78.48% done
 ISO image produced: 681408 sectors
 Written to medium : 681408 sectors at LBA 0
 Writing to 'stdio:/workspace/build-czo-rescue/czo-rescue-debian-13.2-1.iso' completed successfully.
 
 Inserting md5sum into iso image...
-md5 = a531768edc17c5fee1a4873b92b38d97
+md5 = 822c8665cb953d215e1be3bffa35b3f6
 Inserting fragment md5sums into iso image...
-fragmd5 = 93834d3cd2e57f1a14a88e91d2a49565b793ecd44f86478e27efc68609f2
+fragmd5 = 1ff2a82979a971598bb435de9d3f464e8646b617d65942cbbb8398478b43
 frags = 20
 Setting supported flag to 0
 
--rw-r--r-- 1 root root 1.3G Jan  1 12:01 czo-rescue-debian-13.2-1.iso
-
-##==== make_01_debootstrap (2026-01-01 12:05:05) =================================================##
-
-
-##==== make_02_chroot (2026-01-01 12:05:05) =================================================##
-
-
-##==== make_03_copyfiles (2026-01-01 12:05:05) =================================================##
-
-
-##==== make_04_squashfs (2026-01-01 12:05:05) =================================================##
-
-
-##==== make_05_bootloader (2026-01-01 12:05:05) =================================================##
-
---> isolinux.cfg
---> grubinit.cfg
---> loopback.cfg
---> grubcrd.cfg
---> link and copy
---> prepare boot loader files
-mkfs.fat 4.2 (2021-01-31)
-Copying BOOTx64.EFI
-
-##==== make_06_iso (2026-01-01 12:05:07) =================================================##
-
-xorriso 1.5.6 : RockRidge filesystem manipulator, libburnia project.
-
-Drive current: -outdev 'stdio:/workspace/build-czo-rescue/czo-rescue-debian-13.2-1.iso'
-Media current: stdio file, overwriteable
-Media status : is blank
-Media summary: 0 sessions, 0 data blocks, 0 data,  168g free
-Added to ISO image: directory '/'='/workspace/build-czo-rescue/staging'
-xorriso : UPDATE :     378 files added in 1 seconds
-xorriso : UPDATE :     378 files added in 1 seconds
-xorriso : NOTE : Copying to System Area: 432 bytes from file '/workspace/build-czo-rescue/staging/isolinux/isohdpfx.bin'
-libisofs: NOTE : Automatically adjusted MBR geometry to 1014/84/32
-libisofs: NOTE : Aligned image size to cylinder size by 578 blocks
-xorriso : UPDATE :  3.59% done
-xorriso : UPDATE :  45.89% done
-xorriso : UPDATE :  90.46% done
-ISO image produced: 681408 sectors
-Written to medium : 681408 sectors at LBA 0
-Writing to 'stdio:/workspace/build-czo-rescue/czo-rescue-debian-13.2-1.iso' completed successfully.
-
-Inserting md5sum into iso image...
-md5 = ff0e7d58242df1076ec73bb4341f98ae
-Inserting fragment md5sums into iso image...
-fragmd5 = dad4687e5c9a164179f2cf9ea9398ff8b12989d465ee197453abb53ea7fd
-frags = 20
-Setting supported flag to 0
-
--rw-r--r-- 1 root root 1.3G Jan  1 12:05 czo-rescue-debian-13.2-1.iso
+-rw-r--r-- 1 root root 1.3G Jan  1 20:44 czo-rescue-debian-13.2-1.iso
