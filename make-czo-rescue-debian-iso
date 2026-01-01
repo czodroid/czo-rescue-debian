@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Thursday 01 January 2026, 13:04
-# $Id: make-czo-rescue-debian-iso,v 1.42 2026/01/01 13:04:40 czo Git $
-# Edit Time: 161:31:58
+# Last Modified: Thursday 01 January 2026, 13:40
+# $Id: make-czo-rescue-debian-iso,v 1.42 2026/01/01 13:40:20 czo Git $
+# Edit Time: 161:36:24
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -483,23 +483,31 @@ cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/grubcrd.cfg
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 
-insmod part_gpt
-insmod part_msdos
-insmod fat
-insmod iso9660
-insmod chain
+##==========================================================================##
+## Init
 
-# Global options
+search --no-floppy --set=root --label RESCUE
+
+##==========================================================================##
+## Options
+
 set timeout=300
 # start with 0
 set default=2
 set fallback=2
 set pager=1
 
-#serial --speed=115200 efi0
-serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
-terminal_output serial console
-terminal_input serial console
+insmod part_gpt
+insmod part_msdos
+insmod fat
+insmod iso9660
+insmod echo
+insmod linux16
+insmod linux
+insmod chain
+
+# insmod http
+# insmod tftp
 
 insmod efi_gop
 insmod efi_uga
@@ -509,7 +517,13 @@ set color_highlight=black/light-gray
 set menu_color_normal=light-gray/black
 set menu_color_highlight=black/light-gray
 
-search --no-floppy --set=root --label RESCUE
+#serial --speed=115200 efi0
+serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
+terminal_output serial console
+terminal_input serial console
+
+##==========================================================================##
+## Menu
 
 menuentry "            Czo Rescue Debian $ISO_VERSION ($ISO_DATE)" { czo }
 
