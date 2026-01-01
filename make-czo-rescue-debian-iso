@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Thursday 01 January 2026, 13:40
-# $Id: make-czo-rescue-debian-iso,v 1.42 2026/01/01 13:40:20 czo Git $
-# Edit Time: 161:36:24
+# Last Modified: Thursday 01 January 2026, 16:46
+# $Id: make-czo-rescue-debian-iso,v 1.42 2026/01/01 16:46:01 czo Git $
+# Edit Time: 161:38:44
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -448,7 +448,7 @@ label Hardware Detection Tool
     com32  hdt.c32
     append modules_alias=hdt/modalias.gz pciids=hdt/pciids.gz
 
-label Run Memtest86+
+label Memtest86+
     linux /live/memtest.bin
 
 label Reboot
@@ -487,6 +487,8 @@ cat <<HEREDOC > $LIVE_BOOT/staging/boot/grub/grubcrd.cfg
 ## Init
 
 search --no-floppy --set=root --label RESCUE
+set prefix=/boot/grub
+
 
 ##==========================================================================##
 ## Options
@@ -584,18 +586,18 @@ menuentry "Grml ISO Czo-Rescue-Debian $ISO_VERSION zfs/console      RAM > 1GB" {
     initrd /live/initrd
 }
 
-menuentry "Run Memtest86+" {
+menuentry "Memtest86+" {
     echo "Memtest86+ launch in progress, please stand by..."
     linux /EFI/memtest.efi keyboard=both
 }
 
-menuentry "Start EFI Shell" {
-    terminal_output console
-    chainloader /EFI/shell.efi
-}
-
 menuentry "EFI Firmware setup" {
     fwsetup
+}
+
+menuentry "EFI Shell" {
+    terminal_output console
+    chainloader /EFI/shell.efi
 }
 
 menuentry "Reboot" {
