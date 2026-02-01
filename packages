@@ -2,23 +2,85 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Monday 29 December 2025, 18:11
+# Last Modified: Sunday 01 February 2026, 19:13
 # Description:
 #
 #   Czo-Rescue-Debian is installed with 'debootstrap' then
 #   with this file in a 'chroot' with apt-get install
 #
-# Copyright: (C) 2022-2025 Olivier Sirol <czo@free.fr>
+# Copyright: (C) 2022-2026 Olivier Sirol <czo@free.fr>
 
-## Kernel
-linux-image-amd64
-linux-headers-amd64
-intel-microcode
+acpi
+alsa-utils
 amd64-microcode
-firmware-linux
-firmware-linux-free
-firmware-linux-nonfree
-firmware-misc-nonfree
+aptitude
+apt-utils
+argon2
+at
+atmel-firmware
+atm-tools
+atop
+autofs
+avahi-discover
+avahi-ui-utils
+avahi-utils
+bash
+bash-completion
+bat
+bc
+bind9
+bind9-dnsutils
+bind9-host
+bluez-firmware
+bridge-utils
+broadcom-sta-dkms
+bsd-mailx
+btop
+busybox-static
+bzip2
+cabextract
+ca-certificates
+chntpw
+cifs-utils
+clonezilla
+cloud-guest-utils
+cloud-image-utils
+colordiff
+command-not-found
+console-setup
+cpio
+cron
+cryptsetup
+curl
+cvs
+dahdi-firmware-nonfree
+dbus
+debconf-i18n
+debconf-utils
+debootstrap
+discount
+dislocker
+# dmraid (no13)
+dnsmasq-utils
+dnsutils
+dosfstools
+dstat
+dump
+dwarves
+ecryptfs-utils
+efitools
+elinks
+ethtool
+ext4magic
+extrace
+exuberant-ctags
+fatresize
+fatsort
+fdisk
+# ffmpeg - 100 MB
+fido2-tools
+file
+firefox-esr
 firmware-amd-graphics
 firmware-ast
 firmware-ath9k-htc
@@ -38,8 +100,12 @@ firmware-intel-sound
 # firmware-ivtv
 firmware-iwlwifi
 firmware-libertas
+firmware-linux
+firmware-linux-free
+firmware-linux-nonfree
 firmware-marvell-prestera
 firmware-mediatek
+firmware-misc-nonfree
 firmware-myricom
 firmware-netronome
 firmware-netxen
@@ -49,87 +115,34 @@ firmware-realtek
 firmware-siano
 firmware-sof-signed
 firmware-zd1211
-atmel-firmware
-bluez-firmware
-dahdi-firmware-nonfree
-
-## Console packages
-#13 2to3
-acpi
-aptitude
-apt-utils
-argon2
-at
-atm-tools
-atop
-autofs
-avahi-utils
-bash
-bash-completion
-bat
-bc
-bind9
-bind9-dnsutils
-bind9-host
-bridge-utils
-broadcom-sta-dkms
-btop
-busybox-static
-bzip2
-cabextract
-ca-certificates
-chntpw
-cifs-utils
-clonezilla
-cloud-guest-utils
-cloud-image-utils
-colordiff
-command-not-found
-console-setup
-cpio
-cron
-cryptsetup
-curl
-cvs
-dbus
-debconf-i18n
-debconf-utils
-debootstrap
-discount
-dislocker
-#13 dmraid
-dnsmasq-utils
-dnsutils
-dosfstools
-dstat
-dump
-dwarves
-ecryptfs-utils
-efitools
-elinks
-ethtool
-ext4magic
-extrace
-exuberant-ctags
-fatresize
-fdisk
-# ffmpeg # 100 MB
-fido2-tools
-file
+fonts-dejavu
+fonts-lato-
+fonts-noto-color-emoji
+fonts-wqy-microhei
 foremost
 fsarchiver
+galculator
 gddrescue
 gdisk
+# geany
 gettext-base
+ghex
 ghostscript
 git
+gnome-themes-extra
 gnutls-bin
 gocryptfs
 gpart
+gparted
 groff-base
+grsync
 grub-efi-amd64-bin
 grub-efi-ia32-bin
 grub-pc-bin
+gsmartcontrol
+gvfs-backends
+gvfs-fuse
+hardinfo
 hardlink
 hashalot
 hdparm
@@ -145,6 +158,7 @@ iftop
 ifupdown
 info
 init
+intel-microcode
 inxi
 ioping
 iotop
@@ -162,6 +176,7 @@ isolinux
 isomd5sum
 jfsutils
 jq
+# keepassxc - 67.6 MB
 kmod
 kpartx
 # krb5-user
@@ -177,22 +192,31 @@ liblockfile-bin
 libnet-xmpp-perl
 libnfs-utils
 libnl-utils
+libnotify-bin
 libnss3-tools
 libnss-systemd
 libpam-mount
 libpam-systemd
 libplist-utils
+libpocketsphinx3-
 libqcow-utils
 libsecret-tools
 libteam-utils
 libterm-readline-gnu-perl
 libusb-dev
 libusbmuxd-tools
+lightdm-
+linux-headers-amd64
+linux-image-amd64
+live-boot
+live-boot-doc-
 lm-sensors
+localepurge
 logrotate
 lrzip
 lsb-release
 lshw
+lshw-gtk
 lsof
 lz4
 m4
@@ -200,10 +224,11 @@ man-db
 manpages
 mc
 media-types
+# meld - 1.1 MB
 memtester
 minicom
-plocate
 moreutils
+mousepad
 mtools
 mtr
 multipath-tools
@@ -215,17 +240,19 @@ ncdu
 ncurses-term
 ndisc6
 netcat-traditional
-#13 netdiag
+# netdiag (no13)
 nettle-bin
 net-tools
 network-manager
+network-manager-gnome
 network-manager-openvpn
 network-manager-vpnc
 nfs-client
 nfs-kernel-server
 nftables
 nmap
-#13 ntpdate
+# ntpdate (no13)
+nullmailer
 numactl
 nvme-cli
 nwipe
@@ -241,6 +268,9 @@ partimage-server
 pciutils
 perltidy
 picocom
+plocate
+pocketsphinx-en-us-
+# postfix
 pppoe
 procps
 pv
@@ -249,14 +279,17 @@ qrencode
 rar
 rclone
 rcs
+rdesktop
 rdiff
 rdiff-backup
 rdiff-backup-fs
 readline-common
 recode
 reiserfsprogs
+remmina
 rename
 reportbug
+ristretto
 rsync
 rsyslog
 sanoid
@@ -295,10 +328,12 @@ ucf
 udev
 udftools
 vim-common
+vim-gtk3
 vim-tiny
 vlock
 vmfs6-tools
 wamerican
+webext-ublock-origin-firefox
 wget
 whiptail
 whois
@@ -306,37 +341,12 @@ wimtools
 wipe
 wireless-tools
 wodim
-xfsprogs
-xorriso
-xtrace
-xxd
-xz-utils
-zfs-initramfs
-zsh
-zstd
-
-bsd-mailx
-#postfix
-nullmailer
-
-## Live
-live-boot localepurge
-
-## Do not install
-fonts-font-awesome-
-fonts-lato-
-# fonts-droid-fallback-
-# fonts-noto-mono-
-# fonts-urw-base35-
-# ghostscript-
-libpocketsphinx3-
-live-boot-doc-
-pocketsphinx-en-us-
-yelp-
-lightdm-
-
-## X11/Wayland server
-xinit
+x11vnc
+xarchiver
+xauth
+xclip
+xdotool
+xfburn
 xfce4
 xfce4-power-manager-plugins
 xfce4-screenshooter
@@ -345,42 +355,16 @@ xfce4-taskmanager
 xfce4-terminal
 xfce4-whiskermenu-plugin
 xfce4-xkb-plugin
-gvfs-backends
-gvfs-fuse
-
-## X11/Wayland packages
-avahi-discover
-avahi-ui-utils
-firefox-esr
-fonts-dejavu
-fonts-noto-color-emoji
-fonts-wqy-microhei
-galculator
-# geany
-ghex
-gnome-themes-extra
-gparted
-grsync
-gsmartcontrol
-hardinfo
-# keepassxc # 67.6 MB
-libnotify-bin
-lshw-gtk
-# meld # 1.1 MB
-mousepad
-network-manager-gnome
-rdesktop
-remmina
-ristretto
-vim-gtk3
-webext-ublock-origin-firefox
-x11vnc
-xarchiver
-xauth
-xclip
-xdotool
-xfburn
+xfsprogs
+xinit
+xorriso
 xsel
 xterm
-# yubikey-personalization-gui # 47.8 MB
+xtrace
+xxd
+xz-utils
+# yubikey-personalization-gui - 47.8 MB
+zfs-initramfs
+zsh
+zstd
 
