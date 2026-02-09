@@ -2,7 +2,7 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Friday 06 February 2026, 18:19
+# Last Modified: Monday 09 February 2026, 21:44
 # Description:
 #
 #   Czo-Rescue-Debian is installed with 'debootstrap' then
@@ -191,9 +191,12 @@ less
 lftp
 libarchive-tools
 libcap-ng-utils
+libgetopt-simple-perl
 libguestfs-tools
 libimobiledevice-utils
+libjson-perl
 liblockfile-bin
+libnet-mqtt-simple-perl
 libnet-xmpp-perl
 libnfs-utils
 libnl-utils
@@ -202,6 +205,7 @@ libnss3-tools
 libnss-systemd
 libpam-mount
 libpam-systemd
+libpar-packer-perl
 libplist-utils
 libpocketsphinx3-
 libqcow-utils
@@ -243,6 +247,7 @@ nbd-server
 ncat
 ncdu
 ncurses-term
+ndctl
 ndisc6
 netcat-traditional
 # netdiag (no13)
@@ -255,6 +260,7 @@ network-manager-vpnc
 nfs-client
 nfs-kernel-server
 nftables
+nilfs-utils
 nmap
 nmon
 # ntpdate (no13)
@@ -270,13 +276,16 @@ par2
 partclone
 parted
 partimage-server
+pass
 pciutils
+pcre2-utils
 perltidy
 picocom
 plocate
 pocketsphinx-en-us-
 # postfix
 pppoe
+pptp-linux
 procps
 pv
 qemu-guest-agent
@@ -310,6 +319,7 @@ sqlite3
 squashfs-tools
 squashfs-tools-ng
 ssh
+sshfs
 stoken
 strace
 stress
@@ -324,9 +334,11 @@ tasksel
 tcpdump
 telnet
 testdisk
+thunar-archive-plugin
 tidy
 tigervnc-standalone-server
 tigervnc-viewer
+# timeshift - 6MB
 tmate
 tmux
 traceroute
@@ -335,6 +347,7 @@ tzdata
 ucf
 udev
 udftools
+udpcast
 vim-common
 vim-gtk3
 vim-tiny
@@ -347,8 +360,10 @@ whiptail
 whois
 wimtools
 wipe
+wireguard-tools
 wireless-tools
 wodim
+wvdial
 x11vnc
 xarchiver
 xauth
@@ -363,8 +378,10 @@ xfce4-taskmanager
 xfce4-terminal
 xfce4-whiskermenu-plugin
 xfce4-xkb-plugin
+xfsdump
 xfsprogs
 xinit
+xl2tpd
 xorriso
 xsel
 xterm
