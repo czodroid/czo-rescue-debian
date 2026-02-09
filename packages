@@ -2,7 +2,7 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Sunday 01 February 2026, 19:13
+# Last Modified: Friday 06 February 2026, 18:19
 # Description:
 #
 #   Czo-Rescue-Debian is installed with 'debootstrap' then
@@ -10,6 +10,9 @@
 #
 # Copyright: (C) 2022-2026 Olivier Sirol <czo@free.fr>
 
+7zip
+7zip-rar
+7zip-standalone
 acpi
 alsa-utils
 amd64-microcode
@@ -40,6 +43,7 @@ busybox-static
 bzip2
 cabextract
 ca-certificates
+casync
 chntpw
 cifs-utils
 clonezilla
@@ -115,6 +119,7 @@ firmware-realtek
 firmware-siano
 firmware-sof-signed
 firmware-zd1211
+flashrom
 fonts-dejavu
 fonts-lato-
 fonts-noto-color-emoji
@@ -124,7 +129,7 @@ fsarchiver
 galculator
 gddrescue
 gdisk
-# geany
+# geany - 16 MB
 gettext-base
 ghex
 ghostscript
@@ -161,7 +166,7 @@ init
 intel-microcode
 inxi
 ioping
-iotop
+iotop-c
 iperf
 iperf3
 ipmitool
@@ -224,7 +229,7 @@ man-db
 manpages
 mc
 media-types
-# meld - 1.1 MB
+# meld - 1.1 MB / 373 MB
 memtester
 minicom
 moreutils
@@ -251,6 +256,7 @@ nfs-client
 nfs-kernel-server
 nftables
 nmap
+nmon
 # ntpdate (no13)
 nullmailer
 numactl
@@ -259,7 +265,6 @@ nwipe
 oathtool
 openconnect
 openssh-client
-p7zip-full
 paperkey
 par2
 partclone
@@ -300,6 +305,7 @@ sdparm
 sensible-utils
 smbclient
 socat
+speedtest-cli
 sqlite3
 squashfs-tools
 squashfs-tools-ng
@@ -319,6 +325,8 @@ tcpdump
 telnet
 testdisk
 tidy
+tigervnc-standalone-server
+tigervnc-viewer
 tmate
 tmux
 traceroute
@@ -363,8 +371,7 @@ xterm
 xtrace
 xxd
 xz-utils
-# yubikey-personalization-gui - 47.8 MB
+yq
 zfs-initramfs
 zsh
 zstd
-
