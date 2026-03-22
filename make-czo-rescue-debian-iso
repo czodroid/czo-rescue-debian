@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Thursday 01 January 2026, 19:04
-# $Id: make-czo-rescue-debian-iso,v 1.42 2026/01/01 19:04:10 czo Git $
-# Edit Time: 162:00:13
+# Last Modified: Sunday 22 March 2026, 18:10
+# $Id: make-czo-rescue-debian-iso,v 1.42 2026/03/22 18:10:11 czo Git $
+# Edit Time: 162:08:40
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -33,6 +33,7 @@
 # Copyright: (C) 2022-2026 Olivier Sirol <czo@free.fr>
 
 set -e -u
+set -o pipefail
 
 if [ `id -u` -ne 0 ]; then
     echo "ERROR: this script must be run as root"
@@ -182,7 +183,9 @@ echo "---> install packages ----------------------------------------------"
 grep -v '^\s*#' /tmp/packages | xargs apt-get $QUIET install
 rm -f /tmp/packages
 
-RELEASE=$(dpkg-query -W -f='${binary:Package}\n' linux-image-* | head -n 1 | sed 's/linux-image-//')
+## Release Detection
+# RELEASE=$(dpkg-query -W -f='${binary:Package}\n' linux-image-* | head -n 1 | sed 's/linux-image-//')
+RELEASE=$(ls /lib/modules | sort -V | tail -n 1)
 echo $RELEASE > /tmp/release
 
 ##==================================================##
@@ -192,6 +195,7 @@ echo $RELEASE > /tmp/release
 echo "---> mkinitramfs ($RELEASE) ----------------------------------------------"
 perl -i -pe 's,^COMPRESS=.*,COMPRESS=xz,' /etc/initramfs-tools/initramfs.conf
 perl -i -pe 's,^#?\s*COMPRESSLEVEL=.*,COMPRESSLEVEL=6,' /etc/initramfs-tools/initramfs.conf
+rm -f /boot/initrd.img-$RELEASE
 update-initramfs -c -k $RELEASE
 
 ##==================================================##
