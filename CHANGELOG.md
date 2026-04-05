@@ -3,8 +3,8 @@
 // Author: Olivier Sirol <czo@free.fr>
 // License: GPL-2.0 (http://www.gnu.org/copyleft)
 // File Created: 30 December 2022
-// Last Modified: Sunday 05 April 2026, 17:56
-// Edit Time: 2:36:44
+// Last Modified: Sunday 05 April 2026, 18:47
+// Edit Time: 2:36:57
 // Description:
 //
 //           Czo-Rescue-Debian ChangeLog
@@ -29,7 +29,7 @@
 - Removed 2to3, dmraid, iotop, mime-support, mlocate, netdiag, ntpdate, p7zip, reiser4progs
 - ISO sha512:
 ```
-ebc6cc2a20d0d0dd48156a991cd431cf301a35cc73aff183437c71d7c2dfe0debdfe572a64ad52fd3079f71878c232d800ff8dfe0427da500f7c84c628db7643  czo-rescue-debian-13.4-1.iso
+ff5a606873ca0d0ef58fea630c2de10c6d0300cef3ab248e2777c5fb7c986a6cf42e9db18bb9003d2ebb732d9fcfa291dbbac74e7d43549da1a154c637a98c34  czo-rescue-debian-13.4-1.iso
 ```
 
 ## 12.5-4 (2024-05-26):
