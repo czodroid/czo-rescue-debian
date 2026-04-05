@@ -3,8 +3,8 @@
 // Author: Olivier Sirol <czo@free.fr>
 // License: GPL-2.0 (http://www.gnu.org/copyleft)
 // File Created: 30 December 2022
-// Last Modified: Sunday 05 April 2026, 10:05
-// Edit Time: 2:18:48
+// Last Modified: Sunday 05 April 2026, 10:22
+// Edit Time: 2:34:11
 // Description:
 //
 //           Czo-Rescue-Debian ChangeLog
@@ -15,39 +15,41 @@
 # Czo-Rescue-Debian ChangeLog
 
 ## 13.4-1 (2026-04-??):
-- Version 13.4-1 from debian 13 (kernel/6.12.74+deb13+1-amd64 and zfs/2.3.2-2)
-- get rid of the old grub-embed.cfg (for wrong cmdpath) and only for x64 bits
-- packages file contains now kernel+firmaware, and is sorted
-- added 7z, bat, btop, busybox-static, casync, flashrom, ghostscript, gvfs-backends,
+- Released version 13.4-1, based on Debian 13 (kernel/6.12.74+deb13+1-amd64 and zfs/2.3.2-2)
+- Removed the old grub-embed.cfg (wrong cmdpath)
+- x86_64 only; 32-bit support has been removed
+- The packages file now includes the kernel and firmware packages and has been sorted
+- Added 7z, bat, btop, busybox-static, casync, flashrom, ghostscript, gvfs-backends,
   gvfs-fuse, inxi, iotop-c, libgetopt-simple-perl, libjson-perl, libnet-mqtt-simple-perl,
   libnotify-bin, libpar-packer-perl, ndctl, nilfs-tools, nmon, pass, pcre2-utils, plocate,
   pptp-linux, speedtest-cli, sshfs, thunar-archive-plugin, tigervnc-standalone-server,
-  tigervnc-viewer, udpcast, wireguard-tools, wvdial, xfsdump, xl2tpd, yq and a lot of
-  firmwares...
-- deleted 2to3, dmraid, iotop, mime-support, mlocate, netdiag, ntpdate, p7zip, reiser4progs
+  tigervnc-viewer, udpcast, wireguard-tools, wvdial, xfsdump, xl2tpd, yq, and many
+  firmware packages...
+- Removed 2to3, dmraid, iotop, mime-support, mlocate, netdiag, ntpdate, p7zip, reiser4progs
 - ISO sha512:
 ```
+0b5c2dd26463fca604d86b2ea77357288c719332be2e952abd1e6b808029c69ddae4e89d9e3b5e98ca44a9f7c435b26d1e7b4ecb2b84976f63e8adf0bf91e069  czo-rescue-debian-13.4-1.iso
 ```
 
 ## 12.5-4 (2024-05-26):
-- Version 12.5-4 from debian 12 (kernel/6.1.0-21-amd64 and zfs/2.1.11-1)
-- added console-setup, mousepad, sanoid, vim-gtk3, xxd
-- deleted geany, netcat, vim-gtk
+- Released version 12.5-4, based on Debian 12 (kernel/6.1.0-21-amd64 and zfs/2.1.11-1)
+- Added console-setup, mousepad, sanoid, vim-gtk3, xxd
+- Removed geany, netcat, vim-gtk
 - ISO sha512:
 ```
 c6084ca2028b6b4edc86fd7f2440843aec53c9cd25142fc47eec84c32f0a1f1d9b95d4bba4be275192d2cf8318b4ec04c6bab1fd6c2033e7f2747384fb3d7f23  czo-rescue-debian-12.5-4.iso
 ```
 
 ## 11.6-4 (2023-03-19):
-- Version 11.6-4 from debian 11 (kernel/5.10.0-21-amd64 and zfs/2.0.3-9)
-- network additions: ifenslave and bridge-utils
+- Released version 11.6-4, based on Debian 11 (kernel/5.10.0-21-amd64 and zfs/2.0.3-9)
+- Added network packages: ifenslave and bridge-utils
 - ISO sha512:
 ```
 4c6b86af79aaf97e35514fa72bd1228d48ed6f7809a97342a4616c6ebfbc7d1f86a39a5e3450de881c322029bac5cb0f64ff0fd3df5f1d58ef4ed61018a8de30  czo-rescue-debian-11.6-4.iso
 ```
 
 ## 11.6-3 (2023-02-26):
-- Version 11.6-3 from debian 11 (kernel/5.10.0-21-amd64 and zfs/2.0.3-9)
+- Released version 11.6-3, based on Debian 11 (kernel/5.10.0-21-amd64 and zfs/2.0.3-9)
 - First public release
 - ISO sha512:
 ```
@@ -56,5 +58,5 @@ c6084ca2028b6b4edc86fd7f2440843aec53c9cd25142fc47eec84c32f0a1f1d9b95d4bba4be2751
 
 ## Czo-Rescue-Debian (2022-11-28):
 - Czo-Rescue-Debian is based on Debian and built using debootstrap
-- See 'packages' file for Kernel, Console packages and X11/Wayland packages.
+- See the packages file for the kernel, console packages, and X11/Wayland packages.
 
