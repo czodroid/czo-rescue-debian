@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 05 April 2026, 13:28
-# $Id: make-czo-rescue-debian-iso,v 1.42 2026/04/05 13:28:33 czo Git $
-# Edit Time: 162:55:47
+# Last Modified: Sunday 05 April 2026, 17:28
+# $Id: make-czo-rescue-debian-iso,v 1.42 2026/04/05 17:28:17 czo Git $
+# Edit Time: 162:57:17
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -351,6 +351,7 @@ https://gitlab.com/czo/czo-rescue-debian
 HEREDOC
 
 cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/chroot/root
+cp -f $SCRIPT_PATH/CHANGELOG.md $LIVE_BOOT/chroot/root
 cp -f $SCRIPT_PATH/LICENSE $LIVE_BOOT/chroot/root
 cp -f $SCRIPT_PATH/LICENSE.edk2-shell $LIVE_BOOT/chroot/root
 cp -f $SCRIPT_PATH/LICENSE.linux $LIVE_BOOT/chroot/root
@@ -627,6 +628,7 @@ echo "--> link and copy"
 
 ln -fs grubcrd.cfg $LIVE_BOOT/staging/boot/grub/grub.cfg
 cp -f $SCRIPT_PATH/README.md $LIVE_BOOT/staging
+cp -f $SCRIPT_PATH/CHANGELOG.md $LIVE_BOOT/staging
 cp -f $SCRIPT_PATH/LICENSE $LIVE_BOOT/staging
 cp -f $SCRIPT_PATH/LICENSE.edk2-shell $LIVE_BOOT/staging
 cp -f $SCRIPT_PATH/LICENSE.linux $LIVE_BOOT/staging
