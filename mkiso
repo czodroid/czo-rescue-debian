@@ -4,12 +4,12 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 05 juil. 2015
-# Last Modified: Sunday 26 May 2024, 17:07
+# Last Modified: Sunday 05 April 2026, 16:12
 # Description:
 #
 #       Build an isofs from a rescue cd
 #
-# Copyright: (C) 2015-2024 Olivier Sirol <czo@free.fr>
+# Copyright: (C) 2015-2026 Olivier Sirol <czo@free.fr>
 
 
 DIRNAME="$(dirname $(readlink -f $0))"
@@ -44,5 +44,6 @@ xorriso \
 
 
 ### Change Live (must be run as root)
-#( mkdir czo-rescue-debian-12.5-4 && bsdtar -C czo-rescue-debian-12.5-4 -xf czo-rescue-debian-12.5-4.iso && unsquashfs czo-rescue-debian-12.5-4/live/filesystem.squashfs )
-#( cd czo-rescue-debian-12.5-4/live && rm filesystem.squashfs; mksquashfs ../../squashfs-root filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k && sha512sum filesystem.squashfs > filesystem.squashfs.sha512 && cd .. && ./mkiso )
+# ( mkdir czo-rescue-debian-13.4-1 && bsdtar -C czo-rescue-debian-13.4-1 -xf czo-rescue-debian-13.4-1.iso && unsquashfs czo-rescue-debian-13.4-1/live/filesystem.squashfs )
+# ( cd czo-rescue-debian-13.4-1/live && rm filesystem.squashfs; mksquashfs ../../squashfs-root filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k && sha512sum filesystem.squashfs > filesystem.squashfs.sha512 && cd .. && ./mkiso )
+
