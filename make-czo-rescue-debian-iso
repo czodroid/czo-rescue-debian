@@ -4,9 +4,9 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 18 December 2022
-# Last Modified: Sunday 05 April 2026, 12:41
-# $Id: make-czo-rescue-debian-iso,v 1.42 2026/04/05 12:41:20 czo Git $
-# Edit Time: 162:54:24
+# Last Modified: Sunday 05 April 2026, 13:28
+# $Id: make-czo-rescue-debian-iso,v 1.42 2026/04/05 13:28:33 czo Git $
+# Edit Time: 162:55:47
 # Description:
 #
 #       This script creates a czo-rescue-debian ISO, which is a live linux debian rescue
@@ -555,6 +555,8 @@ menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] toram/console/serial" {
     initrd /live/initrd
 }
 
+menuentry "" { czo }
+
 menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] startx" {
     echo "Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     linux  /live/vmlinuz boot=live dostartx
@@ -580,17 +582,21 @@ menuentry "Czo-Rescue-Debian $ISO_VERSION [root/toor] failsafe" {
     initrd /live/initrd
 }
 
-menuentry "Grml ISO Czo-Rescue-Debian $ISO_VERSION toram/startx RAM > 3GB" {
+menuentry "" { czo }
+
+menuentry "Grml ISO Czo-Rescue-Debian $ISO_VERSION [root/toor] toram/startx RAM > 3GB" {
     echo "ISO Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     linux  /live/vmlinuz boot=live findiso=\${iso_path} toram=filesystem.squashfs dostartx
     initrd /live/initrd
 }
 
-menuentry "Grml ISO Czo-Rescue-Debian $ISO_VERSION console      RAM > 1GB" {
+menuentry "Grml ISO Czo-Rescue-Debian $ISO_VERSION [root/toor] console      RAM > 1GB" {
     echo "ISO Czo-Rescue-Debian $ISO_VERSION launch in progress, please stand by..."
     linux  /live/vmlinuz boot=live findiso=\${iso_path}
     initrd /live/initrd
 }
+
+menuentry "" { czo }
 
 menuentry "Memtest86+" {
     echo "Memtest86+ launch in progress, please stand by..."
