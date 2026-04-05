@@ -3,8 +3,8 @@
 // Author: Olivier Sirol <czo@free.fr>
 // License: GPL-2.0 (http://www.gnu.org/copyleft)
 // File Created: 30 December 2022
-// Last Modified: Sunday 05 April 2026, 17:15
-// Edit Time: 2:34:54
+// Last Modified: Sunday 05 April 2026, 17:18
+// Edit Time: 2:36:26
 // Description:
 //
 //           Czo-Rescue-Debian ChangeLog
@@ -20,8 +20,9 @@
 - x86\_64 only; 32-bit support has been removed
 - The packages file now includes the kernel and firmware packages and has been sorted
 - Added 7z, bat, btop, busybox-static, casync, flashrom, ghostscript, gvfs-backends,
-  gvfs-fuse, inxi, iotop-c, libgetopt-simple-perl, libjson-perl, libnet-mqtt-simple-perl,
-  libnotify-bin, libpar-packer-perl, ndctl, nilfs-tools, nmon, pass, pcre2-utils, plocate,
+  gvfs-fuse, hunspell, hunspell-en-us, hunspell-fr-revised, inxi, iotop-c,
+  libgetopt-simple-perl, libjson-perl, libnet-mqtt-simple-perl, libnotify-bin,
+  libpar-packer-perl, ndctl, nilfs-tools, nmon, pass, pcre2-utils, plocate,
   pptp-linux, speedtest-cli, sshfs, thunar-archive-plugin, tigervnc-standalone-server,
   tigervnc-viewer, udpcast, wireguard-tools, wvdial, xfsdump, xl2tpd, yq, and many
   firmware packages...
