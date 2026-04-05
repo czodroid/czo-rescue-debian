@@ -3,21 +3,36 @@
 // Author: Olivier Sirol <czo@free.fr>
 // License: GPL-2.0 (http://www.gnu.org/copyleft)
 // File Created: 30 December 2022
-// Last Modified: Tuesday 04 March 2025, 19:04
-// Edit Time: 1:00:45
+// Last Modified: Sunday 05 April 2026, 10:05
+// Edit Time: 2:18:48
 // Description:
 //
 //           Czo-Rescue-Debian ChangeLog
 //
-// Copyright: (C) 2022-2025 Olivier Sirol <czo@free.fr>
+// Copyright: (C) 2022-2026 Olivier Sirol <czo@free.fr>
 -->
 
 # Czo-Rescue-Debian ChangeLog
 
+## 13.4-1 (2026-04-??):
+- Version 13.4-1 from debian 13 (kernel/6.12.74+deb13+1-amd64 and zfs/2.3.2-2)
+- get rid of the old grub-embed.cfg (for wrong cmdpath) and only for x64 bits
+- packages file contains now kernel+firmaware, and is sorted
+- added 7z, bat, btop, busybox-static, casync, flashrom, ghostscript, gvfs-backends,
+  gvfs-fuse, inxi, iotop-c, libgetopt-simple-perl, libjson-perl, libnet-mqtt-simple-perl,
+  libnotify-bin, libpar-packer-perl, ndctl, nilfs-tools, nmon, pass, pcre2-utils, plocate,
+  pptp-linux, speedtest-cli, sshfs, thunar-archive-plugin, tigervnc-standalone-server,
+  tigervnc-viewer, udpcast, wireguard-tools, wvdial, xfsdump, xl2tpd, yq and a lot of
+  firmwares...
+- deleted 2to3, dmraid, iotop, mime-support, mlocate, netdiag, ntpdate, p7zip, reiser4progs
+- ISO sha512:
+```
+```
+
 ## 12.5-4 (2024-05-26):
 - Version 12.5-4 from debian 12 (kernel/6.1.0-21-amd64 and zfs/2.1.11-1)
-- add console-setup, mousepad, sanoid, vim-gtk3, xxd
-- delete geany, netcat, vim-gtk
+- added console-setup, mousepad, sanoid, vim-gtk3, xxd
+- deleted geany, netcat, vim-gtk
 - ISO sha512:
 ```
 c6084ca2028b6b4edc86fd7f2440843aec53c9cd25142fc47eec84c32f0a1f1d9b95d4bba4be275192d2cf8318b4ec04c6bab1fd6c2033e7f2747384fb3d7f23  czo-rescue-debian-12.5-4.iso
