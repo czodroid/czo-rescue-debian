@@ -3,8 +3,8 @@
 // Author: Olivier Sirol <czo@free.fr>
 // License: GPL-2.0 (http://www.gnu.org/copyleft)
 // File Created: 30 December 2022
-// Last Modified: Sunday 05 April 2026, 17:18
-// Edit Time: 2:36:26
+// Last Modified: Sunday 05 April 2026, 17:56
+// Edit Time: 2:36:44
 // Description:
 //
 //           Czo-Rescue-Debian ChangeLog
@@ -29,7 +29,7 @@
 - Removed 2to3, dmraid, iotop, mime-support, mlocate, netdiag, ntpdate, p7zip, reiser4progs
 - ISO sha512:
 ```
-( cd czo-rescue-debian-13.4-1/live && rm filesystem.squashfs; mksquashfs ../../squashfs-root filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k && sha512sum filesystem.squashfs > filesystem.squashfs.sha512 && cd .. && ./mkiso )
+ebc6cc2a20d0d0dd48156a991cd431cf301a35cc73aff183437c71d7c2dfe0debdfe572a64ad52fd3079f71878c232d800ff8dfe0427da500f7c84c628db7643  czo-rescue-debian-13.4-1.iso
 ```
 
 ## 12.5-4 (2024-05-26):
