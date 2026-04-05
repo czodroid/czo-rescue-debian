@@ -4,7 +4,7 @@ lockPref("app.update.enabled", false);
 lockPref("intl.locale.matchOS", true);
 // Allow user to change based on needs
 pref("browser.display.use_system_colors", true);
-//pref("spellchecker.dictionary_path", "/usr/share/myspell");
+pref("spellchecker.dictionary_path", "/usr/share/hunspell");
 pref("browser.shell.checkDefaultBrowser", false);
 // Preferences that should be reset every session
 pref("browser.EULA.override", true);
@@ -91,7 +91,7 @@ pref("browser.urlbar.trimURLs", false);
 // 5 means "off by choice"
 pref("network.trr.mode", 5);
 
-// Czo settings for firefox 115
+// Czo settings for firefox >= 115
 
 // homepage
 //pref("browser.startup.homepage", "http://www.system-rescue.org/");
