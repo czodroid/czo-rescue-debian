@@ -3,8 +3,8 @@
 // Author: Olivier Sirol <czo@free.fr>
 // License: GPL-2.0 (http://www.gnu.org/copyleft)
 // File Created: 30 December 2022
-// Last Modified: Sunday 05 April 2026, 10:38
-// Edit Time: 3:07:42
+// Last Modified: Sunday 05 April 2026, 12:12
+// Edit Time: 3:11:09
 // Description:
 //
 //          Readme for Czo Rescue Debian
@@ -21,6 +21,8 @@ It includes ZFS binaries, 3ware RAID support, and my configuration files (.bashr
 Xfce includes the Whisker Menu and the xfce4-xkb plugin. Firefox/140.9.0esr and uBlock Origin are also included.
 
 Version 13.4-1 (Trixie) includes kernel/6.12.74+deb13+1-amd64 and zfs/2.3.2-2.
+
+No firewall is enabled, and the root password is `toor`.
 
 ## Project
 
