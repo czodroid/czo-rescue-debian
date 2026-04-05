@@ -2,7 +2,7 @@
 # Author: Olivier Sirol <czo@free.fr>
 # License: GPL-2.0 (http://www.gnu.org/copyleft)
 # File Created: 27 December 2022
-# Last Modified: Monday 09 February 2026, 21:49
+# Last Modified: Sunday 05 April 2026, 16:00
 # Description:
 #
 #   Czo-Rescue-Debian is installed with 'debootstrap' then
@@ -153,6 +153,9 @@ hashalot
 hdparm
 hexcurse
 htop
+hunspell
+hunspell-en-us
+hunspell-fr-revised
 hwinfo
 hwloc-nox
 icu-devtools
