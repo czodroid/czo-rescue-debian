@@ -3,8 +3,8 @@
 // Author: Olivier Sirol <czo@free.fr>
 // License: GPL-2.0 (http://www.gnu.org/copyleft)
 // File Created: 30 December 2022
-// Last Modified: Sunday 05 April 2026, 10:22
-// Edit Time: 2:34:11
+// Last Modified: Sunday 05 April 2026, 17:15
+// Edit Time: 2:34:54
 // Description:
 //
 //           Czo-Rescue-Debian ChangeLog
@@ -14,10 +14,10 @@
 
 # Czo-Rescue-Debian ChangeLog
 
-## 13.4-1 (2026-04-??):
+## 13.4-1 (2026-04-05):
 - Released version 13.4-1, based on Debian 13 (kernel/6.12.74+deb13+1-amd64 and zfs/2.3.2-2)
 - Removed the old grub-embed.cfg (wrong cmdpath)
-- x86_64 only; 32-bit support has been removed
+- x86\_64 only; 32-bit support has been removed
 - The packages file now includes the kernel and firmware packages and has been sorted
 - Added 7z, bat, btop, busybox-static, casync, flashrom, ghostscript, gvfs-backends,
   gvfs-fuse, inxi, iotop-c, libgetopt-simple-perl, libjson-perl, libnet-mqtt-simple-perl,
@@ -28,7 +28,7 @@
 - Removed 2to3, dmraid, iotop, mime-support, mlocate, netdiag, ntpdate, p7zip, reiser4progs
 - ISO sha512:
 ```
-0b5c2dd26463fca604d86b2ea77357288c719332be2e952abd1e6b808029c69ddae4e89d9e3b5e98ca44a9f7c435b26d1e7b4ecb2b84976f63e8adf0bf91e069  czo-rescue-debian-13.4-1.iso
+( cd czo-rescue-debian-13.4-1/live && rm filesystem.squashfs; mksquashfs ../../squashfs-root filesystem.squashfs -comp xz -Xbcj x86 -b 512k -Xdict-size 512k && sha512sum filesystem.squashfs > filesystem.squashfs.sha512 && cd .. && ./mkiso )
 ```
 
 ## 12.5-4 (2024-05-26):

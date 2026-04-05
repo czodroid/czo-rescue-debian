@@ -1,4 +1,4 @@
-#  Name Version Size, Czo-Rescue-Debian 13.4-1 (2026-03-22), vim: set tabstop=50:
+#  Name Version Size, Czo-Rescue-Debian 13.4-1 (2026-04-05), vim: set tabstop=50:
 7zip	25.01+dfsg-1~deb13u1	7038
 7zip-rar	25.00+ds-1+deb13u1	168
 7zip-standalone	25.01+dfsg-1~deb13u1	2715
@@ -41,11 +41,11 @@ bash	5.2.37-2+b8	7196
 bash-completion	1:2.16.0-7	1952
 bat	0.25.0-2+b2	5515
 bc	1.07.1-4	236
-bind9	1:9.20.18-1~deb13u1	892
-bind9-dnsutils	1:9.20.18-1~deb13u1	524
-bind9-host	1:9.20.18-1~deb13u1	140
-bind9-libs	1:9.20.18-1~deb13u1	3636
-bind9-utils	1:9.20.18-1~deb13u1	723
+bind9	1:9.20.21-1~deb13u1	892
+bind9-dnsutils	1:9.20.21-1~deb13u1	524
+bind9-host	1:9.20.21-1~deb13u1	140
+bind9-libs	1:9.20.21-1~deb13u1	3644
+bind9-utils	1:9.20.21-1~deb13u1	723
 binutils	2.44-3	1073
 binutils-common	2.44-3	16098
 binutils-x86-64-linux-gnu	2.44-3	5990
@@ -156,7 +156,7 @@ fdisk	2.41-5	529
 fido2-tools	1.15.0-1+b1	177
 file	1:5.46-5	79
 findutils	4.10.0-3	2160
-firefox-esr	140.8.0esr-1~deb13u1	266568
+firefox-esr	140.9.0esr-1~deb13u1	266471
 firmware-amd-graphics	20250410-2	91908
 firmware-ast	20140808-10	42
 firmware-ath9k-htc	1.4.0-110-ge888634+dfsg1-0.1	153
@@ -302,7 +302,9 @@ hfsplus	1.0.4-19	248
 hicolor-icon-theme	0.18-2	780
 hostname	3.25	50
 htop	3.4.1-5	424
+hunspell	1.7.2+really1.7.2-10+b4	702
 hunspell-en-us	1:2020.12.07-4	1565
+hunspell-fr-revised	1:7.0-3	3834
 hwinfo	21.82-1.1+b2	81
 hwloc-nox	2.12.0-4	659
 i965-va-driver	2.4.1+dfsg1-2	1776
@@ -314,7 +316,7 @@ idevicerestore	1.0.0+git20240709-1+b1	267
 ifenslave	2.14	40
 iftop	1.0~pre4-9+b1	94
 ifupdown	0.8.44+deb13u1	200
-inetutils-telnet	2:2.6-3+deb13u2	278
+inetutils-telnet	2:2.6-3+deb13u3	279
 info	7.1.1-1+b1	445
 init	1.69~deb13u1	17
 init-system-helpers	1.69~deb13u1	133
@@ -967,7 +969,7 @@ libplist-2.0-4	2.6.0-2+b1	140
 libplist-utils	2.6.0-2+b1	44
 libplymouth5	24.004.60-5	489
 libpmem1	1.13.1-1.1+b1	392
-libpng16-16t64	1.6.48-1+deb13u3	440
+libpng16-16t64	1.6.48-1+deb13u4	444
 libpolkit-agent-1-0	126-2	71
 libpolkit-gobject-1-0	126-2	158
 libpolkit-qt5-1-1	0.200.0-4+b1	245
@@ -1283,7 +1285,7 @@ libxkbcommon-x11-0	1.7.0-2	57
 libxkbcommon0	1.7.0-2	317
 libxkbfile1	1:1.1.0-1+b4	187
 libxklavier16	5.4-5+b2	141
-libxml-parser-perl	2.47-1+b3	685
+libxml-parser-perl	2.47-2~deb13u1	684
 libxml-stream-perl	1.24-5	281
 libxml-twig-perl	1:3.52-3	570
 libxml-xpath-perl	1.48-1	238
@@ -1632,7 +1634,7 @@ tcl	8.6.16	20
 tcl8.6	8.6.16+dfsg-1	145
 tcpdump	4.99.5-2	1343
 tdb-tools	2:1.4.13+samba4.22.8+dfsg-0+deb13u1	148
-telnet	0.17+2.6-3+deb13u2	55
+telnet	0.17+2.6-3+deb13u3	56
 testdisk	7.2-0.1	1495
 thin-provisioning-tools	1.1.0-4+b1	3469
 thunar	4.20.2-1+deb13u1	1238
